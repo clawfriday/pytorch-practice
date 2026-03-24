@@ -21,7 +21,7 @@
     "type": "coding",
     "question": "Create a tensor with random values from a standard normal distribution with shape (4, 4).",
     "code_hint": "torch.randn(4, 4)",
-    "expected_pattern": "shape (4, 4), values near N(0,1)"
+    "expected_pattern": "shape (4, 4)"
   },
   {
     "id": 4,
@@ -36,14 +36,16 @@
     "type": "coding",
     "question": "Reshape a tensor from shape (12,) to shape (3, 4).",
     "code_hint": "t.view(3, 4)",
-    "test_code": "t = torch.randn(12)\nresult = t.view(3, 4)\nassert result.shape == (3, 4), f'Expected shape (3, 4), got {result.shape}'\nprint(result)"
+    "expected_output_shape": "(3, 4)",
+    "test_code": "t = torch.randn(12)\nresult = t.view(3, 4)\nprint(result.shape)"
   },
   {
     "id": 6,
     "topic": "Tensor Operations",
     "type": "coding",
-    "question": "Perform matrix multiplication of two 2x2 matrices A and B.",
-    "code_hint": "torch.matmul(A, B) or A @ B",
+    "question": "Perform matrix multiplication of two 2x2 matrices A and B where A=[[1,2],[3,4]] and B=[[2,0],[1,3]]. Show the result.",
+    "code_hint": "A @ B or torch.matmul(A, B)",
+    "expected_output": "tensor([[4., 6.],\n        [10., 12.]]",
     "test_code": "A = torch.tensor([[1., 2.], [3., 4.]])\nB = torch.tensor([[2., 0.], [1., 3.]])\nresult = A @ B\nprint(result)"
   },
   {
@@ -59,15 +61,17 @@
     "type": "coding",
     "question": "Use squeeze() to remove a dimension of size 1 from a tensor with shape (1, 3, 1, 4).",
     "code_hint": "t.squeeze()",
-    "expected_output_shape": "(3, 4)"
+    "expected_output_shape": "(3, 4)",
+    "test_code": "t = torch.randn(1, 3, 1, 4)\nresult = t.squeeze()\nprint(result.shape)"
   },
   {
     "id": 9,
     "topic": "Autograd",
     "type": "coding",
-    "question": "Create x=2.0 with requires_grad=True, compute y=x^2, then calculate gradient dy/dx.",
-    "code_hint": "x = torch.tensor([2.], requires_grad=True)\ny = x ** 2\ny.backward()\nprint(x.grad)",
-    "expected_output": "tensor([4.])"
+    "question": "Create x=2.0 with requires_grad=True, compute y=x^2, then calculate gradient dy/dx at x=2.",
+    "code_hint": "x.requires_grad=True, y.backward(), x.grad",
+    "expected_output": "tensor([4.])",
+    "test_code": "x = torch.tensor([2.], requires_grad=True)\ny = x ** 2\ny.backward()\nprint(x.grad)"
   },
   {
     "id": 10,
@@ -80,9 +84,10 @@
     "id": 11,
     "topic": "Autograd",
     "type": "coding",
-    "question": "Use torch.no_grad() context to evaluate a tensor without tracking gradients.",
-    "code_hint": "x = torch.tensor([1., 2., 3.], requires_grad=True)\nwith torch.no_grad():\n    y = x * 2\nprint(y.requires_grad)",
-    "expected_output": "False"
+    "question": "Use torch.no_grad() context to evaluate y=2*x where x=[1,2,3] with requires_grad=True. What is y.requires_grad after?",
+    "code_hint": "with torch.no_grad():",
+    "expected_output": "False",
+    "test_code": "x = torch.tensor([1., 2., 3.], requires_grad=True)\nwith torch.no_grad():\n    y = x * 2\nprint(y.requires_grad)"
   },
   {
     "id": 12,
@@ -95,31 +100,33 @@
     "id": 13,
     "topic": "nn.Module",
     "type": "coding",
-    "question": "Create a simple linear layer that transforms input of size 10 to output of size 5.",
+    "question": "Create a linear layer that transforms input of size 10 to output of size 5. Then test it with a random input.",
     "code_hint": "nn.Linear(10, 5)",
-    "test_code": "layer = nn.Linear(10, 5)\ntest_input = torch.randn(1, 10)\noutput = layer(test_input)\nassert output.shape == (1, 5)\nprint(output.shape)"
+    "expected_output_shape": "(1, 5)",
+    "test_code": "layer = torch.nn.Linear(10, 5)\nx = torch.randn(1, 10)\ny = layer(x)\nprint(y.shape)"
   },
   {
     "id": 14,
-    "topic": "nn.Module",
-    "type": "coding",
-    "question": "Create a basic nn.Module class for a 2-layer neural network with ReLU activation.",
-    "code_hint": "class Net(nn.Module):\n    def __init__(self):\n        super().__init__()\n        self.fc1 = nn.Linear(10, 32)\n        self.fc2 = nn.Linear(32, 2)\n    def forward(self, x):\n        x = F.relu(self.fc1(x))\n        return self.fc2(x)"
-  },
-  {
-    "id": 15,
     "topic": "nn.Module",
     "type": "explanation",
     "question": "What is the purpose of the forward() method in nn.Module? Can you have multiple forward methods?",
     "answer_type": "text"
   },
   {
+    "id": 15,
+    "topic": "nn.Module",
+    "type": "explanation",
+    "question": "What is the difference between model.parameters() and model.state_dict()? When would you use each?",
+    "answer_type": "text"
+  },
+  {
     "id": 16,
     "topic": "Loss Functions",
     "type": "coding",
-    "question": "Calculate CrossEntropyLoss between predictions and targets for a batch of 4 samples.",
-    "code_hint": "criterion = nn.CrossEntropyLoss()\nloss = criterion(predictions, targets)",
-    "test_code": "criterion = nn.CrossEntropyLoss()\npredictions = torch.randn(4, 3)\ntargets = torch.tensor([0, 1, 2, 1])\nloss = criterion(predictions, targets)\nprint(f'Loss: {loss.item():.4f}')"
+    "question": "Calculate CrossEntropyLoss for predictions=[[0.8, 0.1, 0.1], [0.3, 0.6, 0.1]] and targets=[0, 1].",
+    "code_hint": "nn.CrossEntropyLoss()(predictions, targets)",
+    "expected_pattern": "Loss:",
+    "test_code": "criterion = torch.nn.CrossEntropyLoss()\npredictions = torch.tensor([[0.8, 0.1, 0.1], [0.3, 0.6, 0.1]])\ntargets = torch.tensor([0, 1])\nloss = criterion(predictions, targets)\nprint(f'Loss: {loss.item():.4f}')"
   },
   {
     "id": 17,
@@ -132,9 +139,10 @@
     "id": 18,
     "topic": "Data Loading",
     "type": "coding",
-    "question": "Create a DataLoader for a tensor dataset with batch size 4 and shuffle enabled.",
-    "code_hint": "dataset = TensorDataset(x, y)\nloader = DataLoader(dataset, batch_size=4, shuffle=True)",
-    "test_code": "x = torch.randn(100, 10)\ny = torch.randn(100, 1)\ndataset = TensorDataset(x, y)\nloader = DataLoader(dataset, batch_size=4, shuffle=True)\nbatch_x, batch_y = next(iter(loader))\nprint(batch_x.shape, batch_y.shape)"
+    "question": "Create a DataLoader for a tensor dataset with batch_size=4 and shuffle=True. Get the first batch.",
+    "code_hint": "DataLoader(TensorDataset(x, y), batch_size=4, shuffle=True)",
+    "expected_pattern": "torch.Size([4",
+    "test_code": "x = torch.randn(100, 10)\ny = torch.randn(100, 1)\ndataset = torch.utils.data.TensorDataset(x, y)\nloader = torch.utils.data.DataLoader(dataset, batch_size=4, shuffle=True)\nbatch_x, batch_y = next(iter(loader))\nprint(f'batch_x: {batch_x.shape}, batch_y: {batch_y.shape}')"
   },
   {
     "id": 19,
@@ -147,8 +155,9 @@
     "id": 20,
     "topic": "GPU Training",
     "type": "coding",
-    "question": "Move a tensor to GPU if available, otherwise keep it on CPU.",
-    "hint": "device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')\nx = x.to(device)",
-    "test_code": "device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')\nx = torch.randn(3, 3)\nx_gpu = x.to(device)\nprint(f'Device: {x_gpu.device}')"
+    "question": "Check if CUDA (GPU) is available. If yes, move a tensor to GPU. If no, keep on CPU.",
+    "code_hint": "torch.cuda.is_available(), .to(device)",
+    "expected_pattern": "cuda" or "cpu",
+    "test_code": "device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')\nx = torch.randn(3, 3)\nx_gpu = x.to(device)\nprint(str(x_gpu.device))"
   }
 ]

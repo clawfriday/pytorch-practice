@@ -60,6 +60,7 @@ class EvaluateRequest(BaseModel):
     expected_output: str | None = None
     code_hint: str | None = None
     type: str = "explanation"  # "coding" or "explanation"
+    test_passed: bool = False
 
 
 class EvaluateResponse(BaseModel):
@@ -157,34 +158,37 @@ import numpy as np
                 raise eval_err
         
         # If there's a test code, run it
+        test_error = None
         if request.test_code:
             redirected_test = io.StringIO()
             old_stdout_test = sys.stdout
             sys.stdout = redirected_test
             
-            test_error = None
             try:
                 exec(request.test_code, exec_globals, exec_locals)
                 sys.stdout = old_stdout_test
                 test_output = redirected_test.getvalue()
                 
-                # Test passed if no error and output matches expected
+                # Test passed if expected_output matches OR if no expected_output (just ran without error)
                 if request.expected_output and request.expected_output in test_output:
                     test_passed = True
-                elif not request.expected_output:
+                elif not request.expected_output and not test_output.strip():
+                    # No output expected, no error = pass
                     test_passed = True
+                elif not request.expected_output and test_output.strip():
+                    # Has output but no expected_output - check if it ran without error
+                    # In this case, we can't auto-pass, let LLM decide
+                    pass
                     
             except AssertionError as ae:
                 sys.stdout = old_stdout_test
                 test_passed = False
                 test_error = f"Assertion failed: {str(ae)}"
+                output += f"\n[Test Error] {test_error}"
             except Exception as test_e:
                 sys.stdout = old_stdout_test
                 test_passed = False
                 test_error = str(test_e)
-            
-            # Store test output/error for feedback
-            if not test_passed and test_error:
                 output += f"\n[Test Error] {test_error}"
         
         # Verify output against expected if no test_code
@@ -232,25 +236,35 @@ async def evaluate_answer(
     
     # Build prompt based on type
     if request.type == "coding":
-        system_prompt = f"""You are a PyTorch coding tutor. The user was asked to solve this coding problem:
+        # Check if this is a re-evaluation after test failure
+        test_status = "PASSED" if request.test_passed else "FAILED"
+        
+        system_prompt = f"""You are a STRICT PyTorch coding evaluator. A unit test has {test_status}.
 
 Question: {request.question}
 Hint: {request.code_hint or 'No hint provided'}
 
 User's code:
+```python
 {request.user_code}
+```
 
 User's output:
+```
 {request.user_output}
+```
 
-Expected output/pattern:
-{request.expected_output or request.code_hint or 'See question above'}
+Test status: {test_status}
 
-Compare the user's solution with the expected solution. Provide brief, constructive feedback if incorrect.
+IMPORTANT: The unit test has FAILED. Your job is to:
+1. Check if the user's code is CORRECT for the given task
+2. If INCORRECT: Say "correct: false" and explain what's wrong
+3. If CORRECT: Still be critical - verify the output matches exactly what was asked
+
+Be VERY strict. If the code produces wrong results, say so clearly. Do NOT mark incorrect code as correct just because it "looks close".
 
 Respond in JSON format:
-{{"correct": boolean, "feedback": "brief explanation"}}
-"""
+{{"correct": boolean, "feedback": "specific explanation of what's wrong or what's correct"}}"""
     else:
         system_prompt = f"""You are a PyTorch expert tutor. Evaluate the user's explanation of this concept:
 
