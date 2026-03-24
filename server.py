@@ -107,11 +107,6 @@ import torch
 import numpy as np
 """
     
-    # Capture stdout
-    old_stdout = sys.stdout
-    redirected = io.StringIO()
-    sys.stdout = redirected
-    
     # Execution context with pre-imported modules
     exec_globals = {
         "__builtins__": __builtins__,
@@ -124,11 +119,42 @@ import numpy as np
         # Run pre-import
         exec(preimport_code, exec_globals, exec_locals)
         
-        # Run user's code
-        exec(request.code, exec_globals, exec_locals)
+        # Check if code is a single expression (Jupyter-style display)
+        code = request.code.strip()
         
-        sys.stdout = old_stdout
-        output = redirected.getvalue()
+        # Capture stdout
+        old_stdout = sys.stdout
+        redirected = io.StringIO()
+        sys.stdout = redirected
+        
+        # Try to compile as expression first
+        try:
+            compiled = compile(code, '<string>', 'eval')
+            # It's an expression - evaluate and display result
+            result = eval(code, exec_globals, exec_locals)
+            sys.stdout = old_stdout
+            redirected.truncate(0)
+            redirected.seek(0)
+            # Format result like Jupyter - use repr for tensors
+            if hasattr(result, 'pretty_print'):
+                output = result.pretty_print()
+            elif hasattr(result, '__repr__'):
+                output = repr(result)
+            else:
+                output = str(result)
+        except SyntaxError:
+            # It's a statement - execute normally
+            sys.stdout = redirected
+            exec(code, exec_globals, exec_locals)
+            sys.stdout = old_stdout
+            output = redirected.getvalue()
+        except Exception as eval_err:
+            sys.stdout = old_stdout
+            redirected.truncate(0)
+            redirected.seek(0)
+            output = redirected.getvalue()
+            if not output:
+                raise eval_err
         
         # If there's a test code, run it
         if request.test_code:
@@ -142,11 +168,9 @@ import numpy as np
                 test_output = redirected_test.getvalue()
                 
                 # Test passed if no error and output matches expected
-                # Simple check: if expected_output in test_output
                 if request.expected_output and request.expected_output in test_output:
                     test_passed = True
                 elif not request.expected_output:
-                    # No specific output to check, just ran without error
                     test_passed = True
                     
             except Exception as test_e:
@@ -155,7 +179,6 @@ import numpy as np
         
         # Check expected pattern (shape, etc)
         if not test_passed and request.expected_pattern:
-            # For pattern matching, we check if the shape info is in output
             if request.expected_pattern.lower() in output.lower():
                 test_passed = True
         

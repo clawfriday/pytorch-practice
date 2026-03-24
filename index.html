@@ -530,11 +530,17 @@
                 function appendOutput(text) {
                     terminalOutput.value += (terminalOutput.value ? '\n' : '') + text;
                 }
+                
+                function clearOutput() {
+                    terminalOutput.value = '';
+                }
 
                 async function runCode() {
                     if (!codeInput.value.trim() || executionStatus.value === 'running') return;
                     
                     executionStatus.value = 'running';
+                    // Clear previous output before new run
+                    clearOutput();
                     appendOutput(`>>> ${codeInput.value}`);
                     
                     try {
@@ -597,6 +603,7 @@
                     examples,
                     runCode,
                     clearTerminal,
+                    clearOutput,
                     loadExample,
                     answeredCount,
                     progressPercent,
