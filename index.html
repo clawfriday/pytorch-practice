@@ -13,37 +13,28 @@
             background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
             min-height: 100vh;
         }
-        .terminal {
-            background: #0d1117;
-            border: 1px solid #30363d;
-            border-radius: 8px;
-        }
-        .terminal-output {
-            background: #0d1117;
-            color: #7ee787;
-            padding: 12px;
-            border-radius: 0 0 8px 8px;
-            min-height: 150px;
-            max-height: 250px;
-            overflow-y: auto;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 13px;
-            white-space: pre-wrap;
-        }
-        .terminal-input {
-            background: #161b22;
-            border: none;
-            color: #c9d1d9;
-            padding: 12px;
-            width: 100%;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 13px;
-            outline: none;
-        }
         .question-card {
             background: rgba(255, 255, 255, 0.05);
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        /* Input: white background */
+        .code-input-area {
+            background: #ffffff;
+            border-radius: 8px 8px 0 0;
+        }
+        .code-input-area textarea {
+            background: transparent;
+            color: #1f2937;
+        }
+        /* Output: black background */
+        .code-output-area {
+            background: #0d1117;
+            border-radius: 0 0 8px 8px;
+            color: #7ee787;
+        }
+        .code-output-area .error {
+            color: #f97583;
         }
     </style>
 </head>
@@ -90,10 +81,10 @@
             <h1 class="text-4xl font-bold bg-gradient-to-r from-orange-400 to-red-500 bg-clip-text text-transparent">
                 🔥 PyTorch Practice
             </h1>
-            <p class="text-gray-400 mt-2">Master PyTorch one function at a time</p>
+            <p class="text-gray-400 mt-2">Master PyTorch one task at a time</p>
             <div class="mt-2 flex items-center gap-4">
                 <span v-if="backendStatus === 'connected'" class="text-green-400 text-sm">✓ Connected to server</span>
-                <span v-else-if="backendStatus === 'error' || backendStatus === 'connecting'" class="text-red-400 text-sm">✗ Server error</span>
+                <span v-else-if="backendStatus === 'error'" class="text-red-400 text-sm">✗ Server error</span>
                 <span v-else class="text-yellow-400 text-sm">⏳ Connecting...</span>
                 <button @click="logout" class="text-sm text-gray-400 hover:text-white ml-auto">Logout</button>
             </div>
@@ -122,51 +113,71 @@
                         <span class="text-sm text-orange-400">{{ currentQuestion.topic }}</span>
                         <span 
                             class="text-xs px-2 py-1 rounded"
-                            :class="currentQuestion.type === 'mcq' ? 'bg-blue-900 text-blue-300' : 'bg-purple-900 text-purple-300'"
+                            :class="currentQuestion.type === 'coding' ? 'bg-green-900 text-green-300' : 'bg-purple-900 text-purple-300'"
                         >
-                            {{ currentQuestion.type === 'mcq' ? 'MCQ' : 'Open-ended' }}
+                            {{ currentQuestion.type === 'coding' ? '💻 Coding' : '📝 Explanation' }}
                         </span>
                     </div>
                     
                     <h3 class="text-lg font-medium mb-4">{{ currentQuestion.question }}</h3>
 
-                    <!-- MCQ Options -->
-                    <div v-if="currentQuestion.type === 'mcq'" class="space-y-2 mb-4">
-                        <button
-                            v-for="(option, idx) in currentQuestion.options"
-                            :key="idx"
-                            @click="answerMCQ(idx)"
-                            class="w-full text-left p-3 rounded-lg border transition-all"
-                            :class="getMCQClass(idx)"
-                        >
-                            <span class="font-medium mr-2">{{ ['A', 'B', 'C', 'D'][idx] }}.</span>
-                            {{ option }}
-                        </button>
+                    <!-- Hint -->
+                    <div v-if="currentQuestion.code_hint && !result" class="text-sm text-gray-400 mb-4 p-2 bg-gray-800/50 rounded">
+                        💡 Hint: {{ currentQuestion.code_hint }}
                     </div>
 
-                    <!-- Open-ended Answer -->
-                    <div v-else class="mb-4">
+                    <!-- Coding Task: Code Editor + Submit -->
+                    <div v-if="currentQuestion.type === 'coding' && !result">
+                        <div class="code-editor rounded-lg overflow-hidden">
+                            <!-- Code Input (White background) -->
+                            <div class="code-input-area p-3">
+                                <div class="flex items-center gap-2 mb-2 text-gray-500 text-xs">
+                                    <span>››</span>
+                                    <span>Type your code</span>
+                                </div>
+                                <textarea
+                                    v-model="codeAnswer"
+                                    class="w-full h-32 font-mono text-sm resize-none outline-none placeholder-gray-400"
+                                    placeholder="Write your code here..."
+                                ></textarea>
+                            </div>
+                            
+                            <!-- Submit Button -->
+                            <div class="bg-gray-800 p-2 flex gap-2">
+                                <button
+                                    @click="submitCodeAnswer"
+                                    :disabled="isRunningCode"
+                                    class="bg-green-600 hover:bg-green-700 px-4 py-2 rounded-lg text-sm disabled:opacity-50"
+                                >
+                                    {{ isRunningCode ? 'Running...' : '▶ Run & Test' }}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Explanation Task: Text Answer -->
+                    <div v-else-if="currentQuestion.type === 'explanation' && !result">
                         <textarea
-                            v-model="openAnswer"
-                            placeholder="Type your answer here..."
+                            v-model="textAnswer"
+                            placeholder="Type your explanation here..."
                             class="w-full bg-gray-800 border border-gray-600 rounded-lg p-3 h-32"
                         ></textarea>
                         <button
-                            @click="submitOpenAnswer"
+                            @click="submitTextAnswer"
                             :disabled="isEvaluating"
-                            class="mt-2 bg-orange-500 hover:bg-orange-600 px-6 py-2 rounded-lg font-medium disabled:opacity-50"
+                            class="mt-2 bg-purple-600 hover:bg-purple-700 px-6 py-2 rounded-lg font-medium disabled:opacity-50"
                         >
                             {{ isEvaluating ? 'Evaluating...' : 'Submit for AI Review' }}
                         </button>
                     </div>
 
-                    <!-- Result -->
+                    <!-- Result Display -->
                     <div v-if="result" class="mt-4 p-4 rounded-lg" :class="result.correct ? 'bg-green-900/30' : 'bg-red-900/30'">
                         <div class="flex items-center gap-2 mb-2">
                             <span class="text-2xl">{{ result.correct ? '✅' : '❌' }}</span>
-                            <span class="font-semibold">Score: {{ result.score }}/{{ currentQuestion.type === 'mcq' ? 1 : 10 }}</span>
+                            <span class="font-semibold">{{ result.correct ? 'Correct!' : 'Not quite right' }}</span>
                         </div>
-                        <p class="text-gray-300">{{ result.feedback }}</p>
+                        <p class="text-gray-300 whitespace-pre-wrap">{{ result.feedback }}</p>
                     </div>
 
                     <!-- Navigation -->
@@ -187,43 +198,30 @@
                 </div>
             </div>
 
-            <!-- Right: Code Terminal -->
+            <!-- Right: Code Terminal (for experimentation) -->
             <div class="space-y-4">
                 <div class="question-card rounded-xl p-6">
-                    <h3 class="text-lg font-semibold mb-4">🐍 Python Code Terminal</h3>
+                    <h3 class="text-lg font-semibold mb-4">🐍 Python Code Terminal (Practice)</h3>
+                    <p class="text-sm text-gray-400 mb-4">torch, numpy pre-imported. Use this to experiment!</p>
                     
-                    <div class="terminal rounded-lg overflow-hidden">
-                        <!-- Header -->
-                        <div class="bg-gray-800 px-3 py-2 flex items-center gap-2 text-sm text-gray-400">
-                            <span>›</span>
-                            <span>Python + PyTorch (Server)</span>
-                            <span v-if="executionStatus === 'running'" class="ml-auto text-yellow-400">Running...</span>
-                        </div>
-                        
+                    <div class="code-editor rounded-lg overflow-hidden">
                         <!-- Input (White background) -->
-                        <div class="bg-white p-2">
-                            <div class="flex items-center gap-2">
-                                <span class="text-gray-500 text-sm">››</span>
-                                <input
-                                    v-model="codeInput"
-                                    @keydown.enter="runCode"
-                                    type="text"
-                                    class="flex-1 bg-transparent border-none outline-none text-gray-800 font-mono text-sm placeholder-gray-400"
-                                    placeholder="Enter code... (e.g., torch.randn(3,3))"
-                                >
-                                <button
-                                    @click="runCode"
-                                    :disabled="executionStatus === 'running'"
-                                    class="bg-green-600 hover:bg-green-700 px-3 py-1 rounded text-xs text-white disabled:opacity-50"
-                                >
-                                    Run
-                                </button>
+                        <div class="code-input-area p-3">
+                            <div class="flex items-center gap-2 mb-2 text-gray-500 text-xs">
+                                <span>››</span>
+                                <span>Type code and press Enter</span>
                             </div>
-                            <p class="text-xs text-gray-400 mt-1">torch, numpy, pandas pre-imported</p>
+                            <input
+                                v-model="codeInput"
+                                @keydown.enter="runCode"
+                                type="text"
+                                class="w-full bg-transparent border-none outline-none text-gray-800 font-mono text-sm placeholder-gray-400"
+                                placeholder="e.g., torch.randn(3, 3)"
+                            >
                         </div>
                         
                         <!-- Output (Black background) -->
-                        <div class="terminal-output bg-black text-green-400 font-mono text-sm p-3">
+                        <div class="code-output-area p-3 font-mono text-sm min-h-[150px]">
                             {{ terminalOutput || 'Output will appear here...' }}
                         </div>
                     </div>
@@ -234,13 +232,6 @@
                             class="bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded-lg text-sm"
                         >
                             Clear
-                        </button>
-                        <button
-                            @click="runCode"
-                            :disabled="executionStatus === 'running'"
-                            class="bg-green-600 hover:bg-green-700 px-4 py-2 rounded-lg text-sm disabled:opacity-50"
-                        >
-                            ▶ Run
                         </button>
                     </div>
 
@@ -282,7 +273,6 @@
         const { createApp, ref, computed, onMounted } = Vue;
 
         // ============== CONFIG ==============
-        // UPDATE THIS to your ngrok URL after starting server
         const API_BASE = "https://nonautomatic-grant-salaryless.ngrok-free.dev";
 
         createApp({
@@ -291,9 +281,11 @@
                 const questions = ref([]);
                 const currentQuestionIndex = ref(0);
                 const selectedTopic = ref('');
-                const openAnswer = ref('');
+                const codeAnswer = ref('');
+                const textAnswer = ref('');
                 const result = ref(null);
                 const isEvaluating = ref(false);
+                const isRunningCode = ref(false);
                 const executionStatus = ref('idle');
                 const backendStatus = ref('connecting');
                 
@@ -308,10 +300,10 @@
 
                 // Examples
                 const examples = [
-                    'import torch; print(torch.randn(3, 3))',
-                    'import torch; print(torch.zeros(2, 4))',
-                    'x = torch.tensor([1,2,3]); print(x.shape)',
-                    'import torch; print(torch.cuda.is_available())',
+                    'torch.randn(3, 3)',
+                    'torch.zeros(2, 4)',
+                    'torch.eye(3)',
+                    'torch.ones(2, 3)',
                 ];
 
                 // Load questions and check backend
@@ -323,7 +315,6 @@
                         console.error('Failed to load questions:', e);
                     }
                     
-                    // Check backend health
                     checkBackend();
                 });
 
@@ -343,7 +334,6 @@
                     }
                 }
 
-                // Auth helpers
                 function getAuthHeaders() {
                     const username = localStorage.getItem('username');
                     const password = localStorage.getItem('password');
@@ -397,14 +387,16 @@
                 function filterQuestions() {
                     currentQuestionIndex.value = 0;
                     result.value = null;
-                    openAnswer.value = '';
+                    codeAnswer.value = '';
+                    textAnswer.value = '';
                 }
 
                 function nextQuestion() {
                     if (currentQuestionIndex.value < filteredQuestions.value.length - 1) {
                         currentQuestionIndex.value++;
                         result.value = null;
-                        openAnswer.value = '';
+                        codeAnswer.value = '';
+                        textAnswer.value = '';
                     }
                 }
 
@@ -412,21 +404,96 @@
                     if (currentQuestionIndex.value > 0) {
                         currentQuestionIndex.value--;
                         result.value = null;
-                        openAnswer.value = '';
+                        codeAnswer.value = '';
+                        textAnswer.value = '';
                     }
                 }
 
-                function answerMCQ(idx) {
-                    const correct = currentQuestion.value.correct === ['A','B','C','D'][idx];
-                    result.value = {
-                        correct,
-                        score: correct ? 1 : 0,
-                        feedback: currentQuestion.value.explanation || (correct ? 'Correct!' : 'Incorrect')
-                    };
-                    currentQuestion.value.answered = true;
+                async function submitCodeAnswer() {
+                    if (isRunningCode.value || !codeAnswer.value.trim()) return;
+                    
+                    isRunningCode.value = true;
+                    
+                    try {
+                        // Execute user's code
+                        const response = await fetch(`${API_BASE}/api/execute`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                ...getAuthHeaders()
+                            },
+                            body: JSON.stringify({ 
+                                code: codeAnswer.value,
+                                test_code: currentQuestion.value.test_code,
+                                expected_output: currentQuestion.value.expected_output,
+                                expected_pattern: currentQuestion.value.expected_pattern,
+                                expected_shape: currentQuestion.value.expected_output_shape
+                            })
+                        });
+                        
+                        const data = await response.json();
+                        
+                        // Check if code ran successfully
+                        if (data.error) {
+                            // Code error - show feedback
+                            result.value = {
+                                correct: false,
+                                feedback: `Code error: ${data.error}\n\nHint: ${currentQuestion.value.code_hint || 'Check your syntax'}`
+                            };
+                            currentQuestion.value.answered = true;
+                        } else if (data.test_passed) {
+                            // Test passed
+                            result.value = {
+                                correct: true,
+                                feedback: '✅ All tests passed! Your solution is correct.'
+                            };
+                            currentQuestion.value.answered = true;
+                        } else {
+                            // Test failed - get LLM feedback
+                            result.value = {
+                                correct: false,
+                                feedback: 'Your output didn\'t match the expected result. Let me check...\n\n(Getting feedback...)'
+                            };
+                            
+                            // Call LLM for feedback
+                            try {
+                                const evalResponse = await fetch(`${API_BASE}/api/evaluate`, {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                        ...getAuthHeaders()
+                                    },
+                                    body: JSON.stringify({
+                                        question: currentQuestion.value.question,
+                                        user_code: codeAnswer.value,
+                                        user_output: data.output,
+                                        expected_output: data.expected_output,
+                                        code_hint: currentQuestion.value.code_hint,
+                                        type: 'coding'
+                                    })
+                                });
+                                
+                                const evalData = await evalResponse.json();
+                                result.value = evalData;
+                            } catch (e) {
+                                result.value = {
+                                    correct: false,
+                                    feedback: `Output mismatch!\n\nYour output:\n${data.output}\n\nExpected pattern: ${currentQuestion.value.expected_pattern || currentQuestion.value.expected_output_shape || 'See hint'}`
+                                };
+                            }
+                            currentQuestion.value.answered = true;
+                        }
+                    } catch (e) {
+                        result.value = {
+                            correct: false,
+                            feedback: 'Failed to execute code: ' + e.message
+                        };
+                    }
+                    
+                    isRunningCode.value = false;
                 }
 
-                async function submitOpenAnswer() {
+                async function submitTextAnswer() {
                     if (isEvaluating.value) return;
                     
                     isEvaluating.value = true;
@@ -440,8 +507,8 @@
                             },
                             body: JSON.stringify({
                                 question: currentQuestion.value.question,
-                                user_answer: openAnswer.value,
-                                code_hint: currentQuestion.value.code_hint
+                                user_answer: textAnswer.value,
+                                type: 'explanation'
                             })
                         });
                         
@@ -459,22 +526,7 @@
                     isEvaluating.value = false;
                 }
 
-                function getMCQClass(idx) {
-                    const correct = currentQuestion.value?.correct;
-                    const selected = ['A','B','C','D'][idx];
-                    
-                    if (!result.value) {
-                        return 'bg-gray-800 border-gray-600 hover:bg-gray-700';
-                    }
-                    
-                    if (correct === selected) {
-                        return 'bg-green-900/50 border-green-500 text-green-300';
-                    }
-                    
-                    return 'bg-gray-800 border-gray-600 opacity-50';
-                }
-
-                // Terminal
+                // Terminal (separate from question answering)
                 function appendOutput(text) {
                     terminalOutput.value += (terminalOutput.value ? '\n' : '') + text;
                 }
@@ -507,7 +559,7 @@
                     }
                     
                     executionStatus.value = 'idle';
-                    codeInput.value = '';
+                    // NOTE: NOT clearing codeInput.value - persists for user convenience
                 }
 
                 function clearTerminal() {
@@ -526,9 +578,11 @@
                     selectedTopic,
                     topics,
                     filteredQuestions,
-                    openAnswer,
+                    codeAnswer,
+                    textAnswer,
                     result,
                     isEvaluating,
+                    isRunningCode,
                     executionStatus,
                     backendStatus,
                     // Auth
@@ -548,9 +602,8 @@
                     progressPercent,
                     nextQuestion,
                     prevQuestion,
-                    answerMCQ,
-                    submitOpenAnswer,
-                    getMCQClass
+                    submitCodeAnswer,
+                    submitTextAnswer
                 };
             }
         }).mount('#app');

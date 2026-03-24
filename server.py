@@ -6,7 +6,7 @@ PyTorch Practice Backend Server
 """
 import os
 import json
-import asyncio
+import re
 from pathlib import Path
 
 from fastapi import FastAPI, HTTPException, Header, Depends
@@ -19,21 +19,15 @@ from botocore.config import Config
 import base64
 
 # ============== CONFIG ==============
-# User allowlist: username -> password
 USERS = {
     "hawkoli1987": "Matajinqiu2!",
 }
 
-# AWS Bedrock config
 AWS_REGION = "us-east-1"
 BEDROCK_MODEL_ID = "deepseek.v3.2"
 
-# Bedrock credentials (from ~/.ssh/.bedrock)
-AWS_BEARER_TOKEN = os.environ.get("AWS_BEARER_TOKEN_BEDROCK", "")
-
 app = FastAPI(title="PyTorch Practice API")
 
-# Enable CORS for GitHub Pages
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -45,35 +39,42 @@ app.add_middleware(
 # ============== MODELS ==============
 class ExecuteRequest(BaseModel):
     code: str
+    test_code: str | None = None
+    expected_output: str | None = None
+    expected_pattern: str | None = None
+    expected_shape: str | None = None
 
 
 class ExecuteResponse(BaseModel):
     output: str
     error: str | None = None
+    test_passed: bool = False
+    expected_output: str | None = None
 
 
 class EvaluateRequest(BaseModel):
     question: str
-    user_answer: str
+    user_answer: str | None = None
+    user_code: str | None = None
+    user_output: str | None = None
+    expected_output: str | None = None
     code_hint: str | None = None
+    type: str = "explanation"  # "coding" or "explanation"
 
 
 class EvaluateResponse(BaseModel):
-    score: int
     correct: bool
     feedback: str
 
 
 # ============== AUTH ==============
 def verify_auth(authorization: str | None = Header(None)) -> str:
-    """Verify Basic Auth credentials"""
     if not authorization:
         raise HTTPException(status_code=401, detail="Missing authorization header")
     
     if not authorization.startswith("Basic "):
         raise HTTPException(status_code=401, detail="Invalid authorization format")
     
-    # Decode credentials
     try:
         encoded = authorization.replace("Basic ", "")
         decoded = base64.b64decode(encoded).decode("utf-8")
@@ -81,7 +82,6 @@ def verify_auth(authorization: str | None = Header(None)) -> str:
     except Exception:
         raise HTTPException(status_code=401, detail="Invalid credentials")
     
-    # Check allowlist
     if username not in USERS or USERS[username] != password:
         raise HTTPException(status_code=401, detail="Invalid credentials")
     
@@ -92,12 +92,14 @@ def verify_auth(authorization: str | None = Header(None)) -> str:
 
 @app.post("/api/execute", response_model=ExecuteResponse)
 async def execute_code(request: ExecuteRequest):
-    """Execute Python code and return output"""
+    """Execute Python code with optional unit test verification"""
     import sys
     import io
     
     output = ""
     error = None
+    test_passed = False
+    expected_output = request.expected_output or ""
     
     # Pre-import common libraries
     preimport_code = """
@@ -121,15 +123,57 @@ import numpy as np
     try:
         # Run pre-import
         exec(preimport_code, exec_globals, exec_locals)
-        # Run user code
+        
+        # Run user's code
         exec(request.code, exec_globals, exec_locals)
+        
         sys.stdout = old_stdout
         output = redirected.getvalue()
+        
+        # If there's a test code, run it
+        if request.test_code:
+            redirected_test = io.StringIO()
+            old_stdout = sys.stdout
+            sys.stdout = redirected_test
+            
+            try:
+                exec(request.test_code, exec_globals, exec_locals)
+                sys.stdout = old_stdout
+                test_output = redirected_test.getvalue()
+                
+                # Test passed if no error and output matches expected
+                # Simple check: if expected_output in test_output
+                if request.expected_output and request.expected_output in test_output:
+                    test_passed = True
+                elif not request.expected_output:
+                    # No specific output to check, just ran without error
+                    test_passed = True
+                    
+            except Exception as test_e:
+                sys.stdout = old_stdout
+                test_passed = False
+        
+        # Check expected pattern (shape, etc)
+        if not test_passed and request.expected_pattern:
+            # For pattern matching, we check if the shape info is in output
+            if request.expected_pattern.lower() in output.lower():
+                test_passed = True
+        
+        # Check expected shape
+        if not test_passed and request.expected_shape:
+            if f"({request.expected_shape})" in output or f"[{request.expected_shape}]" in output:
+                test_passed = True
+        
     except Exception as e:
         sys.stdout = old_stdout
         error = str(e)
     
-    return ExecuteResponse(output=output, error=error)
+    return ExecuteResponse(
+        output=output, 
+        error=error,
+        test_passed=test_passed,
+        expected_output=expected_output if not test_passed else None
+    )
 
 
 @app.post("/api/evaluate", response_model=EvaluateResponse)
@@ -137,48 +181,49 @@ async def evaluate_answer(
     request: EvaluateRequest,
     user: str = Depends(verify_auth)
 ):
-    """Evaluate open-ended answer using DeepSeek via Bedrock"""
+    """Evaluate using DeepSeek via Bedrock"""
     
-    # Parse the bearer token for Bedrock
-    if not AWS_BEARER_TOKEN:
-        raise HTTPException(status_code=500, detail="AWS credentials not configured")
+    client = boto3.client(
+        'bedrock-runtime',
+        region_name=AWS_REGION,
+        config=Config(signature_version='bearer')
+    )
     
-    # The token format is: "yuli-at-167004608122:base64_credential"
-    # We need just the credential part for the Authorization header
-    try:
-        # Split by dot, take second part, decode
-        parts = AWS_BEARER_TOKEN.split(".")
-        if len(parts) >= 2:
-            credential = parts[1]
-            # Just use the full token as Bearer
-            bearer_token = AWS_BEARER_TOKEN
-        else:
-            bearer_token = AWS_BEARER_TOKEN
-    except:
-        bearer_token = AWS_BEARER_TOKEN
-    
-    # Call Bedrock
-    try:
-        client = boto3.client(
-            "bedrock-runtime",
-            region_name=AWS_REGION,
-            aws_access_key_id="ASdummy",  # Will be overridden by bearer token
-            aws_secret_access_key="dummy",
-            config=Config(signature_version="bearer")
-        )
-        
-        # Build the prompt
-        system_prompt = f"""You are a PyTorch expert tutor. Evaluate the answer to this question.
+    # Build prompt based on type
+    if request.type == "coding":
+        system_prompt = f"""You are a PyTorch coding tutor. The user was asked to solve this coding problem:
 
 Question: {request.question}
-{request.code_hint if request.code_hint else ''}
+Hint: {request.code_hint or 'No hint provided'}
+
+User's code:
+{request.user_code}
+
+User's output:
+{request.user_output}
+
+Expected output/pattern:
+{request.expected_output or request.code_hint or 'See question above'}
+
+Compare the user's solution with the expected solution. Provide brief, constructive feedback if incorrect.
+
+Respond in JSON format:
+{{"correct": boolean, "feedback": "brief explanation"}}
+"""
+    else:
+        system_prompt = f"""You are a PyTorch expert tutor. Evaluate the user's explanation of this concept:
+
+Question: {request.question}
 
 User's Answer: {request.user_answer}
 
+Provide encouraging feedback with corrections if needed. Focus on accuracy and completeness.
+
 Respond in JSON format:
-{{"score": number 0-10, "correct": boolean, "feedback": "detailed explanation"}}"""
-        
-        # Call DeepSeek via Bedrock
+{{"correct": boolean, "feedback": "detailed explanation"}}
+"""
+    
+    try:
         response = client.invoke_model(
             modelId=BEDROCK_MODEL_ID,
             contentType="application/json",
@@ -186,42 +231,36 @@ Respond in JSON format:
             body=json.dumps({
                 "messages": [
                     {"role": "system", "content": system_prompt},
-                    {"role": "user", "content": "Evaluate my answer."}
+                    {"role": "user", "content": "Please evaluate this answer."}
                 ],
-                "max_tokens": 1000,
+                "max_tokens": 800,
                 "temperature": 0.7
             })
         )
         
-        # Parse response
         response_body = json.loads(response["body"].read())
         content = response_body["choices"][0]["message"]["content"]
         
-        # Extract JSON from response
-        import re
+        # Extract JSON
         match = re.search(r'\{[\s\S]*\}', content)
         if match:
             result = json.loads(match.group())
+            return EvaluateResponse(**result)
         else:
-            result = {
-                "score": 5,
-                "correct": True,
-                "feedback": content[:200]
-            }
-        
-        return EvaluateResponse(**result)
+            return EvaluateResponse(
+                correct=False,
+                feedback="Could not parse evaluation. " + content[:200]
+            )
         
     except Exception as e:
         return EvaluateResponse(
-            score=0,
             correct=False,
-            feedback=f"Evaluation failed: {str(e)}"
+            feedback=f"Evaluation error: {str(e)}"
         )
 
 
 @app.get("/api/health")
 async def health_check():
-    """Health check endpoint"""
     return {
         "status": "healthy",
         "pytorch_version": torch.__version__,
@@ -231,18 +270,14 @@ async def health_check():
 
 # ============== RUN ==============
 if __name__ == "__main__":
-    import sys
-    import io
     import uvicorn
     
-    print("🚀 Starting PyTorch Practice Backend")
+    print("🚀 PyTorch Practice Backend")
     print(f"   PyTorch: {torch.__version__}")
     print(f"   Users: {len(USERS)}")
     print("\n   Endpoints:")
-    print("   - POST /api/execute  (code execution)")
-    print("   - POST /api/evaluate (AI evaluation, requires auth)")
+    print("   - POST /api/execute  (code execution + testing)")
+    print("   - POST /api/evaluate (AI evaluation)")
     print("   - GET  /api/health   (health check)")
-    print("\n   To test locally:")
-    print('   curl -X POST http://localhost:8000/api/execute -H "Content-Type: application/json" -d \'{"code":"import torch; print(torch.randn(3,3))"}\'')
     
     uvicorn.run(app, host="0.0.0.0", port=8000)
