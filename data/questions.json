@@ -36,7 +36,8 @@
     "type": "coding",
     "question": "Reshape a tensor from shape (12,) to shape (3, 4).",
     "code_hint": "t.view(3, 4)",
-    "test_code": "t = torch.randn(12)\nresult = t.view(3, 4)\nprint(result.shape)\nassert result.shape == (3, 4)"
+    "test_code": "t = torch.randn(12)\nresult = t.view(3, 4)\nprint(result.shape)\nassert result.shape == (3, 4)",
+    "template": "# Create a tensor with 12 elements\nt = torch.randn(12)\n\n# Reshape to 3x4\nresult = t.view(3, 4)\nprint(result.shape)"
   },
   {
     "id": 6,
@@ -44,7 +45,8 @@
     "type": "coding",
     "question": "Perform matrix multiplication of two 2x2 matrices A=[[1,2],[3,4]] and B=[[2,0],[1,3]]. Show the result.",
     "code_hint": "A @ B or torch.matmul(A, B)",
-    "expected_output": "tensor([[ 4.,  6.],\n        [10., 12.]]"
+    "expected_output": "tensor([[ 4.,  6.],\n        [10., 12.]]",
+    "template": "# Define the matrices\nA = torch.tensor([[1., 2.], [3., 4.]])\nB = torch.tensor([[2., 0.], [1., 3.]])\n\n# Perform matrix multiplication\nC = A @ B\nprint(C)"
   },
   {
     "id": 7,
@@ -59,7 +61,8 @@
     "type": "coding",
     "question": "Use squeeze() to remove a dimension of size 1 from a tensor with shape (1, 3, 1, 4).",
     "code_hint": "t.squeeze()",
-    "test_code": "t = torch.randn(1, 3, 1, 4)\nresult = t.squeeze()\nprint(result.shape)\nassert result.shape == (3, 4)"
+    "test_code": "t = torch.randn(1, 3, 1, 4)\nresult = t.squeeze()\nprint(result.shape)\nassert result.shape == (3, 4)",
+    "template": "# Create a tensor with shape (1, 3, 1, 4)\nt = torch.randn(1, 3, 1, 4)\n\n# Use squeeze() to remove dimensions of size 1\nresult = t.squeeze()\nprint(result.shape)"
   },
   {
     "id": 9,
@@ -68,7 +71,8 @@
     "question": "Create x=2.0 with requires_grad=True, compute y=x^2, then calculate gradient dy/dx at x=2.",
     "code_hint": "x.requires_grad=True, y.backward(), x.grad",
     "expected_output": "tensor([4.])",
-    "test_code": "x = torch.tensor([2.], requires_grad=True)\ny = x ** 2\ny.backward()\nprint(x.grad)"
+    "test_code": "x = torch.tensor([2.], requires_grad=True)\ny = x ** 2\ny.backward()\nprint(x.grad)",
+    "template": "# Create x with requires_grad=True\nx = torch.tensor([2.], requires_grad=True)\n\n# Compute y = x^2\ny = x ** 2\n\n# Backward pass to compute gradients\ny.backward()\n\n# Print the gradient\nprint(x.grad)"
   },
   {
     "id": 10,
@@ -84,7 +88,8 @@
     "question": "Use torch.no_grad() context to evaluate y=2*x where x=[1,2,3] with requires_grad=True. What is y.requires_grad after?",
     "code_hint": "with torch.no_grad():",
     "expected_output": "False",
-    "test_code": "x = torch.tensor([1., 2., 3.], requires_grad=True)\nwith torch.no_grad():\n    y = x * 2\nprint(y.requires_grad)"
+    "test_code": "x = torch.tensor([1., 2., 3.], requires_grad=True)\nwith torch.no_grad():\n    y = x * 2\nprint(y.requires_grad)",
+    "template": "# Create x with requires_grad=True\nx = torch.tensor([1., 2., 3.], requires_grad=True)\n\n# Use no_grad context for forward pass\nwith torch.no_grad():\n    y = x * 2\n\n# Check if gradients are tracked\nprint(y.requires_grad)"
   },
   {
     "id": 12,
@@ -99,7 +104,8 @@
     "type": "coding",
     "question": "Create a linear layer that transforms input of size 10 to output of size 5. Then test it with a random input.",
     "code_hint": "torch.nn.Linear(10, 5)",
-    "test_code": "layer = torch.nn.Linear(10, 5)\nx = torch.randn(1, 10)\ny = layer(x)\nprint(y.shape)\nassert y.shape == (1, 5)"
+    "test_code": "layer = torch.nn.Linear(10, 5)\nx = torch.randn(1, 10)\ny = layer(x)\nprint(y.shape)\nassert y.shape == (1, 5)",
+    "template": "import torch.nn as nn\n\n# Create a linear layer\nlayer = nn.Linear(10, 5)\n\n# Test with random input\nx = torch.randn(1, 10)\ny = layer(x)\nprint(y.shape)"
   },
   {
     "id": 14,
@@ -121,7 +127,8 @@
     "type": "coding",
     "question": "Calculate CrossEntropyLoss for predictions=[[0.8, 0.1, 0.1], [0.3, 0.6, 0.1]] and targets=[0, 1].",
     "code_hint": "torch.nn.CrossEntropyLoss()(predictions, targets)",
-    "test_code": "criterion = torch.nn.CrossEntropyLoss()\npredictions = torch.tensor([[0.8, 0.1, 0.1], [0.3, 0.6, 0.1]])\ntargets = torch.tensor([0, 1])\nloss = criterion(predictions, targets)\nprint(f'Loss: {loss.item():.4f}')\nassert loss.item() > 0"
+    "test_code": "criterion = torch.nn.CrossEntropyLoss()\npredictions = torch.tensor([[0.8, 0.1, 0.1], [0.3, 0.6, 0.1]])\ntargets = torch.tensor([0, 1])\nloss = criterion(predictions, targets)\nprint(f\"Loss: {loss.item():.4f}\")\nassert loss.item() > 0",
+    "template": "import torch.nn as nn\n\n# Define predictions and targets\npredictions = torch.tensor([[0.8, 0.1, 0.1], [0.3, 0.6, 0.1]])\ntargets = torch.tensor([0, 1])\n\n# Calculate CrossEntropyLoss\ncriterion = nn.CrossEntropyLoss()\nloss = criterion(predictions, targets)\nprint(f\"Loss: {loss.item():.4f}\")"
   },
   {
     "id": 17,
@@ -136,7 +143,8 @@
     "type": "coding",
     "question": "Create a DataLoader for a tensor dataset with batch_size=4 and shuffle=True. Get the first batch.",
     "code_hint": "DataLoader(TensorDataset(x, y), batch_size=4, shuffle=True)",
-    "test_code": "x = torch.randn(100, 10)\ny = torch.randn(100, 1)\ndataset = torch.utils.data.TensorDataset(x, y)\nloader = torch.utils.data.DataLoader(dataset, batch_size=4, shuffle=True)\nbatch_x, batch_y = next(iter(loader))\nprint(f'{batch_x.shape}, {batch_y.shape}')\nassert batch_x.shape[0] == 4"
+    "test_code": "x = torch.randn(100, 10)\ny = torch.randn(100, 1)\ndataset = torch.utils.data.TensorDataset(x, y)\nloader = torch.utils.data.DataLoader(dataset, batch_size=4, shuffle=True)\nbatch_x, batch_y = next(iter(loader))\nprint(f\"{batch_x.shape}, {batch_y.shape}\")\nassert batch_x.shape[0] == 4",
+    "template": "import torch.utils.data as data\n\n# Create sample data\nx = torch.randn(100, 10)\ny = torch.randn(100, 1)\n\n# Create dataset and dataloader\ndataset = data.TensorDataset(x, y)\nloader = data.DataLoader(dataset, batch_size=4, shuffle=True)\n\n# Get first batch\nbatch_x, batch_y = next(iter(loader))\nprint(f\"batch_x: {batch_x.shape}, batch_y: {batch_y.shape}\")"
   },
   {
     "id": 19,
@@ -151,6 +159,7 @@
     "type": "coding",
     "question": "Check if CUDA (GPU) is available. If yes, move a tensor to GPU. If no, keep on CPU.",
     "code_hint": "torch.cuda.is_available(), .to(device)",
-    "test_code": "device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')\nx = torch.randn(3, 3)\nx_gpu = x.to(device)\nprint(str(x_gpu.device))\nassert 'cuda' in str(x_gpu.device) or 'cpu' in str(x_gpu.device)"
+    "test_code": "device = torch.device(\"cuda\" if torch.cuda.is_available() else \"cpu\")\nx = torch.randn(3, 3)\nx_gpu = x.to(device)\nprint(str(x_gpu.device))\nassert \"cuda\" in str(x_gpu.device) or \"cpu\" in str(x_gpu.device)",
+    "template": "# Check if CUDA is available\ndevice = torch.device(\"cuda\" if torch.cuda.is_available() else \"cpu\")\nprint(f\"Using device: {device}\")\n\n# Create a tensor and move to device\nx = torch.randn(3, 3)\nx_on_device = x.to(device)\nprint(f\"Tensor device: {x_on_device.device}\")"
   }
 ]

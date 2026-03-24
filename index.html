@@ -36,6 +36,20 @@
         .code-output-area .error {
             color: #f97583;
         }
+        /* Editor textarea styling */
+        .editor-textarea {
+            background: transparent;
+            color: #1f2937;
+            resize: none;
+            outline: none;
+        }
+        .editor-textarea::placeholder {
+            color: #9ca3af;
+        }
+        /* Tab focus prevention */
+        .no-focus-outline:focus {
+            outline: none;
+        }
     </style>
 </head>
 <body>
@@ -133,13 +147,23 @@
                             <div class="code-input-area p-3">
                                 <div class="flex items-center gap-2 mb-2 text-gray-500 text-xs">
                                     <span>››</span>
-                                    <span>Type your code</span>
+                                    <span>Write your code (Ctrl+Enter to run)</span>
                                 </div>
                                 <textarea
+                                    ref="codeEditorRef"
                                     v-model="codeAnswer"
-                                    class="w-full h-32 font-mono text-sm resize-none outline-none placeholder-gray-400"
-                                    placeholder="Write your code here..."
+                                    @keydown.ctrl.enter.prevent="submitCodeAnswer"
+                                    @keydown.tab.prevent="handleTabInEditor"
+                                    class="editor-textarea w-full h-40 font-mono text-sm"
+                                    placeholder="Start typing or use the template below..."
                                 ></textarea>
+                            </div>
+                            
+                            <!-- Template hint -->
+                            <div v-if="getEditorTemplate()" class="bg-gray-100 border-t border-gray-200 p-2">
+                                <button @click="loadTemplate" class="text-xs text-blue-600 hover:text-blue-800">
+                                    📋 Load template
+                                </button>
                             </div>
                             
                             <!-- Submit Button -->
@@ -151,6 +175,7 @@
                                 >
                                     {{ isRunningCode ? 'Running...' : '▶ Run & Test' }}
                                 </button>
+                                <span class="text-gray-400 text-xs self-center ml-2">Ctrl+Enter</span>
                             </div>
                         </div>
                     </div>
@@ -159,7 +184,8 @@
                     <div v-else-if="currentQuestion.type === 'explanation' && !result">
                         <textarea
                             v-model="textAnswer"
-                            placeholder="Type your explanation here..."
+                            @keydown.ctrl.enter.prevent="submitTextAnswer"
+                            placeholder="Type your explanation here... (Ctrl+Enter to submit)"
                             class="w-full bg-gray-800 border border-gray-600 rounded-lg p-3 h-32"
                         ></textarea>
                         <button
@@ -167,17 +193,26 @@
                             :disabled="isEvaluating"
                             class="mt-2 bg-purple-600 hover:bg-purple-700 px-6 py-2 rounded-lg font-medium disabled:opacity-50"
                         >
-                            {{ isEvaluating ? 'Evaluating...' : 'Submit for AI Review' }}
+                            {{ isEvaluating ? 'Evaluating...' : 'Submit for AI Review (Ctrl+Enter)' }}
                         </button>
                     </div>
 
                     <!-- Result Display -->
                     <div v-if="result" class="mt-4 p-4 rounded-lg" :class="result.correct ? 'bg-green-900/30' : 'bg-red-900/30'">
-                        <div class="flex items-center gap-2 mb-2">
-                            <span class="text-2xl">{{ result.correct ? '✅' : '❌' }}</span>
-                            <span class="font-semibold">{{ result.correct ? 'Correct!' : 'Not quite right' }}</span>
+                        <div class="flex items-center justify-between mb-2">
+                            <div class="flex items-center gap-2">
+                                <span class="text-2xl">{{ result.correct ? '✅' : '❌' }}</span>
+                                <span class="font-semibold">{{ result.correct ? 'Correct!' : 'Not quite right' }}</span>
+                            </div>
+                            <button 
+                                v-if="!result.correct && currentQuestion.type === 'coding'"
+                                @click="editCode"
+                                class="text-xs text-blue-400 hover:text-blue-300"
+                            >
+                                ✏️ Edit code
+                            </button>
                         </div>
-                        <p class="text-gray-300 whitespace-pre-wrap">{{ result.feedback }}</p>
+                        <pre class="text-gray-300 whitespace-pre-wrap text-sm">{{ result.feedback }}</pre>
                     </div>
 
                     <!-- Navigation -->
@@ -202,22 +237,23 @@
             <div class="space-y-4">
                 <div class="question-card rounded-xl p-6">
                     <h3 class="text-lg font-semibold mb-4">🐍 Python Code Terminal (Practice)</h3>
-                    <p class="text-sm text-gray-400 mb-4">torch, numpy pre-imported. Use this to experiment!</p>
+                    <p class="text-sm text-gray-400 mb-4">torch, numpy pre-imported. Press Enter for new line, Ctrl+Enter to run</p>
                     
                     <div class="code-editor rounded-lg overflow-hidden">
-                        <!-- Input (White background) -->
+                        <!-- Input (White background) - Multi-line textarea -->
                         <div class="code-input-area p-3">
                             <div class="flex items-center gap-2 mb-2 text-gray-500 text-xs">
                                 <span>››</span>
-                                <span>Type code and press Enter</span>
+                                <span>Multi-line input (Enter=newline, Ctrl+Enter=run)</span>
                             </div>
-                            <input
+                            <textarea
                                 v-model="codeInput"
-                                @keydown.enter="runCode"
-                                type="text"
-                                class="w-full bg-transparent border-none outline-none text-gray-800 font-mono text-sm placeholder-gray-400"
-                                placeholder="e.g., torch.randn(3, 3)"
-                            >
+                                @keydown.enter.exact.prevent="addNewLineInTerminal"
+                                @keydown.ctrl.enter.prevent="runCode"
+                                @keydown.tab.prevent="handleTabInTerminal"
+                                class="editor-textarea w-full h-32 font-mono text-sm"
+                                placeholder="e.g., torch.randn(3, 3)&#10;torch.eye(3)"
+                            ></textarea>
                         </div>
                         
                         <!-- Output (Black background) -->
@@ -227,6 +263,13 @@
                     </div>
 
                     <div class="flex gap-2 mt-3">
+                        <button
+                            @click="runCode"
+                            :disabled="executionStatus === 'running'"
+                            class="bg-green-600 hover:bg-green-700 px-4 py-2 rounded-lg text-sm disabled:opacity-50"
+                        >
+                            ▶ Run
+                        </button>
                         <button
                             @click="clearTerminal"
                             class="bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded-lg text-sm"
@@ -245,7 +288,7 @@
                                 @click="loadExample(ex)"
                                 class="text-xs bg-gray-800 hover:bg-gray-700 px-2 py-1 rounded"
                             >
-                                {{ ex }}
+                                {{ ex.split('\n')[0].substring(0, 20) }}
                             </button>
                         </div>
                     </div>
@@ -270,7 +313,7 @@
     </div>
 
     <script>
-        const { createApp, ref, computed, onMounted } = Vue;
+        const { createApp, ref, computed, onMounted, nextTick } = Vue;
 
         // ============== CONFIG ==============
         const API_BASE = "https://nonautomatic-grant-salaryless.ngrok-free.dev";
@@ -288,6 +331,7 @@
                 const isRunningCode = ref(false);
                 const executionStatus = ref('idle');
                 const backendStatus = ref('connecting');
+                const codeEditorRef = ref(null);
                 
                 // Auth
                 const isLoggedIn = ref(false);
@@ -298,12 +342,12 @@
                 const terminalOutput = ref('');
                 const codeInput = ref('');
 
-                // Examples
+                // Examples (multi-line now)
                 const examples = [
                     'torch.randn(3, 3)',
                     'torch.zeros(2, 4)',
                     'torch.eye(3)',
-                    'torch.ones(2, 3)',
+                    'x = torch.randn(3)\ny = x ** 2\nprint(y)',
                 ];
 
                 // Load questions and check backend
@@ -386,33 +430,125 @@
                 // Methods
                 function filterQuestions() {
                     currentQuestionIndex.value = 0;
+                    loadCurrentQuestionCode();
+                }
+
+                function loadCurrentQuestionCode() {
+                    if (!currentQuestion.value) return;
+                    
+                    // Restore previously saved code or load template
+                    if (currentQuestion.value.userCode) {
+                        codeAnswer.value = currentQuestion.value.userCode;
+                    } else {
+                        const template = getEditorTemplate();
+                        codeAnswer.value = template || '';
+                    }
+                    textAnswer.value = currentQuestion.value.textAnswer || '';
                     result.value = null;
-                    codeAnswer.value = '';
-                    textAnswer.value = '';
+                }
+
+                function getEditorTemplate() {
+                    if (!currentQuestion.value) return '';
+                    return currentQuestion.value.template || '';
+                }
+
+                function loadTemplate() {
+                    const template = getEditorTemplate();
+                    if (template) {
+                        codeAnswer.value = template;
+                        nextTick(() => {
+                            if (codeEditorRef.value) {
+                                codeEditorRef.value.focus();
+                            }
+                        });
+                    }
+                }
+
+                function handleTabInEditor(e) {
+                    // Insert tab character instead of moving focus
+                    const textarea = e.target;
+                    const start = textarea.selectionStart;
+                    const end = textarea.selectionEnd;
+                    codeAnswer.value = codeAnswer.value.substring(0, start) + '\t' + codeAnswer.value.substring(end);
+                    nextTick(() => {
+                        textarea.selectionStart = textarea.selectionEnd = start + 1;
+                    });
+                }
+
+                function handleTabInTerminal(e) {
+                    // Insert tab character in terminal
+                    const textarea = e.target;
+                    const start = textarea.selectionStart;
+                    const end = textarea.selectionEnd;
+                    codeInput.value = codeInput.value.substring(0, start) + '\t' + codeInput.value.substring(end);
+                    nextTick(() => {
+                        textarea.selectionStart = textarea.selectionEnd = start + 1;
+                    });
+                }
+
+                function addNewLineInTerminal(e) {
+                    // Allow default behavior (add newline)
                 }
 
                 function nextQuestion() {
+                    saveCurrentCode();
                     if (currentQuestionIndex.value < filteredQuestions.value.length - 1) {
                         currentQuestionIndex.value++;
-                        result.value = null;
-                        codeAnswer.value = '';
-                        textAnswer.value = '';
+                        loadCurrentQuestionCode();
                     }
                 }
 
                 function prevQuestion() {
+                    saveCurrentCode();
                     if (currentQuestionIndex.value > 0) {
                         currentQuestionIndex.value--;
-                        result.value = null;
-                        codeAnswer.value = '';
-                        textAnswer.value = '';
+                        loadCurrentQuestionCode();
                     }
+                }
+
+                function saveCurrentCode() {
+                    if (currentQuestion.value) {
+                        currentQuestion.value.userCode = codeAnswer.value;
+                        currentQuestion.value.textAnswer = textAnswer.value;
+                    }
+                }
+
+                function editCode() {
+                    result.value = null;
+                    nextTick(() => {
+                        if (codeEditorRef.value) {
+                            codeEditorRef.value.focus();
+                        }
+                    });
+                }
+
+                // Retry helper for API calls
+                async function fetchWithRetry(url, options, retries = 3) {
+                    let lastError;
+                    for (let i = 0; i < retries; i++) {
+                        try {
+                            const response = await fetch(url, options);
+                            if (!response.ok) {
+                                throw new Error(`HTTP ${response.status}`);
+                            }
+                            return await response.json();
+                        } catch (e) {
+                            lastError = e;
+                            if (i < retries - 1) {
+                                await new Promise(r => setTimeout(r, 1000)); // Wait 1s before retry
+                            }
+                        }
+                    }
+                    throw lastError;
                 }
 
                 async function submitCodeAnswer() {
                     if (isRunningCode.value || !codeAnswer.value.trim()) return;
                     
                     isRunningCode.value = true;
+                    
+                    // Save code first
+                    saveCurrentCode();
                     
                     try {
                         // Execute user's code
@@ -444,9 +580,9 @@
                                 feedback: 'Analyzing your error...'
                             };
                             
-                            // Call LLM for helpful error explanation
+                            // Call LLM with retry
                             try {
-                                const evalResponse = await fetch(`${API_BASE}/api/evaluate`, {
+                                const evalData = await fetchWithRetry(`${API_BASE}/api/evaluate`, {
                                     method: 'POST',
                                     headers: {
                                         'Content-Type': 'application/json',
@@ -462,8 +598,6 @@
                                         test_passed: false
                                     })
                                 });
-                                
-                                const evalData = await evalResponse.json();
                                 result.value = evalData;
                             } catch (e) {
                                 result.value = {
@@ -486,9 +620,9 @@
                                 feedback: 'Your output didn\'t match the expected result. Let me check...\n\n(Getting feedback...)'
                             };
                             
-                            // Call LLM for feedback
+                            // Call LLM with retry
                             try {
-                                const evalResponse = await fetch(`${API_BASE}/api/evaluate`, {
+                                const evalData = await fetchWithRetry(`${API_BASE}/api/evaluate`, {
                                     method: 'POST',
                                     headers: {
                                         'Content-Type': 'application/json',
@@ -504,8 +638,6 @@
                                         test_passed: data.test_passed
                                     })
                                 });
-                                
-                                const evalData = await evalResponse.json();
                                 result.value = evalData;
                             } catch (e) {
                                 result.value = {
@@ -526,12 +658,12 @@
                 }
 
                 async function submitTextAnswer() {
-                    if (isEvaluating.value) return;
+                    if (isEvaluating.value || !textAnswer.value.trim()) return;
                     
                     isEvaluating.value = true;
                     
                     try {
-                        const response = await fetch(`${API_BASE}/api/evaluate`, {
+                        const evalData = await fetchWithRetry(`${API_BASE}/api/evaluate`, {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json',
@@ -543,15 +675,13 @@
                                 type: 'explanation'
                             })
                         });
-                        
-                        const data = await response.json();
-                        result.value = data;
+                        result.value = evalData;
                         currentQuestion.value.answered = true;
                     } catch (e) {
                         result.value = {
                             score: 0,
                             correct: false,
-                            feedback: 'Evaluation failed: ' + e.message
+                            feedback: 'Evaluation failed. Please try again. Error: ' + e.message
                         };
                     }
                     
@@ -571,11 +701,11 @@
                     if (!codeInput.value.trim() || executionStatus.value === 'running') return;
                     
                     executionStatus.value = 'running';
-                    // Clear previous output before new run
                     clearOutput();
+                    appendOutput(`>>> ${codeInput.value.split('\n').join('\n>>> ')}`);
                     
                     try {
-                        const response = await fetch(`${API_BASE}/api/execute`, {
+                        const response = await fetchWithRetry(`${API_BASE}/api/execute`, {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json',
@@ -584,12 +714,11 @@
                             body: JSON.stringify({ code: codeInput.value })
                         });
                         
-                        const data = await response.json();
-                        if (data.output) {
-                            appendOutput(data.output);
+                        if (response.output) {
+                            appendOutput(response.output);
                         }
-                        if (data.error) {
-                            appendOutput(`Error: ${data.error}`);
+                        if (response.error) {
+                            appendOutput(`Error: ${response.error}`);
                         }
                     } catch (e) {
                         appendOutput(`Error: ${e.message}`);
@@ -622,6 +751,7 @@
                     isRunningCode,
                     executionStatus,
                     backendStatus,
+                    codeEditorRef,
                     // Auth
                     isLoggedIn,
                     loginForm,
@@ -641,7 +771,13 @@
                     nextQuestion,
                     prevQuestion,
                     submitCodeAnswer,
-                    submitTextAnswer
+                    submitTextAnswer,
+                    getEditorTemplate,
+                    loadTemplate,
+                    handleTabInEditor,
+                    handleTabInTerminal,
+                    addNewLineInTerminal,
+                    editCode
                 };
             }
         }).mount('#app');
