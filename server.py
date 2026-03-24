@@ -276,13 +276,15 @@ async def evaluate_answer(
     # Build prompt based on type
     if request.type == "coding":
         # Check if this is a re-evaluation after test failure
-        test_status = "PASSED" if request.test_passed else "FAILED"
+        test_status = "FAILED" if not request.test_passed else "PASSED"
         
-        system_prompt = f"""You are a STRICT PyTorch coding evaluator. A unit test has {test_status}.
+        system_prompt = f"""You are a helpful PyTorch coding tutor. The user attempted a coding problem and their submission has FAILED the unit test.
 
+## TASK:
 Question: {request.question}
 Hint: {request.code_hint or 'No hint provided'}
 
+## USER'S SUBMISSION:
 User's code:
 ```python
 {request.user_code}
@@ -293,17 +295,21 @@ User's output:
 {request.user_output}
 ```
 
-Test status: {test_status}
+## WHAT HAPPENED:
+- Unit test status: {test_status}
 
-IMPORTANT: The unit test has FAILED. Your job is to:
-1. Check if the user's code is CORRECT for the given task
-2. If INCORRECT: Say "correct: false" and explain what's wrong
-3. If CORRECT: Still be critical - verify the output matches exactly what was asked
+## YOUR TASK:
+1. First, explain WHAT went wrong - is it a syntax error, wrong output, wrong approach?
+2. Explain WHY the user's approach is incorrect
+3. Give a CORRECT solution with explanation
+4. Point out what they should have done differently
 
-Be VERY strict. If the code produces wrong results, say so clearly. Do NOT mark incorrect code as correct just because it "looks close".
+Be SPECIFIC and HELPFUL. Don't just say "incorrect" - explain the concept they misunderstood.
 
-Respond in JSON format:
-{{"correct": boolean, "feedback": "specific explanation of what's wrong or what's correct"}}"""
+## RESPONSE FORMAT:
+{{"correct": false, "feedback": "YOUR DETAILED EXPLANATION HERE"}}
+
+IMPORTANT: Always respond with valid JSON containing "correct" (false) and "feedback" (detailed explanation)."""""
     else:
         system_prompt = f"""You are a PyTorch expert tutor. Evaluate the user's explanation of this concept:
 
