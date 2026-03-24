@@ -93,7 +93,7 @@
             <p class="text-gray-400 mt-2">Master PyTorch one function at a time</p>
             <div class="mt-2 flex items-center gap-4">
                 <span v-if="backendStatus === 'connected'" class="text-green-400 text-sm">✓ Connected to server</span>
-                <span v-else-if="backendStatus === 'error'" class="text-red-400 text-sm">✗ Server error</span>
+                <span v-else-if="backendStatus === 'error' || backendStatus === 'connecting'" class="text-red-400 text-sm">✗ Server error</span>
                 <span v-else class="text-yellow-400 text-sm">⏳ Connecting...</span>
                 <button @click="logout" class="text-sm text-gray-400 hover:text-white ml-auto">Logout</button>
             </div>
