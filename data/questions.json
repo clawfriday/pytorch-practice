@@ -1,0 +1,186 @@
+[
+  {
+    "id": 1,
+    "topic": "Tensor Creation",
+    "type": "mcq",
+    "question": "Which PyTorch function creates a tensor with random values from a standard normal distribution?",
+    "options": [
+      "torch.rand()",
+      "torch.randn()",
+      "torch.randperm()",
+      "torch.random()"
+    ],
+    "correct": "B",
+    "explanation": "torch.randn() creates tensors with values sampled from a standard normal distribution N(0,1)."
+  },
+  {
+    "id": 2,
+    "topic": "Tensor Creation",
+    "type": "open-ended",
+    "question": "Create a 3x3 identity matrix using PyTorch. Explain the function you used.",
+    "code_hint": "torch.eye(3)",
+    "expected_output": "A 3x3 identity matrix with 1s on diagonal"
+  },
+  {
+    "id": 3,
+    "topic": "Tensor Creation",
+    "type": "mcq",
+    "question": "What is the difference between torch.tensor() and torch.from_numpy()?",
+    "options": [
+      "No difference",
+      "tensor() copies data, from_numpy() shares memory",
+      "from_numpy() copies data, tensor() shares memory",
+      "tensor() only works with lists"
+    ],
+    "correct": "B",
+    "explanation": "torch.from_numpy() shares memory with the NumPy array, while torch.tensor() creates a copy by default."
+  },
+  {
+    "id": 4,
+    "topic": "Tensor Operations",
+    "type": "open-ended",
+    "question": "Write code to reshape a tensor from shape (2, 6) to (3, 4). What is the difference between view() and reshape()?",
+    "code_hint": "t.view(3, 4) or t.reshape(3, 4)"
+  },
+  {
+    "id": 5,
+    "topic": "Tensor Operations",
+    "type": "mcq",
+    "question": "What does .squeeze() do in PyTorch?",
+    "options": [
+      "Adds a dimension of size 1",
+      "Removes all dimensions of size 1",
+      "Transposes the tensor",
+      "Flattens the tensor"
+    ],
+    "correct": "B",
+    "explanation": ".squeeze() removes all dimensions that have size 1. Use .unsqueeze() to add a dimension."
+  },
+  {
+    "id": 6,
+    "topic": "Tensor Operations",
+    "type": "mcq",
+    "question": "Which operation is used for matrix multiplication in PyTorch?",
+    "options": [
+      "torch.mul()",
+      "torch.matmul()",
+      "torch.dot()",
+      "torch.cross()"
+    ],
+    "correct": "B",
+    "explanation": "torch.matmul() (or @ operator) performs matrix multiplication. torch.mul() is element-wise."
+  },
+  {
+    "id": 7,
+    "topic": "Autograd",
+    "type": "open-ended",
+    "question": "Create a tensor with requires_grad=True and compute the gradient of y = x^2 at x=3.",
+    "code_hint": "x = torch.tensor([3.0], requires_grad=True); y = x**2; y.backward()",
+    "expected_output": "The gradient should be 2*3 = 6"
+  },
+  {
+    "id": 8,
+    "topic": "Autograd",
+    "type": "mcq",
+    "question": "What does optimizer.zero_grad() do?",
+    "options": [
+      "Sets all gradients to None",
+      "Sets all gradients to zero before backpropagation",
+      "Deletes the computational graph",
+      "Initializes weights to zero"
+    ],
+    "correct": "B",
+    "explanation": "zero_grad() clears the gradients of all parameters. Called before each training step."
+  },
+  {
+    "id": 9,
+    "topic": "Autograd",
+    "type": "mcq",
+    "question": "When should you use torch.no_grad()?",
+    "options": [
+      "During training",
+      "During inference/evaluation",
+      "When computing gradients",
+      "Always"
+    ],
+    "correct": "B",
+    "explanation": "no_grad() disables gradient computation to save memory and speed up inference."
+  },
+  {
+    "id": 10,
+    "topic": "nn.Module",
+    "type": "open-ended",
+    "question": "Create a simple neural network with one hidden layer using nn.Module.",
+    "code_hint": "class Net(nn.Module):\n    def __init__(self):\n        super().__init__()\n        self.fc1 = nn.Linear(10, 32)\n        self.fc2 = nn.Linear(32, 2)\n    def forward(self, x):\n        x = F.relu(self.fc1(x))\n        return self.fc2(x)"
+  },
+  {
+    "id": 11,
+    "topic": "nn.Module",
+    "type": "mcq",
+    "question": "Which method returns all trainable parameters in a nn.Module?",
+    "options": [
+      "model.parameters()",
+      "model.state_dict()",
+      "model.modules()",
+      "model.children()"
+    ],
+    "correct": "A",
+    "explanation": "model.parameters() returns an iterator over all trainable parameters."
+  },
+  {
+    "id": 12,
+    "topic": "nn.Module",
+    "type": "mcq",
+    "question": "What does model.train() do?",
+    "options": [
+      "Starts training mode",
+      "Sets dropout and batch norm to training mode",
+      "Loads training data",
+      "Enables gradient computation"
+    ],
+    "correct": "B",
+    "explanation": "train() sets dropout and batch norm layers to training mode. Use eval() for inference."
+  },
+  {
+    "id": 13,
+    "topic": "Loss Functions",
+    "type": "mcq",
+    "question": "Which loss function is used for multi-class classification?",
+    "options": [
+      "MSELoss",
+      "BCELoss",
+      "CrossEntropyLoss",
+      "L1Loss"
+    ],
+    "correct": "C",
+    "explanation": "CrossEntropyLoss is used for multi-class classification problems."
+  },
+  {
+    "id": 14,
+    "topic": "Loss Functions",
+    "type": "open-ended",
+    "question": "Calculate the CrossEntropyLoss between predicted logits [2.0, 1.0, 0.1] and ground truth class 0.",
+    "code_hint": "F.cross_entropy(torch.tensor([[2.0, 1.0, 0.1]]), torch.tensor([0]))"
+  },
+  {
+    "id": 15,
+    "topic": "Optimizers",
+    "type": "mcq",
+    "question": "What is the default learning rate for Adam optimizer?",
+    "options": [
+      "0.001",
+      "0.01",
+      "0.0001",
+      "There is no default"
+    ],
+    "correct": "D",
+    "explanation": "You must explicitly specify the learning rate - there's no default."
+  },
+  {
+    "id": 16,
+    "topic": "Optimizers",
+    "type": "open-ended",
+    "question": "Create an Adam optimizer with learning rate 0.001 for a model with parameters.",
+    "code_hint": "optimizer = torch.optim.Adam(model.parameters(), lr=0.001)"
+  }
+]
