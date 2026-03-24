@@ -541,7 +541,6 @@
                     executionStatus.value = 'running';
                     // Clear previous output before new run
                     clearOutput();
-                    appendOutput(`>>> ${codeInput.value}`);
                     
                     try {
                         const response = await fetch(`${API_BASE}/api/execute`, {

@@ -159,12 +159,13 @@ import numpy as np
         # If there's a test code, run it
         if request.test_code:
             redirected_test = io.StringIO()
-            old_stdout = sys.stdout
+            old_stdout_test = sys.stdout
             sys.stdout = redirected_test
             
+            test_error = None
             try:
                 exec(request.test_code, exec_globals, exec_locals)
-                sys.stdout = old_stdout
+                sys.stdout = old_stdout_test
                 test_output = redirected_test.getvalue()
                 
                 # Test passed if no error and output matches expected
@@ -173,9 +174,26 @@ import numpy as np
                 elif not request.expected_output:
                     test_passed = True
                     
-            except Exception as test_e:
-                sys.stdout = old_stdout
+            except AssertionError as ae:
+                sys.stdout = old_stdout_test
                 test_passed = False
+                test_error = f"Assertion failed: {str(ae)}"
+            except Exception as test_e:
+                sys.stdout = old_stdout_test
+                test_passed = False
+                test_error = str(test_e)
+            
+            # Store test output/error for feedback
+            if not test_passed and test_error:
+                output += f"\n[Test Error] {test_error}"
+        
+        # Verify output against expected if no test_code
+        if not test_passed and request.expected_output and not request.test_code:
+            # Compare actual output with expected (normalize whitespace)
+            normalized_output = ' '.join(output.split())
+            normalized_expected = ' '.join(request.expected_output.split())
+            if normalized_expected in normalized_output or normalized_output == normalized_expected:
+                test_passed = True
         
         # Check expected pattern (shape, etc)
         if not test_passed and request.expected_pattern:
