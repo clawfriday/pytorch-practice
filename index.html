@@ -435,11 +435,39 @@
                         
                         // Check if code ran successfully
                         if (data.error) {
-                            // Code error - show feedback
+                            // Code error - call LLM for helpful feedback
                             result.value = {
                                 correct: false,
-                                feedback: `Code error: ${data.error}\n\nHint: ${currentQuestion.value.code_hint || 'Check your syntax'}`
+                                feedback: 'Analyzing your error...'
                             };
+                            
+                            // Call LLM for helpful error explanation
+                            try {
+                                const evalResponse = await fetch(`${API_BASE}/api/evaluate`, {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                        ...getAuthHeaders()
+                                    },
+                                    body: JSON.stringify({
+                                        question: currentQuestion.value.question,
+                                        user_code: codeAnswer.value,
+                                        user_output: data.error,
+                                        expected_output: data.expected_output,
+                                        code_hint: currentQuestion.value.code_hint,
+                                        type: 'coding',
+                                        test_passed: false
+                                    })
+                                });
+                                
+                                const evalData = await evalResponse.json();
+                                result.value = evalData;
+                            } catch (e) {
+                                result.value = {
+                                    correct: false,
+                                    feedback: `Code error: ${data.error}\n\nHint: ${currentQuestion.value.code_hint || 'Check your syntax'}`
+                                };
+                            }
                             currentQuestion.value.answered = true;
                         } else if (data.test_passed) {
                             // Test passed
