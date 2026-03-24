@@ -120,41 +120,76 @@ import numpy as np
         # Run pre-import
         exec(preimport_code, exec_globals, exec_locals)
         
-        # Check if code is a single expression (Jupyter-style display)
         code = request.code.strip()
         
         # Capture stdout
         old_stdout = sys.stdout
         redirected = io.StringIO()
-        sys.stdout = redirected
         
-        # Try to compile as expression first
+        # Handle multi-line code - execute all lines, display last expression result
+        lines = code.split('\n')
+        
         try:
+            # Try to execute as single expression first
             compiled = compile(code, '<string>', 'eval')
-            # It's an expression - evaluate and display result
+            sys.stdout = redirected
             result = eval(code, exec_globals, exec_locals)
             sys.stdout = old_stdout
             redirected.truncate(0)
             redirected.seek(0)
-            # Format result like Jupyter - use repr for tensors
+            # Format result like Jupyter
             if hasattr(result, 'pretty_print'):
                 output = result.pretty_print()
             elif hasattr(result, '__repr__'):
                 output = repr(result)
             else:
                 output = str(result)
+                
         except SyntaxError:
-            # It's a statement - execute normally
+            # It's statements - execute all, display last expression result
             sys.stdout = redirected
-            exec(code, exec_globals, exec_locals)
-            sys.stdout = old_stdout
-            output = redirected.getvalue()
+            
+            if len(lines) > 1:
+                # Multi-line: execute all lines, try to display last line's result
+                for i, line in enumerate(lines):
+                    line = line.strip()
+                    if not line:
+                        continue
+                    if i < len(lines) - 1:
+                        # Not the last line - execute as statement
+                        exec(line, exec_globals, exec_locals)
+                    else:
+                        # Last line - try as expression, fallback to statement
+                        try:
+                            compiled = compile(line, '<string>', 'eval')
+                            result = eval(line, exec_globals, exec_locals)
+                            sys.stdout = old_stdout
+                            redirected.truncate(0)
+                            redirected.seek(0)
+                            if hasattr(result, 'pretty_print'):
+                                output = result.pretty_print()
+                            elif hasattr(result, '__repr__'):
+                                output = repr(result)
+                            else:
+                                output = str(result)
+                        except:
+                            # Fallback: execute as statement
+                            sys.stdout = redirected
+                            exec(line, exec_globals, exec_locals)
+                            sys.stdout = old_stdout
+                            output = redirected.getvalue()
+            else:
+                # Single line statement - execute normally
+                exec(code, exec_globals, exec_locals)
+                sys.stdout = old_stdout
+                output = redirected.getvalue()
+                
         except Exception as eval_err:
             sys.stdout = old_stdout
             redirected.truncate(0)
             redirected.seek(0)
-            output = redirected.getvalue()
-            if not output:
+            stdout_output = redirected.getvalue()
+            if not stdout_output and output == "":
                 raise eval_err
         
         # If there's a test code, run it
@@ -169,16 +204,22 @@ import numpy as np
                 sys.stdout = old_stdout_test
                 test_output = redirected_test.getvalue()
                 
-                # Test passed if expected_output matches OR if no expected_output (just ran without error)
-                if request.expected_output and request.expected_output in test_output:
+                # Test passed if:
+                # 1. expected_output matches in test_output, OR
+                # 2. expected_output empty and test ran without error
+                if request.expected_output:
+                    # Check if expected is in test output (normalize whitespace)
+                    norm_expected = ' '.join(request.expected_output.split())
+                    norm_test = ' '.join(test_output.split())
+                    if norm_expected in norm_test or norm_test == norm_expected:
+                        test_passed = True
+                    # If not matching, test_passed stays False - will trigger LLM
+                else:
+                    # No expected_output - if test ran without error, pass
                     test_passed = True
-                elif not request.expected_output and not test_output.strip():
-                    # No output expected, no error = pass
-                    test_passed = True
-                elif not request.expected_output and test_output.strip():
-                    # Has output but no expected_output - check if it ran without error
-                    # In this case, we can't auto-pass, let LLM decide
-                    pass
+                    # Store test output for reference
+                    if test_output.strip():
+                        output = test_output.strip()
                     
             except AssertionError as ae:
                 sys.stdout = old_stdout_test
