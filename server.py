@@ -145,52 +145,50 @@ import numpy as np
             else:
                 output = str(result)
                 
-        except SyntaxError:
-            # It's statements - execute all, display last expression result
+        except (SyntaxError, ValueError):
+            # It's statements - execute normally and capture any output
             sys.stdout = redirected
             
-            if len(lines) > 1:
-                # Multi-line: execute all lines, try to display last line's result
-                for i, line in enumerate(lines):
-                    line = line.strip()
-                    if not line:
-                        continue
-                    if i < len(lines) - 1:
-                        # Not the last line - execute as statement
-                        exec(line, exec_globals, exec_locals)
-                    else:
-                        # Last line - try as expression, fallback to statement
-                        try:
-                            compiled = compile(line, '<string>', 'eval')
-                            result = eval(line, exec_globals, exec_locals)
-                            sys.stdout = old_stdout
-                            redirected.truncate(0)
-                            redirected.seek(0)
-                            if hasattr(result, 'pretty_print'):
-                                output = result.pretty_print()
-                            elif hasattr(result, '__repr__'):
-                                output = repr(result)
-                            else:
-                                output = str(result)
-                        except:
-                            # Fallback: execute as statement
-                            sys.stdout = redirected
-                            exec(line, exec_globals, exec_locals)
-                            sys.stdout = old_stdout
-                            output = redirected.getvalue()
-            else:
-                # Single line statement - execute normally
-                exec(code, exec_globals, exec_locals)
+            # For blocks like 'with', 'for', 'if', we need to execute the whole thing
+            # Try to execute the whole code block
+            try:
+                # Check if it's a single line with semicolons
+                if ';' in code and '\n' not in code.strip():
+                    # Execute as single statement
+                    exec(code, exec_globals, exec_locals)
+                    sys.stdout = old_stdout
+                    output = redirected.getvalue()
+                elif '\n' in code.strip():
+                    # Multi-line - could have blocks
+                    # Execute the whole thing and get the last expression's result
+                    exec(code, exec_globals, exec_locals)
+                    sys.stdout = old_stdout
+                    output = redirected.getvalue()
+                    
+                    # If output is empty but we have a last expression value,
+                    # try to get it from exec_locals or the last line
+                    if not output.strip():
+                        # Try to evaluate the last line as expression
+                        last_line = [l.strip() for l in lines if l.strip()][-1] if lines else ''
+                        if last_line and not any(last_line.startswith(kw) for kw in ['if', 'for', 'while', 'with', 'def', 'class']):
+                            try:
+                                result = eval(last_line, exec_globals, exec_locals)
+                                if hasattr(result, '__repr__'):
+                                    output = repr(result)
+                            except:
+                                pass
+                else:
+                    # Single line statement
+                    exec(code, exec_globals, exec_locals)
+                    sys.stdout = old_stdout
+                    output = redirected.getvalue()
+            except Exception as exec_err:
                 sys.stdout = old_stdout
-                output = redirected.getvalue()
-                
-        except Exception as eval_err:
-            sys.stdout = old_stdout
-            redirected.truncate(0)
-            redirected.seek(0)
-            stdout_output = redirected.getvalue()
-            if not stdout_output and output == "":
-                raise eval_err
+                redirected.truncate(0)
+                redirected.seek(0)
+                stdout_output = redirected.getvalue()
+                if not stdout_output.strip() and output == "":
+                    raise exec_err
         
         # If there's a test code, run it
         test_error = None
