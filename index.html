@@ -433,9 +433,12 @@
                         
                         const data = await response.json();
                         
-                        // Check if code ran successfully
-                        if (data.error) {
-                            // Code error - call LLM for helpful feedback
+                        // Check if there's an error (user code OR test code)
+                        const hasUserCodeError = data.error;
+                        const hasTestCodeError = data.output && data.output.includes("[Test Error]");
+                        
+                        if (hasUserCodeError || hasTestCodeError) {
+                            // Code/test error - call LLM for helpful feedback
                             result.value = {
                                 correct: false,
                                 feedback: 'Analyzing your error...'
@@ -452,7 +455,7 @@
                                     body: JSON.stringify({
                                         question: currentQuestion.value.question,
                                         user_code: codeAnswer.value,
-                                        user_output: data.error,
+                                        user_output: data.error || data.output,
                                         expected_output: data.expected_output,
                                         code_hint: currentQuestion.value.code_hint,
                                         type: 'coding',
@@ -465,7 +468,7 @@
                             } catch (e) {
                                 result.value = {
                                     correct: false,
-                                    feedback: `Code error: ${data.error}\n\nHint: ${currentQuestion.value.code_hint || 'Check your syntax'}`
+                                    feedback: `Error: ${data.error || data.output}\n\nHint: ${currentQuestion.value.code_hint || 'Check your syntax'}`
                                 };
                             }
                             currentQuestion.value.answered = true;
