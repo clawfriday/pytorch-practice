@@ -13,25 +13,22 @@
             background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
             min-height: 100vh;
         }
-        .code-font {
-            font-family: 'JetBrains Mono', monospace;
-        }
         .terminal {
             background: #0d1117;
             border: 1px solid #30363d;
             border-radius: 8px;
-            font-family: 'JetBrains Mono', monospace;
         }
         .terminal-output {
             background: #0d1117;
             color: #7ee787;
             padding: 12px;
             border-radius: 0 0 8px 8px;
-            min-height: 100px;
-            max-height: 200px;
+            min-height: 150px;
+            max-height: 250px;
             overflow-y: auto;
             font-family: 'JetBrains Mono', monospace;
             font-size: 13px;
+            white-space: pre-wrap;
         }
         .terminal-input {
             background: #161b22;
@@ -48,86 +45,59 @@
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
-        .pyodide-loading {
-            animation: pulse 1.5s infinite;
-        }
-        @keyframes pulse {
-            0%, 100% { opacity: 0.5; }
-            50% { opacity: 1; }
-        }
-        .loader {
-            border: 3px solid rgba(255,255,255,0.1);
-            border-radius: 50%;
-            border-top: 3px solid #f97316;
-            width: 24px;
-            height: 24px;
-            animation: spin 1s linear infinite;
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
     </style>
 </head>
 <body>
     <div id="app" class="min-h-screen text-white p-6">
+        <!-- Login Modal -->
+        <div v-if="!isLoggedIn" class="fixed inset-0 bg-black/80 flex items-center justify-center z-50">
+            <div class="question-card rounded-xl p-8 max-w-md w-full">
+                <h2 class="text-2xl font-bold mb-6 text-center">🔐 Login</h2>
+                <p class="text-gray-400 mb-4 text-center">Enter your credentials to access AI features</p>
+                
+                <div class="space-y-4">
+                    <div>
+                        <label class="text-sm text-gray-400">Username</label>
+                        <input 
+                            v-model="loginForm.username" 
+                            type="text" 
+                            class="w-full bg-gray-800 border border-gray-600 rounded-lg px-4 py-2 mt-1"
+                            placeholder="username"
+                        >
+                    </div>
+                    <div>
+                        <label class="text-sm text-gray-400">Password</label>
+                        <input 
+                            v-model="loginForm.password" 
+                            type="password" 
+                            class="w-full bg-gray-800 border border-gray-600 rounded-lg px-4 py-2 mt-1"
+                            placeholder="password"
+                        >
+                    </div>
+                    <button 
+                        @click="login" 
+                        class="w-full bg-orange-500 hover:bg-orange-600 px-6 py-3 rounded-lg font-medium"
+                    >
+                        Login
+                    </button>
+                    <p v-if="loginError" class="text-red-400 text-sm text-center">{{ loginError }}</p>
+                </div>
+            </div>
+        </div>
+
         <!-- Header -->
         <header class="mb-8">
             <h1 class="text-4xl font-bold bg-gradient-to-r from-orange-400 to-red-500 bg-clip-text text-transparent">
                 🔥 PyTorch Practice
             </h1>
             <p class="text-gray-400 mt-2">Master PyTorch one function at a time</p>
+            <div class="mt-2 flex items-center gap-4">
+                <span v-if="backendStatus === 'connected'" class="text-green-400 text-sm">✓ Connected to server</span>
+                <span v-else-if="backendStatus === 'error'" class="text-red-400 text-sm">✗ Server error</span>
+                <span v-else class="text-yellow-400 text-sm">⏳ Connecting...</span>
+                <button @click="logout" class="text-sm text-gray-400 hover:text-white ml-auto">Logout</button>
+            </div>
         </header>
-
-        <!-- Auth Setup -->
-        <div class="question-card rounded-xl p-6 mb-6">
-            <h2 class="text-xl font-semibold mb-4">🔐 AI Evaluation Setup</h2>
-            <p class="text-gray-400 mb-4">Choose your evaluation backend:</p>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <!-- Option 1: DeepSeek API -->
-                <div class="bg-gray-800/50 p-4 rounded-lg">
-                    <h3 class="font-medium mb-2">Option 1: DeepSeek API Key</h3>
-                    <input 
-                        v-model="deepseekKeyInput" 
-                        type="password" 
-                        placeholder="sk-..."
-                        class="bg-gray-900 border border-gray-600 rounded-lg px-4 py-2 w-full mb-2"
-                    >
-                    <button 
-                        @click="useDeepSeek" 
-                        class="bg-orange-500 hover:bg-orange-600 px-4 py-2 rounded-lg text-sm w-full"
-                    >
-                        Use DeepSeek API
-                    </button>
-                    <p class="text-xs text-gray-500 mt-2">Get key at platform.deepseek.com</p>
-                </div>
-
-                <!-- Option 2: Bedrock -->
-                <div class="bg-gray-800/50 p-4 rounded-lg">
-                    <h3 class="font-medium mb-2">Option 2: Bedrock (AWS)</h3>
-                    <input 
-                        v-model="bedrockTokenInput" 
-                        type="password" 
-                        placeholder="Bearer token from ~/.ssh/.bedrock"
-                        class="bg-gray-900 border border-gray-600 rounded-lg px-4 py-2 w-full mb-2"
-                    >
-                    <button 
-                        @click="useBedrock" 
-                        :disabled="!bedrockTokenInput"
-                        class="bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded-lg text-sm w-full disabled:opacity-50"
-                    >
-                        Use Bedrock
-                    </button>
-                    <p class="text-xs text-gray-500 mt-2">Paste the AWS_BEARER_TOKEN_BEDROCK value</p>
-                </div>
-            </div>
-
-            <div v-if="evalBackend" class="mt-4 p-3 bg-green-900/30 rounded-lg">
-                <span class="text-green-400">✓ Using: {{ evalBackend }}</span>
-                <button @click="clearAuth" class="ml-4 text-sm text-gray-400 hover:text-white">Change</button>
-            </div>
-        </div>
 
         <!-- Main Content -->
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -183,7 +153,7 @@
                         ></textarea>
                         <button
                             @click="submitOpenAnswer"
-                            :disabled="!evalBackend || isEvaluating"
+                            :disabled="isEvaluating"
                             class="mt-2 bg-orange-500 hover:bg-orange-600 px-6 py-2 rounded-lg font-medium disabled:opacity-50"
                         >
                             {{ isEvaluating ? 'Evaluating...' : 'Submit for AI Review' }}
@@ -194,7 +164,7 @@
                     <div v-if="result" class="mt-4 p-4 rounded-lg" :class="result.correct ? 'bg-green-900/30' : 'bg-red-900/30'">
                         <div class="flex items-center gap-2 mb-2">
                             <span class="text-2xl">{{ result.correct ? '✅' : '❌' }}</span>
-                            <span class="font-semibold">Score: {{ result.score }}/10</span>
+                            <span class="font-semibold">Score: {{ result.score }}/{{ currentQuestion.type === 'mcq' ? 1 : 10 }}</span>
                         </div>
                         <p class="text-gray-300">{{ result.feedback }}</p>
                     </div>
@@ -222,76 +192,52 @@
                 <div class="question-card rounded-xl p-6">
                     <h3 class="text-lg font-semibold mb-4">🐍 Python Code Terminal</h3>
                     
-                    <!-- Pyodide Status -->
-                    <div v-if="!pyodideLoaded" class="text-center py-8">
-                        <div class="loader mx-auto mb-4"></div>
-                        <div class="text-orange-400">
-                            ⏳ Loading Python environment...
+                    <div class="terminal rounded-lg overflow-hidden">
+                        <div class="bg-gray-800 px-3 py-2 flex items-center gap-2 text-sm text-gray-400">
+                            <span>›</span>
+                            <span>Python + PyTorch (Server)</span>
+                            <span v-if="executionStatus === 'running'" class="ml-auto text-yellow-400">Running...</span>
                         </div>
-                        <p class="text-gray-500 text-sm mt-2">This loads PyTorch in your browser</p>
-                        <button @click="reloadPyodide" class="mt-4 bg-gray-700 px-4 py-2 rounded-lg text-sm">
-                            Retry Loading
+                        <div class="terminal-output">
+                            {{ terminalOutput || 'Output will appear here...' }}
+                        </div>
+                        <input
+                            v-model="codeInput"
+                            @keydown.enter="runCode"
+                            type="text"
+                            class="terminal-input"
+                            placeholder="Enter Python code... (e.g., import torch; print(torch.randn(3,3)))"
+                        >
+                    </div>
+
+                    <div class="flex gap-2 mt-3">
+                        <button
+                            @click="runCode"
+                            :disabled="executionStatus === 'running'"
+                            class="bg-green-600 hover:bg-green-700 px-4 py-2 rounded-lg text-sm disabled:opacity-50"
+                        >
+                            ▶ Run
+                        </button>
+                        <button
+                            @click="clearTerminal"
+                            class="bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded-lg text-sm"
+                        >
+                            Clear
                         </button>
                     </div>
 
-                    <!-- Pyodide Error -->
-                    <div v-if="pyodideError" class="text-center py-8">
-                        <div class="text-red-400 mb-2">⚠️ Failed to load Python</div>
-                        <p class="text-gray-500 text-sm">{{ pyodideError }}</p>
-                        <button @click="reloadPyodide" class="mt-4 bg-gray-700 px-4 py-2 rounded-lg text-sm">
-                            Try Again
-                        </button>
-                    </div>
-
-                    <div v-if="pyodideLoaded">
-                        <div class="terminal rounded-lg overflow-hidden">
-                            <div class="bg-gray-800 px-3 py-2 flex items-center gap-2 text-sm text-gray-400">
-                                <span>›</span>
-                                <span>Python 3.11 (Pyodide)</span>
-                                <span class="ml-auto text-xs text-green-400">✓ PyTorch ready</span>
-                            </div>
-                            <div class="terminal-output" id="output">
-                                {{ terminalOutput || 'Output will appear here...' }}
-                            </div>
-                            <input
-                                v-model="codeInput"
-                                @keydown.enter="runCode"
-                                @keydown.up="historyPrev"
-                                @keydown.down="historyNext"
-                                type="text"
-                                class="terminal-input"
-                                placeholder="Enter Python code... (e.g., import torch; torch.randn(3,3))"
+                    <!-- Quick Examples -->
+                    <div class="mt-4">
+                        <p class="text-sm text-gray-400 mb-2">Quick examples:</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button 
+                                v-for="ex in examples" 
+                                :key="ex"
+                                @click="loadExample(ex)"
+                                class="text-xs bg-gray-800 hover:bg-gray-700 px-2 py-1 rounded"
                             >
-                        </div>
-
-                        <div class="flex gap-2 mt-3">
-                            <button
-                                @click="runCode"
-                                class="bg-green-600 hover:bg-green-700 px-4 py-2 rounded-lg text-sm"
-                            >
-                                ▶ Run
+                                {{ ex }}
                             </button>
-                            <button
-                                @click="clearTerminal"
-                                class="bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded-lg text-sm"
-                            >
-                                Clear
-                            </button>
-                        </div>
-
-                        <!-- Quick Examples -->
-                        <div class="mt-4">
-                            <p class="text-sm text-gray-400 mb-2">Quick examples:</p>
-                            <div class="flex flex-wrap gap-2">
-                                <button 
-                                    v-for="ex in examples" 
-                                    :key="ex"
-                                    @click="loadExample(ex)"
-                                    class="text-xs bg-gray-800 hover:bg-gray-700 px-2 py-1 rounded"
-                                >
-                                    {{ ex }}
-                                </button>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -317,6 +263,10 @@
     <script>
         const { createApp, ref, computed, onMounted } = Vue;
 
+        // ============== CONFIG ==============
+        // UPDATE THIS to your ngrok URL after starting server
+        const API_BASE = "https://YOUR-NGROK-URL.ngrok.io";
+
         createApp({
             setup() {
                 // State
@@ -326,32 +276,27 @@
                 const openAnswer = ref('');
                 const result = ref(null);
                 const isEvaluating = ref(false);
+                const executionStatus = ref('idle');
+                const backendStatus = ref('connecting');
                 
                 // Auth
-                const deepseekKeyInput = ref('');
-                const bedrockTokenInput = ref('');
-                const evalBackend = ref(localStorage.getItem('eval_backend') || '');
-                const authToken = ref(localStorage.getItem('auth_token') || '');
+                const isLoggedIn = ref(false);
+                const loginForm = ref({ username: '', password: '' });
+                const loginError = ref('');
                 
-                // Pyodide
-                const pyodideLoaded = ref(false);
-                const pyodideError = ref(null);
-                const pyodide = ref(null);
+                // Terminal
                 const terminalOutput = ref('');
                 const codeInput = ref('');
-                const codeHistory = ref([]);
-                const historyIndex = ref(-1);
 
                 // Examples
                 const examples = [
-                    'import torch',
-                    'torch.randn(3, 3)',
-                    'torch.zeros(2, 4)',
-                    'x = torch.tensor([1,2,3]); x.shape',
-                    'torch.cuda.is_available()',
+                    'import torch; print(torch.randn(3, 3))',
+                    'import torch; print(torch.zeros(2, 4))',
+                    'x = torch.tensor([1,2,3]); print(x.shape)',
+                    'import torch; print(torch.cuda.is_available())',
                 ];
 
-                // Load questions
+                // Load questions and check backend
                 onMounted(async () => {
                     try {
                         const response = await fetch('data/questions.json');
@@ -360,59 +305,50 @@
                         console.error('Failed to load questions:', e);
                     }
                     
-                    // Load Pyodide
-                    loadPyodide();
+                    // Check backend health
+                    checkBackend();
                 });
 
-                async function loadPyodide() {
-                    pyodideLoaded.value = false;
-                    pyodideError.value = null;
-                    
+                async function checkBackend() {
                     try {
-                        // Load Pyodide script
-                        if (!window.loadPyodide) {
-                            const script = document.createElement('script');
-                            script.src = 'https://cdn.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js';
-                            document.head.appendChild(script);
-                            await new Promise((resolve, reject) => {
-                                script.onload = resolve;
-                                script.onerror = () => reject(new Error('Failed to load Pyodide'));
-                            });
+                        const response = await fetch(`${API_BASE}/api/health`, {
+                            method: 'GET',
+                            headers: getAuthHeaders()
+                        });
+                        if (response.ok) {
+                            backendStatus.value = 'connected';
+                        } else {
+                            backendStatus.value = 'error';
                         }
-                        
-                        // Initialize Pyodide
-                        pyodide.value = await window.loadPyodide();
-                        
-                        // Load packages
-                        await pyodide.value.loadPackage(['numpy']);
-                        
-                        // Try to load torch (may not be available in Pyodide)
-                        try {
-                            await pyodide.value.loadPackage(['torch']);
-                        } catch(e) {
-                            console.warn('PyTorch not available in Pyodide:', e);
-                            appendOutput('⚠️ Note: Full PyTorch not available in browser');
-                            appendOutput('   Using NumPy for demonstrations instead');
-                        }
-                        
-                        // Set up stdout capture
-                        pyodide.value.runPython(`
-import sys
-from io import StringIO
-sys.stdout = StringIO()
-                        `);
-                        
-                        pyodideLoaded.value = true;
-                        appendOutput('✅ Python environment ready!');
-                        appendOutput('Try: import torch');
                     } catch (e) {
-                        console.error('Pyodide load error:', e);
-                        pyodideError.value = e.message;
+                        backendStatus.value = 'error';
                     }
                 }
 
-                function reloadPyodide() {
-                    loadPyodide();
+                // Auth helpers
+                function getAuthHeaders() {
+                    const username = localStorage.getItem('username');
+                    const password = localStorage.getItem('password');
+                    const creds = btoa(`${username}:${password}`);
+                    return { 'Authorization': `Basic ${creds}` };
+                }
+
+                function login() {
+                    if (loginForm.value.username && loginForm.value.password) {
+                        localStorage.setItem('username', loginForm.value.username);
+                        localStorage.setItem('password', loginForm.value.password);
+                        isLoggedIn.value = true;
+                        loginError.value = '';
+                    } else {
+                        loginError.value = 'Please enter username and password';
+                    }
+                }
+
+                function logout() {
+                    localStorage.removeItem('username');
+                    localStorage.removeItem('password');
+                    isLoggedIn.value = false;
+                    loginForm.value = { username: '', password: '' };
                 }
 
                 // Computed
@@ -438,32 +374,6 @@ sys.stdout = StringIO()
                     if (filteredQuestions.value.length === 0) return 0;
                     return (answeredCount.value / filteredQuestions.value.length * 100);
                 });
-
-                // Auth methods
-                function useDeepSeek() {
-                    if (deepseekKeyInput.value.startsWith('sk-')) {
-                        evalBackend.value = 'deepseek';
-                        authToken.value = deepseekKeyInput.value;
-                        localStorage.setItem('eval_backend', 'deepseek');
-                        localStorage.setItem('auth_token', deepseekKeyInput.value);
-                    }
-                }
-
-                function useBedrock() {
-                    if (bedrockTokenInput.value) {
-                        evalBackend.value = 'bedrock';
-                        authToken.value = bedrockTokenInput.value;
-                        localStorage.setItem('eval_backend', 'bedrock');
-                        localStorage.setItem('auth_token', bedrockTokenInput.value);
-                    }
-                }
-
-                function clearAuth() {
-                    evalBackend.value = '';
-                    authToken.value = '';
-                    localStorage.removeItem('eval_backend');
-                    localStorage.removeItem('auth_token');
-                }
 
                 // Methods
                 function filterQuestions() {
@@ -492,89 +402,33 @@ sys.stdout = StringIO()
                     const correct = currentQuestion.value.correct === ['A','B','C','D'][idx];
                     result.value = {
                         correct,
-                        score: correct ? 1 : 0,  // 0 or 1 for MCQ
+                        score: correct ? 1 : 0,
                         feedback: currentQuestion.value.explanation || (correct ? 'Correct!' : 'Incorrect')
                     };
                     currentQuestion.value.answered = true;
                 }
 
                 async function submitOpenAnswer() {
-                    if (!evalBackend.value || isEvaluating.value) return;
+                    if (isEvaluating.value) return;
                     
                     isEvaluating.value = true;
                     
                     try {
-                        let response;
+                        const response = await fetch(`${API_BASE}/api/evaluate`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                ...getAuthHeaders()
+                            },
+                            body: JSON.stringify({
+                                question: currentQuestion.value.question,
+                                user_answer: openAnswer.value,
+                                code_hint: currentQuestion.value.code_hint
+                            })
+                        });
                         
-                        if (evalBackend.value === 'deepseek') {
-                            // DeepSeek API
-                            response = await fetch('https://api.deepseek.com/v1/chat/completions', {
-                                method: 'POST',
-                                headers: {
-                                    'Authorization': `Bearer ${authToken.value}`,
-                                    'Content-Type': 'application/json'
-                                },
-                                body: JSON.stringify({
-                                    model: 'deepseek-chat',
-                                    messages: [{
-                                        role: 'system',
-                                        content: `You are a PyTorch expert tutor. Evaluate the answer to this question.
-                                        
-Question: ${currentQuestion.value.question}
-${currentQuestion.value.code_hint ? '\nHint: ' + currentQuestion.value.code_hint : ''}
-
-User's Answer: ${openAnswer.value}
-
-Respond in JSON format:
-{"score": number 0-10, "correct": boolean, "feedback": "detailed explanation"}`
-                                    }, {
-                                        role: 'user',
-                                        content: 'Evaluate.'
-                                    }]
-                                })
-                            });
-                            
-                            const data = await response.json();
-                            const content = data.choices[0].message.content;
-                            
-                            // Parse JSON
-                            const jsonMatch = content.match(/\{[\s\S]*\}/);
-                            if (jsonMatch) {
-                                result.value = JSON.parse(jsonMatch[0]);
-                            }
-                        } 
-                        else if (evalBackend.value === 'bedrock') {
-                            // Bedrock - DeepSeek via AWS
-                            const AWS_REGION = 'us-east-1';
-                            const MODEL_ID = 'deepseek-chat';
-                            
-                            // Get AWS credentials from the bearer token
-                            // The token format is: "yuli-at-XXXX:base64encoded_credentials"
-                            const tokenParts = authToken.value.split('.');
-                            const credentials = atob(tokenParts[1]);
-                            
-                            // For Bedrock, we need to use the AWS SDK style
-                            // Since we can't do signed requests from browser, we'll try an alternative
-                            response = await fetch(`https://bedrock-runtime.${AWS_REGION}.amazonaws.com/model/${MODEL_ID}/invoke`, {
-                                method: 'POST',
-                                headers: {
-                                    'Content-Type': 'application/json',
-                                    'Authorization': `Bearer ${authToken.value}`,
-                                    'X-Amz-Content-Sha256': 'UNSIGNED-PAYLOAD'
-                                },
-                                body: JSON.stringify({
-                                    messages: [{ role: 'user', content: 'Hello' }],
-                                    max_tokens: 50
-                                })
-                            });
-                            
-                            result.value = {
-                                score: 8,
-                                correct: true,
-                                feedback: 'Bedrock integration ready - would evaluate with DeepSeek model'
-                            };
-                        }
-                        
+                        const data = await response.json();
+                        result.value = data;
                         currentQuestion.value.answered = true;
                     } catch (e) {
                         result.value = {
@@ -602,31 +456,40 @@ Respond in JSON format:
                     return 'bg-gray-800 border-gray-600 opacity-50';
                 }
 
-                // Terminal functions
+                // Terminal
                 function appendOutput(text) {
                     terminalOutput.value += (terminalOutput.value ? '\n' : '') + text;
                 }
 
                 async function runCode() {
-                    if (!pyodide.value || !codeInput.value.trim()) return;
+                    if (!codeInput.value.trim() || executionStatus.value === 'running') return;
+                    
+                    executionStatus.value = 'running';
+                    appendOutput(`>>> ${codeInput.value}`);
                     
                     try {
-                        await pyodide.value.runPythonAsync(codeInput.value);
+                        const response = await fetch(`${API_BASE}/api/execute`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                ...getAuthHeaders()
+                            },
+                            body: JSON.stringify({ code: codeInput.value })
+                        });
                         
-                        const output = pyodide.value.runPython('sys.stdout.getvalue()');
-                        appendOutput(`>>> ${codeInput.value}`);
-                        if (output) {
-                            appendOutput(output);
+                        const data = await response.json();
+                        if (data.output) {
+                            appendOutput(data.output);
                         }
-                        
-                        // Add to history
-                        codeHistory.value.push(codeInput.value);
-                        historyIndex.value = codeHistory.value.length;
-                        codeInput.value = '';
+                        if (data.error) {
+                            appendOutput(`Error: ${data.error}`);
+                        }
                     } catch (e) {
-                        appendOutput(`>>> ${codeInput.value}`);
                         appendOutput(`Error: ${e.message}`);
                     }
+                    
+                    executionStatus.value = 'idle';
+                    codeInput.value = '';
                 }
 
                 function clearTerminal() {
@@ -636,20 +499,6 @@ Respond in JSON format:
                 function loadExample(ex) {
                     codeInput.value = ex;
                     runCode();
-                }
-
-                function historyPrev() {
-                    if (historyIndex.value > 0) {
-                        historyIndex.value--;
-                        codeInput.value = codeHistory.value[historyIndex.value] || '';
-                    }
-                }
-
-                function historyNext() {
-                    if (historyIndex.value < codeHistory.value.length - 1) {
-                        historyIndex.value++;
-                        codeInput.value = codeHistory.value[historyIndex.value] || '';
-                    }
                 }
 
                 return {
@@ -662,33 +511,28 @@ Respond in JSON format:
                     openAnswer,
                     result,
                     isEvaluating,
+                    executionStatus,
+                    backendStatus,
                     // Auth
-                    deepseekKeyInput,
-                    bedrockTokenInput,
-                    evalBackend,
-                    useDeepSeek,
-                    useBedrock,
-                    clearAuth,
-                    // Pyodide
-                    pyodideLoaded,
-                    pyodideError,
-                    reloadPyodide,
+                    isLoggedIn,
+                    loginForm,
+                    loginError,
+                    login,
+                    logout,
+                    // Terminal
                     terminalOutput,
                     codeInput,
+                    examples,
                     runCode,
                     clearTerminal,
                     loadExample,
-                    examples,
-                    historyPrev,
-                    historyNext,
                     answeredCount,
                     progressPercent,
-                    // MCQ
                     nextQuestion,
                     prevQuestion,
                     answerMCQ,
-                    getMCQClass,
-                    submitOpenAnswer
+                    submitOpenAnswer,
+                    getMCQClass
                 };
             }
         }).mount('#app');
