@@ -275,9 +275,6 @@ async def evaluate_answer(
     
     # Build prompt based on type
     if request.type == "coding":
-        # Check if this is a re-evaluation after test failure
-        test_status = "FAILED" if not request.test_passed else "PASSED"
-        
         system_prompt = f"""You are a helpful PyTorch coding tutor. The user attempted a coding problem and their submission has FAILED the unit test.
 
 ## TASK:
@@ -295,33 +292,48 @@ User's output:
 {request.user_output}
 ```
 
+Expected output/pattern:
+{request.expected_output or request.code_hint or 'See question above'}
+
 ## WHAT HAPPENED:
-- Unit test status: {test_status}
+- Unit test status: FAILED
 
 ## YOUR TASK:
 1. First, explain WHAT went wrong - is it a syntax error, wrong output, wrong approach?
 2. Explain WHY the user's approach is incorrect
-3. Give a CORRECT solution with explanation
-4. Point out what they should have done differently
+3. Give the CORRECT solution with full working code example
+4. Explain the key concept being tested
 
 Be SPECIFIC and HELPFUL. Don't just say "incorrect" - explain the concept they misunderstood.
 
 ## RESPONSE FORMAT:
-{{"correct": false, "feedback": "YOUR DETAILED EXPLANATION HERE"}}
+{{"correct": false, "feedback": "YOUR DETAILED EXPLANATION INCLUDING THE CORRECT ANSWER"}}
 
-IMPORTANT: Always respond with valid JSON containing "correct" (false) and "feedback" (detailed explanation)."""""
+IMPORTANT: Your feedback MUST include the correct answer code at the end."""""
     else:
-        system_prompt = f"""You are a PyTorch expert tutor. Evaluate the user's explanation of this concept:
+        system_prompt = f"""You are a helpful PyTorch expert tutor. The user attempted an explanation question and their answer needs evaluation.
 
+## TASK:
 Question: {request.question}
 
-User's Answer: {request.user_answer}
+## USER'S ANSWER:
+{request.user_answer}
 
-Provide encouraging feedback with corrections if needed. Focus on accuracy and completeness.
+## YOUR TASK:
+1. Evaluate if the user's answer is CORRECT and COMPLETE
+2. If INCORRECT or INCOMPLETE:
+   - Explain what they missed or got wrong
+   - Provide the CORRECT answer with proper explanation
+3. If CORRECT:
+   - Confirm their answer is correct
+   - Optionally add extra insights
 
-Respond in JSON format:
-{{"correct": boolean, "feedback": "detailed explanation"}}
-"""
+Be ENCOURAGING but ACCURATE. Education over criticism.
+
+## RESPONSE FORMAT:
+{{"correct": boolean, "feedback": "YOUR EXPLANATION INCLUDING THE CORRECT ANSWER IF NEEDED"}}
+
+IMPORTANT: If the answer is wrong, your feedback MUST include the correct answer and explanation."""
     
     try:
         response = client.invoke_model(
