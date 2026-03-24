@@ -26,7 +26,7 @@ USERS = {
 
 # AWS Bedrock config
 AWS_REGION = "us-east-1"
-BEDROCK_MODEL_ID = "deepseek-chat"
+BEDROCK_MODEL_ID = "deepseek.v3.2"
 
 # Bedrock credentials (from ~/.ssh/.bedrock)
 AWS_BEARER_TOKEN = os.environ.get("AWS_BEARER_TOKEN_BEDROCK", "")
@@ -93,7 +93,7 @@ def verify_auth(authorization: str | None = Header(None)) -> str:
 @app.post("/api/execute", response_model=ExecuteResponse)
 async def execute_code(request: ExecuteRequest):
     """Execute Python code and return output"""
-    output = []
+    output = ""
     error = None
     
     # Capture stdout
