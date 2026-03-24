@@ -93,17 +93,36 @@ def verify_auth(authorization: str | None = Header(None)) -> str:
 @app.post("/api/execute", response_model=ExecuteResponse)
 async def execute_code(request: ExecuteRequest):
     """Execute Python code and return output"""
+    import sys
+    import io
+    
     output = ""
     error = None
+    
+    # Pre-import common libraries
+    preimport_code = """
+import torch
+import numpy as np
+"""
     
     # Capture stdout
     old_stdout = sys.stdout
     redirected = io.StringIO()
     sys.stdout = redirected
     
+    # Execution context with pre-imported modules
+    exec_globals = {
+        "__builtins__": __builtins__,
+        "torch": torch,
+        "np": np,
+    }
+    exec_locals = {}
+    
     try:
-        # Execute the code
-        exec(request.code, {"__builtins__": __builtins__})
+        # Run pre-import
+        exec(preimport_code, exec_globals, exec_locals)
+        # Run user code
+        exec(request.code, exec_globals, exec_locals)
         sys.stdout = old_stdout
         output = redirected.getvalue()
     except Exception as e:
