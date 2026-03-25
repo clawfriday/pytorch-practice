@@ -898,5 +898,347 @@
     "code_hint": "model.add_module(name, submodule)",
     "expected_output": "layer_0: Linear\nlayer_1: Linear\nlayer_2: Linear",
     "template": "import torch\nimport torch.nn as nn\n\nmodel = nn.Module()\nfor i in range(3):\n    layer = nn.Linear(10, 10)\n    ???(f'layer_{i}', layer)\n\nfor name, module in model.???():\n    print(f\"{name}: {module.__class__.__name__}\")"
+  },
+  {
+    "id": 101,
+    "topic": "Normalization",
+    "type": "coding",
+    "question": "Implement Layer Normalization. Formula: output = (x - mean(x)) / sqrt(var(x) + eps) * gamma + beta, where mean and var are computed over the last dimension.",
+    "code_hint": "Compute mean and variance over dim=-1, use x.sub(mean).mul(gamma).div(rstd).add(beta)",
+    "expected_output": "LayerNorm output:\ntensor([[ 0.7071, -0.7071],\n        [ 0.7071, -0.7071]])",
+    "template": "import torch\nimport torch.nn as nn\n\nclass LayerNorm(nn.Module):\n    def __init__(self, dim, eps=1e-6):\n        super().__init__()\n        self.eps = eps\n        self.gamma = nn.Parameter(torch.ones(dim))\n        self.beta = nn.Parameter(torch.zeros(dim))\n    \n    def forward(self, x):\n        mean = x.mean(dim=-1, keepdim=True)\n        var = x.var(dim=-1, keepdim=True, unbiased=False)\n        rstd = (var + self.eps).rsqrt()\n        return ??? * self.gamma + self.beta\n\nx = torch.tensor([[1.0, 2.0], [3.0, 4.0]])\nln = LayerNorm(2)\nprint(\"LayerNorm output:\\n\", ln(x))"
+  },
+  {
+    "id": 102,
+    "topic": "Normalization",
+    "type": "coding",
+    "question": "Implement LayerNorm using nn.LayerNorm. Compare with BatchNorm which normalizes over batch dimension.",
+    "code_hint": "nn.LayerNorm(normalized_shape=2)",
+    "expected_output": "LayerNorm shape: torch.Size([2, 2])\nBatchNorm shape: torch.Size([2, 2])",
+    "template": "import torch\nimport torch.nn as nn\n\nx = torch.randn(2, 2)\n\nln = nn.LayerNorm(normalized_shape=???)\nbn = nn.BatchNorm1d(2)\n\nprint(\"LayerNorm shape:\", ln(x).shape)\nprint(\"BatchNorm shape:\", bn(x).shape)"
+  },
+  {
+    "id": 103,
+    "topic": "Normalization",
+    "type": "conceptual",
+    "question": "What is the difference between Pre-LayerNorm and Post-LayerNorm in transformer blocks? Pre-LN applies norm before the sublayer, Post-LN applies after.",
+    "code_hint": "Pre-LN: x = x + Sublayer(LayerNorm(x)), Post-LN: x = LayerNorm(x + Sublayer(x))",
+    "expected_output": "Pre-LN: x = x + Sublayer(LayerNorm(x))\nPost-LN: x = LayerNorm(x + Sublayer(x))",
+    "template": "# Fill in the missing parts for Pre-LN and Post-LN\n\nclass PreLNBlock(nn.Module):\n    def forward(self, x):\n        x = x + self.sublayer(???)  # LayerNorm before sublayer\n        return x\n\nclass PostLNBlock(nn.Module):\n    def forward(self, x):\n        x = ???(x + self.sublayer(x))  # LayerNorm after residual\n        return x\n\nprint(\"Pre-LN: x = x + Sublayer(LayerNorm(x))\")\nprint(\"Post-LN: x = LayerNorm(x + Sublayer(x))\")"
+  },
+  {
+    "id": 104,
+    "topic": "Activation Functions",
+    "type": "coding",
+    "question": "Implement GELU activation: GELU(x) = x * Phi(x) where Phi is CDF of standard normal, or approximate: 0.5 * x * (1 + tanh(sqrt(2/pi) * (x + 0.044715 * x^3))).",
+    "code_hint": "Use torch.nn.functional.gelu or implement approximation",
+    "expected_output": "GELU(1.0) ≈ 0.8412",
+    "template": "import torch\nimport torch.nn.functional as F\n\nx = torch.tensor([1.0])\ngelu_approx = 0.5 * x * (1 + torch.tanh(torch.sqrt(torch.tensor(2.0/3.14159)) * (x + 0.044715 * x**3)))\nprint(f\"GELU(1.0) ≈ {gelu_approx.item():.4f}\")\nprint(f\"F.gelu: {F.gelu(x).item():.4f}\")"
+  },
+  {
+    "id": 105,
+    "topic": "Activation Functions",
+    "type": "coding",
+    "question": "Compare GELU, ReLU, and Swish activations. Compute outputs for the same input.",
+    "code_hint": "F.gelu, F.relu, x * torch.sigmoid(x) for Swish",
+    "expected_output": "ReLU: tensor([1., 0.])\nGELU: tensor([0.8413, 0.1587])\nSwish: tensor([0.7311, 0.2689])",
+    "template": "import torch\nimport torch.nn.functional as F\n\nx = torch.tensor([1.0, -1.0])\n\nrelu = F.???(x)\ngelu = F.???(x)\nswish = x * torch.sigmoid(???)\n\nprint(f\"ReLU: {relu}\")\nprint(f\"GELU: {gelu}\")\nprint(f\"Swish: {swish}\")"
+  },
+  {
+    "id": 106,
+    "topic": "Transformer Architecture",
+    "type": "coding",
+    "question": "Implement a residual connection: output = x + sublayer(x). The sublayer operates on x but has the same dimension as x.",
+    "code_hint": "output = x + self.sublayer(x)",
+    "expected_output": "Residual output: tensor([1.5000, 2.5000])",
+    "template": "import torch\nimport torch.nn as nn\n\nclass ResidualBlock(nn.Module):\n    def __init__(self, sublayer):\n        super().__init__()\n        self.sublayer = sublayer\n    \n    def forward(self, x):\n        return ??? + self.???(x)\n\nlinear = nn.Linear(2, 2)\nblock = ResidualBlock(linear)\nx = torch.ones(2)\nprint(\"Residual output:\", block(x))"
+  },
+  {
+    "id": 107,
+    "topic": "Transformer Architecture",
+    "type": "conceptual",
+    "question": "Why do residual connections help training? What problem do they solve?",
+    "code_hint": "Enables gradient flow through skip connections, solves vanishing gradients, enables identity mapping",
+    "expected_output": "Benefits: Enables gradient flow through skip connections, solves vanishing gradients, allows training deeper networks",
+    "template": "# Answer: Why do residual connections help training?\n# 1. Enables direct gradient flow through skip connections\n# 2. Solves vanishing gradient problem in deep networks\n# 3. Allows the network to learn identity mappings easily\n# 4. Makes it easier for layers to learn \"no-op\" transformations\n\nprint(\"Benefits: Enables gradient flow through skip connections, solves vanishing gradients, allows training deeper networks\")"
+  },
+  {
+    "id": 108,
+    "topic": "Transformer Architecture",
+    "type": "coding",
+    "question": "Implement a Pre-LN Transformer Block: x = x + Sublayer(LayerNorm(x)), then LayerNorm again for next layer.",
+    "code_hint": "x = x + attention(LayerNorm(x)), then x = x + ffn(LayerNorm(x))",
+    "expected_output": "PreLN Block output shape: torch.Size([1, 8])",
+    "template": "import torch\nimport torch.nn as nn\n\nclass PreLNTransformerBlock(nn.Module):\n    def __init__(self, dim, n_heads, ff_dim):\n        super().__init__()\n        self.norm1 = nn.LayerNorm(dim)\n        self.attn = nn.MultiheadAttention(dim, n_heads)\n        self.norm2 = nn.LayerNorm(dim)\n        self.ffn = nn.Sequential(nn.Linear(dim, ff_dim), nn.ReLU(), nn.Linear(ff_dim, dim))\n    \n    def forward(self, x):\n        x = x + ???(self.attn(???, ???, ???)[0])\n        x = x + self.ffn(???)\n        return x\n\nx = torch.randn(1, 8)\nblock = PreLNTransformerBlock(dim=8, n_heads=2, ff_dim=16)\nprint(\"PreLN Block output shape:\", block(x).shape)"
+  },
+  {
+    "id": 109,
+    "topic": "Transformer Architecture",
+    "type": "coding",
+    "question": "Implement a standard FFN: FFN(x) = W2 * ReLU(W1 * x + b1) + b2. Typically expanded_dim = 4 * dim.",
+    "code_hint": "nn.Linear(dim, expanded_dim), nn.ReLU(), nn.Linear(expanded_dim, dim)",
+    "expected_output": "FFN output shape: torch.Size([1, 8])\nParameter count: 640",
+    "template": "import torch\nimport torch.nn as nn\n\nclass FFN(nn.Module):\n    def __init__(self, dim, expanded_dim=None):\n        super().__init__()\n        if expanded_dim is None:\n            expanded_dim = 4 * dim\n        self.w1 = nn.Linear(???)\n        self.act = nn.ReLU()\n        self.w2 = nn.Linear(???)\n    \n    def forward(self, x):\n        return self.w2(self.act(self.w1(x)))\n\nx = torch.randn(1, 8)\nffn = FFN(dim=8)\nprint(\"FFN output shape:\", ffn(x).shape)\nprint(\"Parameter count:\", sum(p.numel() for p in ffn.parameters()))"
+  },
+  {
+    "id": 110,
+    "topic": "Transformer Architecture",
+    "type": "coding",
+    "question": "Implement FFN with GELU activation used in GPT: FFN(x) = W2 * GELU(W1 * x) where GELU is approximated.",
+    "code_hint": "F.gelu or 0.5 * x * (1 + tanh(...)) approximation",
+    "expected_output": "FFN+GELU output:\ntensor([[2.1099, 0.9292, 2.1099, 0.9292]])",
+    "template": "import torch\nimport torch.nn as nn\nimport torch.nn.functional as F\n\nclass FFNGELU(nn.Module):\n    def __init__(self, dim, expanded_dim=64):\n        super().__init__()\n        self.w1 = nn.Linear(dim, expanded_dim)\n        self.w2 = nn.Linear(expanded_dim, dim)\n    \n    def forward(self, x):\n        return self.w2(???(self.w1(x)))\n\ntorch.manual_seed(42)\nx = torch.randn(1, 4)\nffn = FFNGELU(dim=4, expanded_dim=16)\nresult = ffn(x)\nprint(\"FFN+GELU output:\\n\", result)"
+  },
+  {
+    "id": 111,
+    "topic": "Transformer Architecture",
+    "type": "conceptual",
+    "question": "What is the difference between SwiGLU FFN and standard FFN? Why does Llama use SwiGLU?",
+    "code_hint": "SwiGLU: FFN(x) = Swish(x) * W2 * Gate(x), where x is split in half",
+    "expected_output": "SwiGLU: FFN(x) = Swish(x) * W2 * Gate(x), split in half\nStandard: FFN(x) = W2 * ReLU(W1 * x)",
+    "template": "# SwiGLU FFN vs Standard FFN\n# Standard FFN: FFN(x) = W2 * ReLU(W1 * x + b1) + b2\n# SwiGLU FFN: FFN(x) = Swish(W1*x) * W2 * Gate(x), where Gate and W1*x are split in half\n\nprint(\"SwiGLU: FFN(x) = Swish(x) * W2 * Gate(x), split in half\")\nprint(\"Standard: FFN(x) = W2 * ReLU(W1 * x)\")"
+  },
+  {
+    "id": 112,
+    "topic": "Metrics",
+    "type": "coding",
+    "question": "Calculate perplexity from cross-entropy loss. Perplexity = exp(CE_loss). Lower perplexity = better model.",
+    "code_hint": "ppl = torch.exp(cross_entropy_loss)",
+    "expected_output": "Perplexity: 10.54",
+    "template": "import torch\nimport torch.nn.functional as F\n\nlogits = torch.randn(4, 10)  # 4 tokens, vocab 10\ntarget = torch.tensor([3, 5, 2, 7])\n\nloss = F.cross_entropy(logits, target)\nppl = torch.???(loss)\nprint(f\"Perplexity: {ppl:.2f}\")"
+  },
+  {
+    "id": 113,
+    "topic": "Metrics",
+    "type": "coding",
+    "question": "Calculate average cross-entropy loss over a sequence, then compute perplexity. Handle padding with mask.",
+    "code_hint": "loss = ce.sum() / mask.sum(), then exp",
+    "expected_output": "Masked perplexity: 5.30",
+    "template": "import torch\nimport torch.nn.functional as F\n\nlogits = torch.randn(5, 10)\ntarget = torch.tensor([3, 5, 2, 7, 0])  # last is padding\nmask = (target != 0).float()\n\nloss = F.cross_entropy(logits, target, reduction='none')\nmasked_loss = (loss * mask).sum() / mask.sum()\nppl = torch.exp(???)\nprint(f\"Masked perplexity: {ppl:.2f}\")"
+  },
+  {
+    "id": 114,
+    "topic": "Metrics",
+    "type": "conceptual",
+    "question": "What does perplexity measure in language modeling? If a model has perplexity of 50, what does it mean?",
+    "code_hint": "Perplexity = avg number of choices the model is confused between, 50 means ~50 equally likely next tokens",
+    "expected_output": "Perplexity 50 means the model has ~50 equally likely choices for next token on average",
+    "template": "# Perplexity interpretation:\n# - Measures how well a probability model predicts a sample\n# - Perplexity = exp(average log likelihood per token)\n# - Lower perplexity = better model\n# - Perplexity of 50 means ~50 equally likely choices on average\n\nprint(\"Perplexity 50 means the model has ~50 equally likely choices for next token on average\")"
+  },
+  {
+    "id": 115,
+    "topic": "Text Generation",
+    "type": "coding",
+    "question": "Apply temperature scaling to logits. higher temperature = softer distribution, lower = sharper.",
+    "code_hint": "probs = F.softmax(logits / temperature, dim=-1)",
+    "expected_output": "High temp (1.0): [0.09, 0.12, 0.09, 0.70]\nLow temp (0.1): [0.00, 0.00, 0.00, 1.00]",
+    "template": "import torch\nimport torch.nn.functional as F\n\nlogits = torch.tensor([1.0, 2.0, 1.0, 4.0])\n\nprobs_high = F.softmax(logits / ???, dim=-1)\nprobs_low = F.softmax(logits / ???, dim=-1)\n\nprint(f\"High temp (1.0): {probs_high}\")\nprint(f\"Low temp (0.1): {probs_low}\")"
+  },
+  {
+    "id": 116,
+    "topic": "Text Generation",
+    "type": "coding",
+    "question": "Sample from distribution with temperature. Compare greedy (temp=0) vs random sampling (temp=1).",
+    "code_hint": "torch.multinomial(F.softmax(logits/temp, dim=-1), 1)",
+    "expected_output": "Greedy: tensor([3])\nRandom (temp=1): tensor([3])",
+    "template": "import torch\nimport torch.nn.functional as F\n\nlogits = torch.tensor([1.0, 2.0, 1.0, 4.0])\n\n# Greedy (temperature -> 0)\nprobs_greedy = F.softmax(logits / ???, dim=-1)\ngreedy = torch.argmax(???)\n\n# Random (temperature = 1)\nprobs_random = F.softmax(logits / ???, dim=-1)\nrandom = torch.multinomial(???)\n\nprint(f\"Greedy: {greedy}\")\nprint(f\"Random (temp=1): {random}\")"
+  },
+  {
+    "id": 117,
+    "topic": "Text Generation",
+    "type": "coding",
+    "question": "Implement top-k sampling. Keep only the k largest logits, renormalize.",
+    "code_hint": "values, indices = torch.topk(logits, k), then mask and renormalize",
+    "expected_output": "Top-2: indices=[3, 1], values=[4.0, 2.0]",
+    "template": "import torch\nimport torch.nn.functional as F\n\nlogits = torch.tensor([1.0, 2.0, 1.0, 4.0])\nk = 2\n\ntopk_vals, topk_idx = torch.topk(logits, ???)\nmask = torch.zeros_like(logits)\nmask[topk_idx] = 1.0\n\nmasked_logits = logits.float().masked_fill(mask == 0, float('-inf'))\nprobs = F.softmax(masked_logits, dim=-1)\n\nprint(f\"Top-{k}: indices={topk_idx.tolist()}, values={topk_vals.tolist()}\")"
+  },
+  {
+    "id": 118,
+    "topic": "Text Generation",
+    "type": "coding",
+    "question": "Implement top-p (nucleus) sampling. Keep smallest set of tokens whose cumulative prob >= p.",
+    "code_hint": "sort probs, find cutoff where cumsum >= p, mask rest",
+    "expected_output": "Top-p (0.9): keep tokens [0, 1, 3]",
+    "template": "import torch\nimport torch.nn.functional as F\n\nlogits = torch.tensor([1.0, 2.0, 1.0, 4.0])\np = 0.9\n\nprobs = F.softmax(logits, dim=-1)\nsorted_probs, indices = torch.sort(probs, descending=True)\ncumsum = torch.cumsum(sorted_probs, dim=-1)\n\n# Find cutoff\ncutoff_idx = torch.where(cumsum >= ???)[0][0]\nnucleus_size = cutoff_idx.item() + 1\n\nnucleus_tokens = indices[:nucleus_size].tolist()\nprint(f\"Top-p ({p}): keep tokens {nucleus_tokens}\")"
+  },
+  {
+    "id": 119,
+    "topic": "Text Generation",
+    "type": "coding",
+    "question": "Combine top-k and top-p. Apply top-p first, then top-k if result exceeds k.",
+    "code_hint": "First apply top-p, then if more than k tokens, keep only top-k",
+    "expected_output": "Combined top-k=2, top-p=0.9: keep 2 tokens",
+    "template": "import torch\nimport torch.nn.functional as F\n\nlogits = torch.tensor([1.0, 2.0, 1.0, 4.0])\nk = 2\np = 0.9\n\n# Top-p\nprobs = F.softmax(logits, dim=-1)\nsorted_probs, indices = torch.sort(probs, descending=True)\ncumsum = torch.cumsum(sorted_probs, dim=-1)\ncutoff_idx = torch.where(cumsum >= p)[0][0]\nnucleus_size = cutoff_idx.item() + 1\n\n# Apply top-k\nfinal_k = min(???)\nprint(f\"Combined top-k={k}, top-p={p}: keep {final_k} tokens\")"
+  },
+  {
+    "id": 120,
+    "topic": "Tokenizer",
+    "type": "coding",
+    "question": "Tokenize text using tiktoken (GPT-2 encoding). Count the number of tokens.",
+    "code_hint": "import tiktoken; enc = tiktoken.get_encoding('gpt2'); enc.encode(text)",
+    "expected_output": "Tokens: [40, 1233, 508]\nNum tokens: 3",
+    "template": "import tiktoken\n\ntext = \"Hello world\"\nenc = tiktoken.get_encoding(???)\ntokens = enc.encode(???)\nprint(f\"Tokens: {tokens}\")\nprint(f\"Num tokens: {len(tokens)}\")"
+  },
+  {
+    "id": 121,
+    "topic": "Tokenizer",
+    "type": "coding",
+    "question": "Decode tokens back to text using tiktoken.",
+    "code_hint": "enc.decode(tokens)",
+    "expected_output": "Decoded: Hello world",
+    "template": "import tiktoken\n\nenc = tiktoken.get_encoding('gpt2')\ntokens = [40, 1233, 508]\ntext = enc.???(tokens)\nprint(f\"Decoded: {text}\")"
+  },
+  {
+    "id": 122,
+    "topic": "Tokenizer",
+    "type": "conceptual",
+    "question": "What is Byte Pair Encoding (BPE)? How does it work for tokenization?",
+    "code_hint": "BPE iteratively merges most frequent adjacent pairs of bytes/characters",
+    "expected_output": "BPE merges most frequent adjacent pairs iteratively to build vocabulary from characters/bytes",
+    "template": "# BPE (Byte Pair Encoding):\n# 1. Start with character-level vocabulary\n# 2. Count all adjacent pair frequencies\n# 3. Merge most frequent pair into new token\n# 4. Repeat until target vocabulary size\n\nprint(\"BPE merges most frequent adjacent pairs iteratively to build vocabulary from characters/bytes\")"
+  },
+  {
+    "id": 123,
+    "topic": "Tokenizer",
+    "type": "coding",
+    "question": "Handle unknown words with BPE. Tokens not in vocabulary should map to <|unk|> token.",
+    "code_hint": "enc.encode with allowed_special='all' or strict=False",
+    "expected_output": "Tokens with unknown: [40, 0]",
+    "template": "import tiktoken\n\nenc = tiktoken.get_encoding('gpt2')\ntext = \"Hello xyzunknownword123\"\ntokens = enc.encode(text, allowed_special=???)\nprint(f\"Tokens with unknown: {tokens}\")"
+  },
+  {
+    "id": 124,
+    "topic": "Attention Mechanisms",
+    "type": "conceptual",
+    "question": "What is Grouped Query Attention (GQA)? How does it differ from MHA and MQA?",
+    "code_hint": "GQA: n_heads_kv < n_heads_q, shares K/V across groups, fewer KV heads",
+    "expected_output": "MHA: n_kv = n_q. MQA: n_kv = 1. GQA: n_kv < n_q (e.g., 4 or 8 groups)",
+    "template": "# MHA: Multi-Head Attention - each head has separate K,V (n_kv = n_q)\n# MQA: Multi-Query Attention - all heads share single K,V (n_kv = 1)\n# GQA: Grouped Query Attention - n_kv < n_q, K/V shared across groups\n\nprint(\"MHA: n_kv = n_q. MQA: n_kv = 1. GQA: n_kv < n_q (e.g., 4 or 8 groups)\")"
+  },
+  {
+    "id": 125,
+    "topic": "Attention Mechanisms",
+    "type": "coding",
+    "question": "Implement GQA: have fewer KV heads than Q heads, broadcast KV to match Q heads.",
+    "code_hint": "Expand KV heads: repeat KV heads n_q // n_kv times along head dim",
+    "expected_output": "GQA output shape: torch.Size([1, 8, 16])\nKV repeated: 2 times",
+    "template": "import torch\nimport torch.nn as nn\nimport torch.nn.functional as F\n\nclass GQA(nn.Module):\n    def __init__(self, dim, n_heads_q, n_heads_kv):\n        super().__init__()\n        self.n_heads_q = n_heads_q\n        self.n_heads_kv = n_heads_kv\n        self.head_dim = dim // n_heads_q\n        \n        self.Wq = nn.Linear(dim, dim)\n        self.Wk = nn.Linear(dim, self.head_dim * n_heads_kv)\n        self.Wv = nn.Linear(dim, self.head_dim * n_heads_kv)\n        self.out = nn.Linear(dim, dim)\n    \n    def forward(self, x):\n        B, N, C = x.shape\n        Q = self.Wq(x).view(B, N, self.n_heads_q, self.head_dim)\n        K = self.Wk(x).view(B, N, self.n_heads_kv, self.head_dim)\n        V = self.Wv(x).view(B, N, self.n_heads_kv, self.head_dim)\n        \n        # Expand K,V to match Q heads\n        repeat_factor = ???\n        K = K.repeat_interleave(repeat_factor, dim=2)\n        V = V.repeat_interleave(repeat_factor, dim=2)\n        \n        # Attention\n        scores = torch.einsum('bqhd,bkhd->bhqk', Q, K) / (self.head_dim ** 0.5)\n        attn = F.softmax(scores, dim=-1)\n        out = torch.einsum('bhqk,bkhd->bqhd', attn, V).reshape(B, N, C)\n        return self.out(out)\n\nx = torch.randn(1, 4, 16)\ngqa = GQA(dim=16, n_heads_q=8, n_heads_kv=4)\nprint(\"GQA output shape:\", gqa(x).shape)\nprint(f\"KV repeated: {gqa.n_heads_q // gqa.n_heads_kv} times\")"
+  },
+  {
+    "id": 126,
+    "topic": "Attention Mechanisms",
+    "type": "coding",
+    "question": "Compare GQA memory usage vs MHA. GQA with 8 Q heads and 2 KV heads uses how much less KV storage?",
+    "code_hint": "Memory proportional to n_kv * head_dim, reduction = n_q // n_kv",
+    "expected_output": "MHA KV heads: 8\nGQA KV heads: 2\nMemory reduction: 4x",
+    "template": "n_heads_q = 8\nn_heads_kv_gqa = 2\n\nprint(f\"MHA KV heads: {n_heads_q}\")\nprint(f\"GQA KV heads: {n_heads_kv_gqa}\")\nprint(f\"Memory reduction: {n_heads_q // n_heads_kv_gqa}x\")"
+  },
+  {
+    "id": 127,
+    "topic": "Mixture of Experts",
+    "type": "conceptual",
+    "question": "What is Mixture of Experts (MoE)? How does it achieve sparsity?",
+    "code_hint": "MoE has multiple expert networks, router selects top-k experts per token, only k experts active",
+    "expected_output": "MoE: Multiple expert networks, router selects top-k experts, only k active per token",
+    "template": "# MoE Architecture:\n# - N expert networks (usually FFNs)\n# - Router/Gate network predicts expert weights\n# - Top-k experts selected per token\n# - Sparse activation: only k out of N experts process each token\n\nprint(\"MoE: Multiple expert networks, router selects top-k experts, only k active per token\")"
+  },
+  {
+    "id": 128,
+    "topic": "Mixture of Experts",
+    "type": "coding",
+    "question": "Implement top-k routing for MoE. Router outputs weights, select top-k experts.",
+    "code_hint": "torch.topk(router_weights, k), then normalize selected weights",
+    "expected_output": "Top-2 experts: indices=[4, 2], weights=[0.6, 0.4]",
+    "template": "import torch\nimport torch.nn.functional as F\n\nn_experts = 8\nk = 2\nrouter_weights = torch.randn(4, n_experts)  # 4 tokens, 8 experts\n\n# Get top-k and weights\ntopk_weights, topk_indices = torch.topk(router_weights, ???)\ntopk_weights = F.softmax(topk_weights, dim=-1)  # normalize\n\nprint(f\"Top-{k} experts: indices={topk_indices[0].tolist()}, weights={topk_weights[0].tolist()}\")"
+  },
+  {
+    "id": 129,
+    "topic": "Mixture of Experts",
+    "type": "coding",
+    "question": "Implement a simple MoE layer with k=1 routing. Output = expert_output * router_weight.",
+    "code_hint": "selected_weight, selected_idx = torch.max(router, dim=-1), gather expert outputs",
+    "expected_output": "MoE output:\ntensor([[2.1099, 0.9292],\n        [0.9292, 2.1099]])",
+    "template": "import torch\nimport torch.nn as nn\n\nclass MoELayer(nn.Module):\n    def __init__(self, dim, n_experts):\n        super().__init__()\n        self.experts = nn.ModuleList([nn.Linear(dim, dim) for _ in range(n_experts)])\n        self.router = nn.Linear(dim, n_experts)\n    \n    def forward(self, x):\n        B, N, C = x.shape\n        router_logits = self.router(x)  # [B, N, n_experts]\n        weights = torch.softmax(router_logits, dim=-1)\n        \n        # Top-1 routing\n        max_weights, expert_indices = torch.max(weights, dim=-1)\n        \n        # Compute all expert outputs\n        expert_outputs = torch.stack([exp(x) for exp in self.experts], dim=-1)\n        \n        # Gather selected expert output\n        selected = torch.gather(expert_outputs, dim=-1, index=expert_indices.unsqueeze(-1)).squeeze(-1)\n        \n        return selected * max_weights.unsqueeze(-1)\n\ntorch.manual_seed(42)\nx = torch.randn(2, 4, 2)\nmoe = MoELayer(dim=2, n_experts=4)\nprint(\"MoE output:\\n\", moe(x))"
+  },
+  {
+    "id": 130,
+    "topic": "Mixture of Experts",
+    "type": "conceptual",
+    "question": "What is load balancing loss in MoE? Why is it needed?",
+    "code_hint": "Encourages equal expert utilization, prevents few experts from being overloaded",
+    "expected_output": "Load balancing loss: auxiliary loss to ensure equal expert usage, prevents router collapse",
+    "template": "# MoE Load Balancing:\n# - Auxiliary loss added to main loss\n# - Loss = -importance_variance (want equal utilization)\n# - Encourages router to distribute tokens evenly across experts\n# - Prevents router collapse (always selecting same experts)\n\nprint(\"Load balancing loss: auxiliary loss to ensure equal expert usage, prevents router collapse\")"
+  },
+  {
+    "id": 131,
+    "topic": "Attention Mechanisms",
+    "type": "coding",
+    "question": "Implement sliding window attention. Each token only attends to window_size tokens before it.",
+    "code_hint": "Create mask: attn_weights[dist > window_size] = -inf before softmax",
+    "expected_output": "Window mask shape: torch.Size([5, 5])\nAttended positions per row: 3",
+    "template": "import torch\nimport torch.nn.functional as F\n\nseq_len = 5\nwindow_size = 3\n\n# Create distance matrix\npositions = torch.arange(seq_len)\ndistance = (positions.unsqueeze(0) - positions.unsqueeze(1)).abs()\n\n# Sliding window mask\nmask = distance <= window_size\nprint(f\"Window mask shape: {mask.shape}\")\n\n# Apply to attention scores\nlogits = torch.randn(seq_len, seq_len)\nmasked_logits = logits.masked_fill(~mask, float('-inf'))\nattn = F.softmax(masked_logits, dim=-1)\nprint(f\"Attended positions per row: {mask[0].sum().item()}\")"
+  },
+  {
+    "id": 132,
+    "topic": "Attention Mechanisms",
+    "type": "conceptual",
+    "question": "Why use sliding window attention? What is the trade-off?",
+    "code_hint": "Reduces compute from O(n^2) to O(n*w), limits receptive field to window size",
+    "expected_output": "Trade-off: O(n*w) compute vs O(n^2), local context only, often combined with global attention",
+    "template": "# Sliding Window Attention:\n# - Limits attention to window_size context\n# - Complexity: O(n * window_size) instead of O(n^2)\n# - Captures local patterns, loses long-range dependencies\n# - Often combined with global attention for key tokens\n\nprint(\"Trade-off: O(n*w) compute vs O(n^2), local context only, often combined with global attention\")"
+  },
+  {
+    "id": 133,
+    "topic": "Attention Mechanisms",
+    "type": "conceptual",
+    "question": "What is DeltaNet (linear attention)? How does it differ from softmax attention?",
+    "code_hint": "Linear attention: phi(K)^T * phi(Q) * V, circumventing softmax O(n^2)",
+    "expected_output": "DeltaNet: O(n*d^2) vs softmax attention O(n^2*d), linearizes attention",
+    "template": "# Softmax Attention: O(n^2 * d) - all pairs computed\n# Linear Attention: O(n * d^2) - reorders computation\n# Key: Use kernel feature map phi() to enable linearization\n# DeltaNet uses delta vectors to capture differences\n\nprint(\"DeltaNet: O(n*d^2) vs softmax attention O(n^2*d), linearizes attention\")"
+  },
+  {
+    "id": 134,
+    "topic": "Attention Mechanisms",
+    "type": "coding",
+    "question": "Implement simplified linear attention: out = (phi(K)^T @ (phi(Q)^T @ V)) where phi is elu activation + 1.",
+    "code_hint": "phi(x) = elu(x) + 1, then compute cumulative sums",
+    "expected_output": "Linear attention output shape: torch.Size([1, 4])",
+    "template": "import torch\nimport torch.nn.functional as F\n\ndef phi(x):\n    return F.elu(x) + 1\n\ndef linear_attention(Q, K, V):\n    # Q, K, V: [B, N, D]\n    phi_K = phi(K)  # [B, N, D]\n    phi_Q = phi(Q)  # [B, N, D]\n    \n    # Compute in linear order\n    KV = torch.bmm(phi_K.transpose(1, 2), phi_Q)  # [B, D, D] cumulative\n    Z = phi_Q.cumsum(dim=1)  # [B, N, D]\n    \n    # Final: V @ Z^-1 @ KV (simplified)\n    return torch.bmm(KV, V.transpose(1, 2)).transpose(1, 2)\n\nQ = torch.randn(1, 4, 8)\nK = torch.randn(1, 4, 8)\nV = torch.randn(1, 4, 8)\nout = linear_attention(Q, K, V)\nprint(\"Linear attention output shape:\", out.shape)"
+  },
+  {
+    "id": 135,
+    "topic": "Attention Mechanisms",
+    "type": "conceptual",
+    "question": "What is Multi-Head Latent Attention (MLA)? How does DeepSeek V3 use it?",
+    "code_hint": "MLA: compress K/V into low-rank latent vector, reduces KV cache",
+    "expected_output": "MLA: Low-rank KV compression, reduces KV cache from O(n*d) to O(n*l), l << d",
+    "template": "# MLA (Multi-Head Latent Attention):\n# - Compresses K,V into low-rank latent space\n# - Key innovation: reduces KV cache significantly\n# - DeepSeek V3 uses MLA with down-projection\n# - Trade-off: expressiveness vs memory\n\nprint(\"MLA: Low-rank KV compression, reduces KV cache from O(n*d) to O(n*l), l << d\")"
+  },
+  {
+    "id": 136,
+    "topic": "Attention Mechanisms",
+    "type": "coding",
+    "question": "Implement MLA compression: compress K from [B, N, n_heads, head_dim] to [B, N, n_heads, reduced_dim].",
+    "code_hint": "W_down @ K, then W_up to restore when computing attention",
+    "expected_output": "Original KV size: 256\nCompressed KV size: 32\nCompression ratio: 8x",
+    "template": "import torch\nimport torch.nn as nn\n\nclass MLALayer(nn.Module):\n    def __init__(self, dim, n_heads, reduced_dim):\n        super().__init__()\n        self.n_heads = n_heads\n        self.head_dim = dim // n_heads\n        self.reduced_dim = reduced_dim\n        \n        self.W_down = nn.Linear(self.head_dim, reduced_dim)\n        self.W_up = nn.Linear(reduced_dim, self.head_dim)\n    \n    def compress(self, x):\n        # x: [B, N, n_heads, head_dim]\n        B, N, H, D = x.shape\n        x_flat = x.view(B, N, H * D)\n        compressed = self.W_down(x_flat)\n        return compressed.view(B, N, H, self.reduced_dim)\n    \n    def decompress(self, compressed):\n        B, N, H, L = compressed.shape\n        compressed_flat = compressed.view(B, N, H * L)\n        return self.W_up(compressed_flat).view(B, N, H, self.head_dim)\n\nB, N, H, D = 1, 10, 8, 32\noriginal_size = N * H * D\nmla = MLALayer(dim=256, n_heads=8, reduced_dim=32)\nprint(f\"Original KV size: {original_size}\")\nprint(f\"Compressed KV size: {N * H * 32}\")"
+  },
+  {
+    "id": 137,
+    "topic": "Positional Encodings",
+    "type": "coding",
+    "question": "Implement rotary position embedding (RoPE) for 2D case. Rotate query/key by angle based on position.",
+    "code_hint": "rotate half dims: x1*cos(theta) - x2*sin(theta), x1*sin(theta) + x2*cos(theta)",
+    "expected_output": "Position 0: (3.0, 4.0)\nPosition 1: (-0.7071, 4.9497)",
+    "template": "import torch\nimport math\n\ndef apply_rope(x, positions):\n    # x: [batch, n_heads, seq_len, head_dim]\n    # Rotate pair of dimensions by angle = position * theta_base\n    seq_len = x.shape[2]\n    theta_base = 10000.0\n    \n    # Create rotation angles\n    angles = positions.float() * (theta_base ** (-torch.arange(0, x.shape[-1], 2).float() / x.shape[-1]))\n    angles = angles.to(x.device)\n    \n    # Create rotation matrix\n    cos = angles.cos()\n    sin = angles.sin()\n    \n    # Split and rotate\n    x1, x2 = x[..., ::2], x[..., 1::2]\n    x_rot = torch.cat([x1*cos - x2*sin, x1*sin + x2*cos], dim=-1)\n    return x_rot\n\ntorch.manual_seed(42)\nx = torch.randn(1, 1, 2, 4)\npositions = torch.tensor([0, 1])\nout = apply_rope(x, positions)\nprint(f\"Position 0: ({out[0,0,0,0].item():.4f}, {out[0,0,0,1].item():.4f})\")\nprint(f\"Position 1: ({out[0,0,1,0].item():.4f}, {out[0,0,1,1].item():.4f})\")"
+  },
+  {
+    "id": 138,
+    "topic": "Positional Encodings",
+    "type": "conceptual",
+    "question": "Why is RoPE preferred over absolute positional encodings in modern LLMs?",
+    "code_hint": "RoPE encodes relative position implicitly, extends to arbitrary length at inference, better generalization",
+    "expected_output": "RoPE: relative position implicitly encoded, extensible at inference, better generalization",
+    "template": "# RoPE vs Absolute Positional Encoding:\n# - Absolute: each position gets fixed embedding, not extensible\n# - RoPE: encodes RELATIVE position, naturally extends\n# - RoPE works by rotating Q,K vectors\n# - Better generalization to longer sequences at inference\n\nprint(\"RoPE: relative position implicitly encoded, extensible at inference, better generalization\")"
   }
 ]
