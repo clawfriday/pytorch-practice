@@ -583,5 +583,50 @@
     "code_hint": ".numel(), .element_size()",
     "expected_output": "Shape: torch.Size([3, 4])\nnumel: 12\nelement_size: 4\nTotal bytes: 48",
     "template": "import torch\n\na = torch.randn(3, 4)\nnumel = a.???()\nelement_size = a.???()\nprint(f\"Shape: {a.shape}\")\nprint(f\"numel: {numel}\")\nprint(f\"element_size: {element_size}\")\nprint(f\"Total bytes: {numel * element_size}\")"
+  },
+  {
+    "id": 66,
+    "topic": "Advanced Activations",
+    "type": "coding",
+    "question": "Implement SwiGLU activation used in LLaMA. Formula: SwiGLU(x) = Swish(x) * GELU(linear_gate(x)), where input is split in half.",
+    "code_hint": "Split input with x.chunk(2, dim=-1), use torch.nn.functional.silu (Swish) and torch.nn.functional.gelu",
+    "expected_output": "tensor([[2.7884, 3.9038]], grad_fn=<MulBackward0>)",
+    "template": "import torch\nimport torch.nn as nn\n\nclass SwiGLU(nn.Module):\n    def __init__(self, dim):\n        super().__init__()\n        self.linear_gate = nn.Linear(dim // 2, dim // 2)\n        \n    def forward(self, x):\n        # Split x into two halves: x and gate\n        ???\n        return torch.nn.functional.silu(???) * torch.nn.functional.gelu(self.linear_gate(???))\n\n# Test\ntorch.manual_seed(42)\nmodel = SwiGLU(4)\nx = torch.tensor([[1.0, 2.0, 3.0, 4.0]])\nresult = model(x)\nprint(f\"SwiGLU output: {result}\")\n"
+  },
+  {
+    "id": 67,
+    "topic": "Advanced Activations",
+    "type": "coding",
+    "question": "Implement GeGLU (Gated Exponential Linear Unit) activation used in LLaMA. The formula is GeGLU(x) = GELU(x_gate) * x_value, where the input is split in half along the last dimension - one half acts as a gate that goes through GELU, and the other half provides the values.",
+    "code_hint": "Use torch.chunk to split the input tensor into two halves along the last dimension, apply F.gelu to the gate part, then multiply element-wise with the value part.",
+    "expected_output": "tensor([[2.5240, 7.8180]])",
+    "template": "import torch\nimport torch.nn.functional as F\n\ndef geglu(x):\n    # Split x into two halves along the last dimension\n    ???\n\ntorch.manual_seed(42)\nx = torch.tensor([[1.0, 2.0, 3.0, 4.0]])\nresult = geglu(x)\nprint(result)"
+  },
+  {
+    "id": 68,
+    "topic": "Positional Encodings",
+    "type": "coding",
+    "question": "Implement the 2D rotation formula used in Rotary Positional Encoding (RoPE). Given vector (x1, x2) and angle theta, rotate it to (x1*cos(θ) - x2*sin(θ), x1*sin(θ) + x2*cos(θ)).",
+    "code_hint": "Use math.cos() and math.sin() to compute the rotated values.",
+    "expected_output": "x1_rotated: -0.7071\nx2_rotated: 4.9497",
+    "template": "import torch\nimport math\n\ntorch.manual_seed(42)\n\n# Input vector (x1, x2) and angle theta\nx1, x2 = 3.0, 4.0\ntheta = math.pi / 4  # 45 degrees\n\n# TODO: Implement 2D rotation using RoPE formula\n# rotate (x1,x2) to (x1*cos(θ) - x2*sin(θ), x1*sin(θ) + x2*cos(θ))\nx1_rotated = ???\nx2_rotated = ???\n\nprint(f\"x1_rotated: {x1_rotated:.4f}\")\nprint(f\"x2_rotated: {x2_rotated:.4f}\")"
+  },
+  {
+    "id": 69,
+    "topic": "Positional Encodings",
+    "type": "coding",
+    "question": "Implement AliBi (Attention with Linear Biases). AliBi adds a position-dependent linear bias to attention scores. The bias for position i attending to position j at head h is: bias[i,j,h] = -|i-j| * slope[h], where slope[h] = 2^(-8 * (h+1) / n_heads). Note: slopes decrease geometrically from head 0 to head n_heads-1.",
+    "code_hint": "Compute slopes using exponent formula. Create distance matrix |i-j| using torch.arange. Multiply by slopes with broadcasting.",
+    "expected_output": "tensor([[[ 0.0000, -0.0625, -0.1250, -0.1875],\n         [-0.0625,  0.0000, -0.0625, -0.1250],\n         [-0.1250, -0.0625,  0.0000, -0.0625],\n         [-0.1875, -0.1250, -0.0625,  0.0000]],\n\n        [[ 0.0000, -0.0039, -0.0078, -0.0117],\n         [-0.0039,  0.0000, -0.0039, -0.0078],\n         [-0.0078, -0.0039,  0.0000, -0.0039],\n         [-0.0117, -0.0078, -0.0039,  0.0000]]])",
+    "template": "import torch\nimport torch.nn as nn\n\n\ndef alibi_bias(seq_len: int, n_heads: int) -> torch.Tensor:\n    \"\"\"\n    Compute AliBi positional bias matrix.\n\n    Args:\n        seq_len: sequence length\n        n_heads: number of attention heads\n\n    Returns:\n        bias: shape (n_heads, seq_len, seq_len)\n        bias[h, i, j] = -|i-j| * slope[h]\n        where slope[h] = 2^(-8 * (h+1) / n_heads)\n    \"\"\"\n    # TODO: Implement AliBi bias computation\n    # 1. Compute slopes for each head\n    # 2. Create distance matrix |i-j|\n    # 3. Multiply and apply negative sign\n    ???\n\n\n# Test\ntorch.manual_seed(42)\nseq_len = 4\nn_heads = 2\n\nbias = alibi_bias(seq_len, n_heads)\nprint(bias)"
+  },
+  {
+    "id": 70,
+    "topic": "Normalization",
+    "type": "coding",
+    "question": "Implement RMSNorm (Root Mean Square Normalization). RMSNorm normalizes without centering. Formula: output = x / RMS(x) * g where RMS(x) = sqrt(mean(x^2)) over the last dimension.",
+    "code_hint": "Compute RMS(x) = sqrt(mean(x**2, dim=-1, keepdim=True)). Apply normalization with learned gain parameter g (initialized to 1).",
+    "expected_output": "tensor([[[ 1.3434,  1.0369, -0.3468],\n         [ 0.5480, -0.9450,  1.3441],\n         [ 0.7318,  1.5358,  0.3252]],\n\n        [[-0.7339,  0.6525,  1.4267],\n         [-1.1645,  0.2099, -1.2648],\n         [ 1.4954, -0.5387, -0.6882]]], grad_fn=<MulBackward0>)",
+    "template": "import torch\nimport torch.nn as nn\n\n\nclass RMSNorm(nn.Module):\n    def __init__(self, dim: int, eps: float = 1e-6):\n        super().__init__()\n        self.eps = eps\n        self.g = nn.Parameter(torch.ones(dim))\n\n    def forward(self, x: torch.Tensor) -> torch.Tensor:\n        \"\"\"\n        Apply RMSNorm: output = x / RMS(x) * g\n        where RMS(x) = sqrt(mean(x^2)) computed over last dimension\n        \"\"\"\n        # TODO: Implement RMSNorm\n        # 1. Compute RMS(x) = sqrt(mean(x**2, dim=-1, keepdim=True) + eps)\n        # 2. Normalize x by dividing by RMS(x)\n        # 3. Multiply by gain parameter g\n        rms = torch.sqrt(x.pow(2).mean(dim=-1, keepdim=True) + self.eps)\n        return ???\n\n\n# Test\ntorch.manual_seed(42)\nnorm = RMSNorm(3)\nx = torch.randn(2, 3, 3)\nresult = norm(x)\nprint(result)\n"
   }
 ]
