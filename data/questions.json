@@ -207,7 +207,7 @@
     "code_hint": "torch.split(t, 2, dim=1), torch.chunk(t, 3, dim=1)",
     "expected_output": "Original: torch.Size([1, 6])\nSplit into 3 parts, each shape: torch.Size([1, 2])\nChunked into 3 parts, each shape: torch.Size([1, 2])",
     "template": "import torch\n\nt = torch.randn(1, 6)\nprint(f\"Original: {t.shape}\")\n\nsplit = torch.???(???, ???, dim=???)\nprint(f\"Split into {len(split)} parts, each shape: {split[0].shape}\")\n\nchunk = torch.???(???, ???, dim=???)\nprint(f\"Chunked into {len(chunk)} parts, each shape: {chunk[0].shape}\")",
-    "answer": "import torch\n\n# Concatenate two tensors along dim=0\na = torch.randn(2, 3)\nb = torch.randn(1, 3)\nc = torch.cat([a, b], dim=0)\nprint(f\"Concatenated shape: {c.shape}\")"
+    "answer": "import torch\n\nt = torch.randn(1, 6)\nprint(f\"Original: {t.shape}\")\n\nsplit = torch.split(t, 2, dim=1)\nprint(f\"Split into {len(split)} parts, each shape: {split[0].shape}\")\n\nchunk = torch.chunk(t, 3, dim=1)\nprint(f\"Chunked into {len(chunk)} parts, each shape: {chunk[0].shape}\")"
   },
   {
     "id": 22,
@@ -217,7 +217,7 @@
     "code_hint": "t[0, :], t[:, 4], t[1:4, 2:5]",
     "expected_output": "Row 0: tensor([0, 1, 2, 3, 4])\nCol 4: tensor([ 4,  9, 14, 19, 24])\nSub tensor:\ntensor([[ 7,  8,  9],\n        [12, 13, 14],\n        [17, 18, 19]])",
     "template": "import torch\n\nt = torch.arange(25).reshape(5, 5)\nprint(f\"Row 0: {t[0, : ]}\")\nprint(f\"Col 4: {t[ :, 4]}\")\nprint(f\"Sub tensor:\\n{t[1:4, 2:5]}\")",
-    "answer": "import torch\n\n# Stack tensors along new dimension\na = torch.randn(2, 3)\nb = torch.randn(2, 3)\nstacked = torch.stack([a, b], dim=0)\nprint(f\"Stacked shape: {stacked.shape}\")"
+    "answer": "import torch\n\nt = torch.arange(25).reshape(5, 5)\nprint(f\"Row 0: {t[0, :]}\")\nprint(f\"Col 4: {t[ :, 4]}\")\nprint(f\"Sub tensor:\\n{t[1:4, 2:5]}\")"
   },
   {
     "id": 23,
@@ -227,7 +227,7 @@
     "code_hint": "t[mask] or torch.masked_select(t, mask)",
     "expected_output": "Original: tensor([1., 2., 3., 4., 5.])\nMask: [True, False, True, False, True]\nSelected: tensor([1., 3., 5.])",
     "template": "import torch\n\nt = torch.tensor([1.0, 2.0, 3.0, 4.0, 5.0])\nmask = torch.tensor([???])\nselected = t[???]\nprint(f\"Original: {t}\")\nprint(f\"Mask: {[???]}\")\nprint(f\"Selected: {selected}\")",
-    "answer": "import torch\n\n# Split tensor into chunks of size 2\nx = torch.arange(8)\nchunks = torch.split(x, 2)\nprint(f\"Number of chunks: {len(chunks)}\")"
+    "answer": "import torch\n\nt = torch.tensor([1.0, 2.0, 3.0, 4.0, 5.0])\nmask = torch.tensor([True, False, True, False, True])\nselected = t[mask]\nprint(f\"Original: {t}\")\nprint(f\"Mask: {[True, False, True, False, True]}\")\nprint(f\"Selected: {selected}\")"
   },
   {
     "id": 24,
@@ -237,7 +237,7 @@
     "code_hint": "torch.gather(t, dim, index)",
     "expected_output": "Tensor t:\ntensor([[1, 2],\n        [3, 4],\n        [5, 6]])\nIndex:\ntensor([[0, 1],\n        [1, 0],\n        [0, 0]])\nGathered:\ntensor([[1, 2],\n        [4, 3],\n        [5, 5]])",
     "template": "import torch\n\nt = torch.tensor([[1, 2], [3, 4], [5, 6]])\nindex = torch.tensor([[0, 1], [1, 0], [0, 0]])\ngathered = torch.???(???, ???, ???)\nprint(f\"Tensor t:\\n{t}\")\nprint(f\"Index:\\n{index}\")\nprint(f\"Gathered:\\n{index}\")",
-    "answer": "import torch\n\n# Chunk tensor into 4 parts\nx = torch.randn(12, 4)\nchunks = torch.chunk(x, 4, dim=0)\nprint(f\"Number of chunks: {len(chunks)}\")"
+    "answer": "import torch\n\nt = torch.tensor([[1, 2], [3, 4], [5, 6]])\nindex = torch.tensor([[0, 1], [1, 0], [0, 0]])\ngathered = torch.gather(t, 1, index)\nprint(f\"Tensor t:\\n{t}\")\nprint(f\"Index:\\n{index}\")\nprint(f\"Gathered:\\n{aligned}\")"
   },
   {
     "id": 25,
@@ -247,7 +247,7 @@
     "code_hint": "torch.index_select(t, dim, index)",
     "expected_output": "Original shape: torch.Size([5, 4])\nIndex: [0, 2, 4]\nSelected shape: torch.Size([3, 4])\nSelected:\ntensor([[ 0.3367,  0.1288,  0.2345,  0.2303],\n        [ 0.4617,  0.2674,  0.5349,  0.8094],\n        [-0.4601,  0.0286, -0.0735,  0.0399]])",
     "template": "import torch\n\ntorch.manual_seed(42)\nt = torch.randn(5, 4)\nidx = torch.tensor([???, ???, ???])\nselected = torch.???(???, ???, ???)\nprint(f\"Original shape: {t.shape}\")\nprint(f\"Index: {[???]}\")\nprint(f\"Selected shape: {selected.shape}\")\nprint(f\"Selected:\\n{selected}\")",
-    "answer": "import torch\n\n# Repeat tensor\nx = torch.randn(2, 3)\nrepeated = x.repeat(3, 2)\nprint(f\"Repeated shape: {repeated.shape}\")"
+    "answer": "import torch\n\ntorch.manual_seed(42)\nt = torch.randn(5, 4)\nidx = torch.tensor([0, 2, 4])\nselected = torch.index_select(t, 0, idx)\nprint(f\"Original shape: {t.shape}\")\nprint(f\"Index: {[0, 2, 4]}\")\nprint(f\"Selected shape: {selected.shape}\")\nprint(f\"Selected:\\n{selected}\")"
   },
   {
     "id": 26,
@@ -257,7 +257,7 @@
     "code_hint": "torch.add(a,b), torch.mul(a,b), torch.div(b,a)",
     "expected_output": "a: tensor([1., 2., 3.])\nb: tensor([4., 5., 6.])\nadd: tensor([5., 7., 9.])\nmul: tensor([ 4., 10., 18.])\ndiv: tensor([4.0000, 2.5000, 2.0000])",
     "template": "import torch\n\na = torch.tensor([1.0, 2.0, 3.0])\nb = torch.tensor([4.0, 5.0, 6.0])\nadd = torch.???(???, ???)\nmul = torch.???(???, ???)\ndiv = torch.???(???, ???)\nprint(f\"a: {a}\")\nprint(f\"b: {b}\")\nprint(f\"add: {add}\")\nprint(f\"mul: {mul}\")\nprint(f\"div: {div}\")",
-    "answer": "import torch\n\n# Element-wise multiplication\na = torch.tensor([1.0, 2.0, 3.0])\nb = torch.tensor([4.0, 5.0, 6.0])\nc = a * b\nprint(f\"Element-wise product: {c}\")"
+    "answer": "import torch\n\na = torch.tensor([1.0, 2.0, 3.0])\nb = torch.tensor([4.0, 5.0, 6.0])\nadd = torch.add(a, b)\nmul = torch.mul(a, b)\ndiv = torch.div(b, a)\nprint(f\"a: {a}\")\nprint(f\"b: {b}\")\nprint(f\"add: {add}\")\nprint(f\"mul: {mul}\")\nprint(f\"div: {div}\")"
   },
   {
     "id": 27,
@@ -267,7 +267,7 @@
     "code_hint": "torch.mm(a, b), torch.matmul(a, b)",
     "expected_output": "a shape: torch.Size([2, 3])\nb shape: torch.Size([3, 2])\nmm result shape: torch.Size([2, 2])\nmatmul result shape: torch.Size([2, 2])",
     "template": "import torch\n\ntorch.manual_seed(42)\na = torch.randn(???, ???)\nb = torch.randn(???, ???)\nmm = torch.???(???, ???)\nmatmul = torch.???(???, ???)\nprint(f\"a shape: {a.shape}\")\nprint(f\"b shape: {b.shape}\")\nprint(f\"mm result shape: {mm.shape}\")\nprint(f\"matmul result shape: {matmul.shape}\")",
-    "answer": "import torch\n\n# Matrix multiplication\na = torch.randn(2, 3)\nb = torch.randn(3, 4)\nc = torch.matmul(a, b)\nprint(f\"Matmul shape: {c.shape}\")"
+    "answer": "import torch\n\ntorch.manual_seed(42)\na = torch.randn(2, 3)\nb = torch.randn(3, 2)\nmm = torch.mm(a, b)\nmatmul = torch.matmul(a, b)\nprint(f\"a shape: {a.shape}\")\nprint(f\"b shape: {b.shape}\")\nprint(f\"mm result shape: {mm.shape}\")\nprint(f\"matmul result shape: {matmul.shape}\")"
   },
   {
     "id": 28,
@@ -277,7 +277,7 @@
     "code_hint": ".sum(), .mean(), .max(), .min()",
     "expected_output": "Shape: torch.Size([2, 3, 4])\nSum: -5.8065\nMean: -0.2419\nMax: 1.9269\nMin: -2.3169",
     "template": "import torch\n\ntorch.manual_seed(42)\nt = torch.randn(2, 3, 4)\nsum_val = t.???\nmean_val = t.???\nmax_val = t.???\nmin_val = t.???\nprint(f\"Shape: {t.shape}\")\nprint(f\"Sum: {sum_val.item():.4f}\")\nprint(f\"Mean: {mean_val.item():.4f}\")\nprint(f\"Max: {max_val.item():.4f}\")\nprint(f\"Min: {min_val.item():.4f}\")",
-    "answer": "import torch\n\n# Multiply with scalar\nx = torch.tensor([1.0, 2.0, 3.0])\ny = x * 2.0\nprint(f\"Scalar multiply: {y}\")"
+    "answer": "import torch\n\ntorch.manual_seed(42)\nt = torch.randn(2, 3, 4)\nsum_val = t.sum()\nmean_val = t.mean()\nmax_val = t.max()\nmin_val = t.min()\nprint(f\"Shape: {t.shape}\")\nprint(f\"Sum: {sum_val.item():.4f}\")\nprint(f\"Mean: {mean_val.item():.4f}\")\nprint(f\"Max: {max_val.item():.4f}\")\nprint(f\"Min: {min_val.item():.4f}\")"
   },
   {
     "id": 29,
@@ -287,7 +287,7 @@
     "code_hint": "torch.gt(t, 0), torch.lt(t, 0), torch.eq(t, 0)",
     "expected_output": "Shape: torch.Size([3, 4])\nCount > 0: 9\nCount < 0: 3\nCount == 0: 0",
     "template": "import torch\n\ntorch.manual_seed(42)\nt = torch.randn(3, 4)\ngt = torch.???(???, ???)\nlt = torch.???(???, ???)\neq = torch.???(???, ???)\nprint(f\"Shape: {t.shape}\")\nprint(f\"Count > 0: {gt.???()}\")\nprint(f\"Count < 0: {lt.???()}\")\nprint(f\"Count == 0: {eq.???()}\")",
-    "answer": "import torch\n\n# Compute dot product\na = torch.tensor([1.0, 2.0, 3.0])\nb = torch.tensor([4.0, 5.0, 6.0])\ndot = torch.dot(a, b)\nprint(f\"Dot product: {dot.item()}\")"
+    "answer": "import torch\n\ntorch.manual_seed(42)\nt = torch.randn(3, 4)\ngt = (t > 0)\nlt = (t < 0)\neq = (t == 0)\nprint(f\"Shape: {t.shape}\")\nprint(f\"Count > 0: {gt.sum().item()}\")\nprint(f\"Count < 0: {lt.sum().item()}\")\nprint(f\"Count == 0: {eq.sum().item()}\")"
   },
   {
     "id": 30,
@@ -297,7 +297,7 @@
     "code_hint": "nn.Linear(in, out), list(model.parameters())",
     "expected_output": "Linear(in=10, out=5)\nNumber of parameters: 2\nWeight shape: torch.Size([5, 10])\nBias shape: torch.Size([5])",
     "template": "import torch\nimport torch.nn as nn\n\nlinear = nn.???(???, ???)\nparams = list(linear.???())\nprint(f\"Linear(in=10, out=5)\")\nprint(f\"Number of parameters: {len(params)}\")\nprint(f\"Weight shape: {params[0].shape}\")\nprint(f\"Bias shape: {params[1].shape}\")",
-    "answer": "import torch\n\n# Outer product\na = torch.tensor([1, 2, 3])\nb = torch.tensor([4, 5])\nouter = torch.outer(a, b)\nprint(f\"Outer product:\\n{outer}\")"
+    "answer": "import torch\nimport torch.nn as nn\n\nlinear = nn.Linear(10, 5)\nparams = list(linear.parameters())\nprint(f\"Linear(in=10, out=5)\")\nprint(f\"Number of parameters: {len(params)}\")\nprint(f\"Weight shape: {params[0].shape}\")\nprint(f\"Bias shape: {params[1].shape}\")"
   },
   {
     "id": 31,
