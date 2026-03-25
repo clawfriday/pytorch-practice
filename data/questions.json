@@ -7,7 +7,7 @@
     "code_hint": "Use torch.manual_seed(42), torch.randint(0, 10, (4, 4)) for random integers and torch.eye(3) for identity matrix",
     "expected_output": "tensor([[2, 7, 6, 4],\n        [6, 5, 0, 4],\n        [0, 3, 8, 4],\n        [0, 4, 1, 2]])\ntensor([[1., 0., 0.],\n        [0., 1., 0.],\n        [0., 0., 1.]])",
     "template": "import torch\n\ntorch.manual_seed(42)\na = torch.randint(0, 10, (???, ???))\nprint(a)\n\nb = torch.eye(???)\nprint(b)",
-    "answer": "import torch\n\n# Create a 1D tensor with values 0 to 9\nx = torch.arange(10)\nprint(x)"
+    "answer": "import torch\n\ntorch.manual_seed(42)\na = torch.randint(0, 10, (4, 4))\nprint(a)\n\nb = torch.eye(3)\nprint(b)"
   },
   {
     "id": 2,
@@ -17,7 +17,7 @@
     "code_hint": "Use tensor.view() to reshape and .t() or .transpose() to transpose",
     "expected_output": "tensor([[1, 2],\n        [3, 4],\n        [5, 6]])\ntensor([[1, 3, 5],\n        [2, 4, 6]])",
     "template": "import torch\n\nt = torch.tensor([[1, 2, 3], [4, 5, 6]])\nreshaped = t.???(???, ???)\nprint(reshaped)\n\ntransposed = reshaped.???()\nprint(transposed)",
-    "answer": "import torch\n\n# Create 3x3 identity matrix\nx = torch.eye(3)\nprint(x)"
+    "answer": "import torch\n\nt = torch.tensor([[1, 2, 3], [4, 5, 6]])\nreshaped = t.reshape(3, 2)\nprint(reshaped)\n\ntransposed = reshaped.T\nprint(transposed)"
   },
   {
     "id": 3,
@@ -27,37 +27,37 @@
     "code_hint": "Use tensor[row, col] for indexing, : for slicing ranges",
     "expected_output": "tensor([0, 1, 2, 3, 4])\ntensor([ 4,  9, 14, 19, 24])\ntensor([[ 7,  8],\n        [12, 13]])",
     "template": "import torch\n\nt = torch.arange(25).reshape(5, 5)\nprint(t[0, ???])\nprint(t[???, 4])\nprint(t[1:3, ???])",
-    "answer": "import torch\n\n# Create 2x3x4 tensor of zeros\nx = torch.zeros(2, 3, 4)\nprint(x.shape)"
+    "answer": "import torch\n\nt = torch.arange(25).reshape(5, 5)\nprint(t[0, :])\nprint(t[:, 4])\nprint(t[1:3, 2:4])"
   },
   {
     "id": 4,
     "topic": "Math Operations",
     "type": "coding",
-    "question": "使用torch.matmul计算两个矩阵的乘法。创建矩阵A (2x3) 和矩阵B (3x2)，计算它们的矩阵乘法并打印结果。",
-    "code_hint": "使用torch.tensor创建指定矩阵，torch.matmul进行矩阵乘法",
+    "question": "\u4f7f\u7528torch.matmul\u8ba1\u7b97\u4e24\u4e2a\u77e9\u9635\u7684\u4e58\u6cd5\u3002\u521b\u5efa\u77e9\u9635A (2x3) \u548c\u77e9\u9635B (3x2)\uff0c\u8ba1\u7b97\u5b83\u4eec\u7684\u77e9\u9635\u4e58\u6cd5\u5e76\u6253\u5370\u7ed3\u679c\u3002",
+    "code_hint": "\u4f7f\u7528torch.tensor\u521b\u5efa\u6307\u5b9a\u77e9\u9635\uff0ctorch.matmul\u8fdb\u884c\u77e9\u9635\u4e58\u6cd5",
     "expected_output": "tensor([[ 58.,  64.],\n        [139., 154.]])",
     "template": "import torch\n\nA = torch.tensor([[1.0, 2.0, 3.0], [4.0, 5.0, 6.0]])\nB = torch.tensor([[7.0, 8.0], [9.0, 10.0], [11.0, 12.0]])\nresult = torch.???(A, B)\nprint(result)",
-    "answer": "import torch\n\n# Create 5x5 tensor with random values from uniform distribution [0, 1)\nx = torch.rand(5, 5)\nprint(x)"
+    "answer": "import torch\n\nA = torch.tensor([[1.0, 2.0, 3.0], [4.0, 5.0, 6.0]])\nB = torch.tensor([[7.0, 8.0], [9.0, 10.0], [11.0, 12.0]])\nresult = torch.matmul(A, B)\nprint(result)"
   },
   {
     "id": 5,
     "topic": "nn.Module",
     "type": "coding",
-    "question": "定义一个简单的多层感知机(MLP)类，继承自nn.Module，包含两个线性层和ReLU激活函数。实例化并打印模型结构。",
-    "code_hint": "创建继承nn.Module的类，在__init__中定义层，在forward中定义前向传播",
+    "question": "\u5b9a\u4e49\u4e00\u4e2a\u7b80\u5355\u7684\u591a\u5c42\u611f\u77e5\u673a(MLP)\u7c7b\uff0c\u7ee7\u627f\u81eann.Module\uff0c\u5305\u542b\u4e24\u4e2a\u7ebf\u6027\u5c42\u548cReLU\u6fc0\u6d3b\u51fd\u6570\u3002\u5b9e\u4f8b\u5316\u5e76\u6253\u5370\u6a21\u578b\u7ed3\u6784\u3002",
+    "code_hint": "\u521b\u5efa\u7ee7\u627fnn.Module\u7684\u7c7b\uff0c\u5728__init__\u4e2d\u5b9a\u4e49\u5c42\uff0c\u5728forward\u4e2d\u5b9a\u4e49\u524d\u5411\u4f20\u64ad",
     "expected_output": "MLP(\n  (fc1): Linear(in_features=10, out_features=20, bias=True)\n  (fc2): Linear(in_features=20, out_features=5, bias=True)\n)",
     "template": "import torch\nimport torch.nn as nn\n\nclass MLP(nn.Module):\n    def __init__(self):\n        super().__init__()\n        self.fc1 = nn.???(???, ???)\n        self.fc2 = nn.???(???, ???)\n    \n    def forward(self, x):\n        x = torch.???(self.fc1(x))\n        x = self.???(x)\n        return x\n\nmodel = MLP()\nprint(model)",
-    "answer": "import torch\n\n# Create 3x3 tensor with values 1, 2, 3, ..., 9\nx = torch.tensor([[1, 2, 3], [4, 5, 6], [7, 8, 9]], dtype=torch.float32)\nprint(x)"
+    "answer": "import torch\nimport torch.nn as nn\n\nclass MLP(nn.Module):\n    def __init__(self):\n        super().__init__()\n        self.fc1 = nn.Linear(10, 20)\n        self.fc2 = nn.Linear(20, 5)\n    \n    def forward(self, x):\n        x = torch.relu(self.fc1(x))\n        x = self.fc2(x)\n        return x\n\nmodel = MLP()\nprint(model)"
   },
   {
     "id": 6,
     "topic": "Activation Functions",
     "type": "coding",
-    "question": "使用torch.nn.functional实现ReLU和Softmax激活函数。对张量x = torch.tensor([[1.0, -2.0, 3.0]])分别应用ReLU和Softmax，验证ReLU将负值变为0，Softmax将值转换为概率分布。",
-    "code_hint": "使用F.relu和F.softmax，注意softmax的dim参数",
+    "question": "\u4f7f\u7528torch.nn.functional\u5b9e\u73b0ReLU\u548cSoftmax\u6fc0\u6d3b\u51fd\u6570\u3002\u5bf9\u5f20\u91cfx = torch.tensor([[1.0, -2.0, 3.0]])\u5206\u522b\u5e94\u7528ReLU\u548cSoftmax\uff0c\u9a8c\u8bc1ReLU\u5c06\u8d1f\u503c\u53d8\u4e3a0\uff0cSoftmax\u5c06\u503c\u8f6c\u6362\u4e3a\u6982\u7387\u5206\u5e03\u3002",
+    "code_hint": "\u4f7f\u7528F.relu\u548cF.softmax\uff0c\u6ce8\u610fsoftmax\u7684dim\u53c2\u6570",
     "expected_output": "ReLU: tensor([[1.0, 0.0, 3.0]])\nSoftmax: tensor([[0.1185, 0.0059, 0.8756]])",
     "template": "import torch\nimport torch.nn.functional as F\n\nx = torch.tensor([[1.0, -2.0, 3.0]])\nrelu_out = F.???(x)\nsoftmax_out = F.???(x, dim=???)\nprint(f\"ReLU: {???}\")\nprint(f\"Softmax: {???}\")",
-    "answer": "import torch\n\n# Create tensor from list and compute mean\nx = torch.tensor([1.0, 2.0, 3.0, 4.0, 5.0])\nmean_val = x.mean()\nprint(f\"Mean: {mean_val.item()}\")"
+    "answer": "import torch\nimport torch.nn.functional as F\n\nx = torch.tensor([[1.0, -2.0, 3.0]])\nrelu_out = F.relu(x)\nsoftmax_out = F.softmax(x, dim=1)\nprint(f\"ReLU: {relu_out}\")\nprint(f\"Softmax: {softmax_out}\")"
   },
   {
     "id": 7,
@@ -67,7 +67,7 @@
     "code_hint": "x is a tensor with requires_grad=True, y is the target. A linear layer is defined as y_pred = x * w + b. Use MSELoss as loss function.",
     "expected_output": "Gradient of w: tensor([-9.3333])\nGradient of b: tensor([-4.])",
     "template": "import torch\n\nx = torch.tensor([1.0, 2.0, 3.0], requires_grad=True)\ny = torch.tensor([2.0, 4.0, 6.0])\n\nw = torch.tensor([???], requires_grad=True)\nb = torch.tensor([???], requires_grad=True)\n\ny_pred = x * w + b\nloss = ???(y_pred, y)\n???()\n\nprint(f\"Gradient of w: {w.grad}\")\nprint(f\"Gradient of b: {b.grad}\")",
-    "answer": "import torch\n\n# Create 4x4 tensor of random integers from 0 to 9\nx = torch.randint(0, 10, (4, 4))\nprint(x)"
+    "answer": "import torch\n\nx = torch.tensor([1.0, 2.0, 3.0], requires_grad=True)\ny = torch.tensor([2.0, 4.0, 6.0])\n\nw = torch.tensor([1.0], requires_grad=True)\nb = torch.tensor([0.0], requires_grad=True)\n\ny_pred = x * w + b\nloss = torch.nn.functional.mse_loss(y_pred, y)\nloss.backward()\n\nprint(f\"Gradient of w: {w.grad}\")\nprint(f\"Gradient of b: {b.grad}\")"
   },
   {
     "id": 8,
@@ -77,7 +77,7 @@
     "code_hint": "Use torch.no_grad() as a context manager, and model.train() or torch.set_grad_enabled(True) for grad mode.",
     "expected_output": "In no_grad mode, grad is: False\nIn grad mode, grad is: True",
     "template": "import torch\n\nx = torch.tensor([1.0, 2.0], requires_grad=True)\n\n# Forward pass in no_grad context\nwith ???:\n    y1 = x * 2\n    print(f\"In no_grad mode, grad is: {y1.requires_grad}\")\n\n# Forward pass with gradients enabled\nwith ???:\n    y2 = x * 2\n    print(f\"In grad mode, grad is: {y2.requires_grad}\")",
-    "answer": "import torch\n\n# Create 2D tensor and compute sum along rows\nx = torch.tensor([[1.0, 2.0, 3.0], [4.0, 5.0, 6.0]])\nrow_sum = x.sum(dim=1)\nprint(f\"Row sums: {row_sum}\")"
+    "answer": "import torch\n\nx = torch.tensor([1.0, 2.0], requires_grad=True)\n\n# Forward pass in no_grad context\nwith torch.no_grad():\n    y1 = x * 2\n    print(f\"In no_grad mode, grad is: {y1.requires_grad}\")\n\n# Forward pass with gradients enabled\nwith torch.enable_grad():\n    y2 = x * 2\n    print(f\"In grad mode, grad is: {y2.requires_grad}\")"
   },
   {
     "id": 9,
@@ -87,7 +87,7 @@
     "code_hint": "Use torch.optim.SGD with lr=0.01 and momentum=0.9. After optimizer.step(), the parameter values should decrease.",
     "expected_output": "Parameter before update: tensor([2.0, 2.0])\nParameter after update: tensor([1.8400, 1.9000])",
     "template": "import torch\n\nparam = torch.tensor([2.0, 2.0], requires_grad=True)\noptimizer = torch.optim.SGD([param], lr=???, momentum=0.9)\n\nx = torch.tensor([1.0, 2.0])\ny = torch.tensor([0.0])\n\nloss = ((param[0] * x + param[1] - y) ** 2).mean()\n\nprint(f\"Parameter before update: {param.data}\")\n???\nloss.backward()\n???\nprint(f\"Parameter after update: {param.data}\")",
-    "answer": "import torch\n\n# Create 3x3 tensor and compute transpose\nx = torch.randn(3, 3)\nx_t = x.T\nprint(f\"Original shape: {x.shape}, Transpose shape: {x_t.shape}\")"
+    "answer": "import torch\n\nparam = torch.tensor([2.0, 2.0], requires_grad=True)\noptimizer = torch.optim.SGD([param], lr=0.01, momentum=0.9)\n\nx = torch.tensor([1.0, 2.0])\ny = torch.tensor([0.0])\n\nloss = ((param[0] * x + param[1] - y) ** 2).mean()\n\nprint(f\"Parameter before update: {param.data}\")\nloss.backward()\noptimizer.step()\nprint(f\"Parameter after update: {param.data}\")"
   },
   {
     "id": 10,
@@ -97,14 +97,14 @@
     "code_hint": "Use model.train() and model.eval() to toggle modes. state_dict() returns an OrderedDict of all learnable parameters.",
     "expected_output": "In train mode, parameters: 2\nIn eval mode, parameters: 2\nState dict keys: ['linear.weight', 'linear.bias']",
     "template": "import torch\nimport torch.nn as nn\n\nclass SimpleNet(nn.Module):\n    def __init__(self):\n        super().__init__()\n        self.linear = nn.Linear(10, 2)\n    \n    def forward(self, x):\n        return self.linear(x)\n\nmodel = SimpleNet()\n\n???\nprint(f\"In train mode, parameters: {len(list(model.parameters()))}\")\n\n???\nprint(f\"In eval mode, parameters: {len(list(model.parameters()))}\")\n\nstate = ???\nprint(f\"State dict keys: {list(state.keys())}\")",
-    "answer": "import torch\n\n# Reshape 1D tensor to 2D\nx = torch.arange(12)\nx_2d = x.view(3, 4)\nprint(f\"Shape: {x_2d.shape}\")"
+    "answer": "import torch\nimport torch.nn as nn\n\nclass SimpleNet(nn.Module):\n    def __init__(self):\n        super().__init__()\n        self.linear = nn.Linear(10, 2)\n    \n    def forward(self, x):\n        return self.linear(x)\n\nmodel = SimpleNet()\n\nmodel.train()\nprint(f\"In train mode, parameters: {len(list(model.parameters()))}\")\n\nmodel.eval()\nprint(f\"In eval mode, parameters: {len(list(model.parameters()))}\")\n\nstate = model.state_dict()\nprint(f\"State dict keys: {list(state.keys())}\")"
   },
   {
     "id": 11,
     "topic": "Data Processing",
     "type": "coding",
-    "question": "实现一个函数，使用 torch.utils.data.DataLoader 对数据集进行批量读取，并启用 shuffle 和多 worker 加载。",
-    "code_hint": "分别设置 batch_size=2, shuffle=True, num_workers=0",
+    "question": "\u5b9e\u73b0\u4e00\u4e2a\u51fd\u6570\uff0c\u4f7f\u7528 torch.utils.data.DataLoader \u5bf9\u6570\u636e\u96c6\u8fdb\u884c\u6279\u91cf\u8bfb\u53d6\uff0c\u5e76\u542f\u7528 shuffle \u548c\u591a worker \u52a0\u8f7d\u3002",
+    "code_hint": "\u5206\u522b\u8bbe\u7f6e batch_size=2, shuffle=True, num_workers=0",
     "expected_output": "First batch shape: torch.Size([2, 3, 224, 224])\nDataset size: 10 samples",
     "template": "import torch\nfrom torch.utils.data import Dataset, DataLoader\n\nclass DummyDataset(Dataset):\n    def __init__(self):\n        self.data = torch.randn(10, 3, 224, 224)\n    def __len__(self):\n        return len(self.data)\n    def __getitem__(self, idx):\n        return self.data[idx]\n\ndataset = DummyDataset()\nloader = DataLoader(???, batch_size=???, shuffle=???, num_workers=???)\n\nbatch = next(iter(loader))\nprint(f\"First batch shape: {batch.shape}\")\nprint(f\"Dataset size: {len(dataset)} samples\")",
     "answer": "import torch\n\n# Slice tensor to get first row\nx = torch.randn(3, 4)\nfirst_row = x[0]\nprint(f\"First row: {first_row}\")"
@@ -113,8 +113,8 @@
     "id": 12,
     "topic": "Common Patterns",
     "type": "coding",
-    "question": "实现一个常见的模型训练循环，包含前向传播、损失计算、反向传播和参数更新步骤。",
-    "code_hint": "使用 CrossEntropyLoss 作为损失函数，SGD 优化器，学习率为 0.01",
+    "question": "\u5b9e\u73b0\u4e00\u4e2a\u5e38\u89c1\u7684\u6a21\u578b\u8bad\u7ec3\u5faa\u73af\uff0c\u5305\u542b\u524d\u5411\u4f20\u64ad\u3001\u635f\u5931\u8ba1\u7b97\u3001\u53cd\u5411\u4f20\u64ad\u548c\u53c2\u6570\u66f4\u65b0\u6b65\u9aa4\u3002",
+    "code_hint": "\u4f7f\u7528 CrossEntropyLoss \u4f5c\u4e3a\u635f\u5931\u51fd\u6570\uff0cSGD \u4f18\u5316\u5668\uff0c\u5b66\u4e60\u7387\u4e3a 0.01",
     "expected_output": "loss=0.733107",
     "template": "import torch\nimport torch.nn as nn\n\nmodel = nn.Linear(10, 2)\ncriterion = ???\noptimizer = torch.optim.SGD(model.parameters(), lr=0.01)\n\nX = torch.randn(4, 10)\ny = torch.randint(0, 2, (4,))\n\noutputs = ???\nloss = ???\n\n???\n???\n\nprint(f\"loss={loss.item():.6f}\")",
     "answer": "import torch\n\n# Select elements at indices [0,2] and [1,3]\nx = torch.arange(16).view(4, 4)\nselected = x[[0, 2], [1, 3]]\nprint(f\"Selected: {selected}\")"
@@ -123,8 +123,8 @@
     "id": 13,
     "topic": "Debugging",
     "type": "coding",
-    "question": "使用 torch.set_printoptions 和 tensor.shape 检查张量的维度、数据类型和设备位置。",
-    "code_hint": "设置打印精度为 4 位小数，创建不同设备和 dtype 的张量进行检查",
+    "question": "\u4f7f\u7528 torch.set_printoptions \u548c tensor.shape \u68c0\u67e5\u5f20\u91cf\u7684\u7ef4\u5ea6\u3001\u6570\u636e\u7c7b\u578b\u548c\u8bbe\u5907\u4f4d\u7f6e\u3002",
+    "code_hint": "\u8bbe\u7f6e\u6253\u5370\u7cbe\u5ea6\u4e3a 4 \u4f4d\u5c0f\u6570\uff0c\u521b\u5efa\u4e0d\u540c\u8bbe\u5907\u548c dtype \u7684\u5f20\u91cf\u8fdb\u884c\u68c0\u67e5",
     "expected_output": "Tensor A shape: torch.Size([3, 4])\nTensor A dtype: torch.float32\nTensor A device: cpu\nTensor B shape: torch.Size([5, 6])\nTensor B dtype: torch.int64\nTensor B device: cpu\nAllclose check: True",
     "template": "import torch\n\n???\n\nA = torch.randn(3, 4)\nB = torch.randint(0, 10, (5, 6))\n\nprint(f\"Tensor A shape: {???}\")\nprint(f\"Tensor A dtype: {???}\")\nprint(f\"Tensor A device: {???}\")\nprint(f\"Tensor B shape: {???}\")\nprint(f\"Tensor B dtype: {???}\")\nprint(f\"Tensor B device: {???}\")\n\nresult = torch.allclose(A, A)\nprint(f\"Allclose check: {???}\")",
     "answer": "import torch\n\n# Boolean indexing - select elements > 5\nx = torch.tensor([1, 6, 3, 8, 2, 9, 4])\nmask = x > 5\nfiltered = x[mask]\nprint(f\"Filtered: {filtered}\")"
@@ -673,10 +673,10 @@
     "id": 68,
     "topic": "Positional Encodings",
     "type": "coding",
-    "question": "Implement the 2D rotation formula used in Rotary Positional Encoding (RoPE). Given vector (x1, x2) and angle theta, rotate it to (x1*cos(θ) - x2*sin(θ), x1*sin(θ) + x2*cos(θ)).",
+    "question": "Implement the 2D rotation formula used in Rotary Positional Encoding (RoPE). Given vector (x1, x2) and angle theta, rotate it to (x1*cos(\u03b8) - x2*sin(\u03b8), x1*sin(\u03b8) + x2*cos(\u03b8)).",
     "code_hint": "Use math.cos() and math.sin() to compute the rotated values.",
     "expected_output": "x1_rotated: -0.7071\nx2_rotated: 4.9497",
-    "template": "import torch\nimport math\n\ntorch.manual_seed(42)\n\n# Input vector (x1, x2) and angle theta\nx1, x2 = 3.0, 4.0\ntheta = math.pi / 4  # 45 degrees\n\n# TODO: Implement 2D rotation using RoPE formula\n# rotate (x1,x2) to (x1*cos(θ) - x2*sin(θ), x1*sin(θ) + x2*cos(θ))\nx1_rotated = ???\nx2_rotated = ???\n\nprint(f\"x1_rotated: {x1_rotated:.4f}\")\nprint(f\"x2_rotated: {x2_rotated:.4f}\")",
+    "template": "import torch\nimport math\n\ntorch.manual_seed(42)\n\n# Input vector (x1, x2) and angle theta\nx1, x2 = 3.0, 4.0\ntheta = math.pi / 4  # 45 degrees\n\n# TODO: Implement 2D rotation using RoPE formula\n# rotate (x1,x2) to (x1*cos(\u03b8) - x2*sin(\u03b8), x1*sin(\u03b8) + x2*cos(\u03b8))\nx1_rotated = ???\nx2_rotated = ???\n\nprint(f\"x1_rotated: {x1_rotated:.4f}\")\nprint(f\"x2_rotated: {x2_rotated:.4f}\")",
     "answer": "import torch\nimport math\n\nx1, x2 = 3.0, 4.0\ntheta = math.pi / 4\n\nx1_rot = x1 * math.cos(theta) - x2 * math.sin(theta)\nx2_rot = x1 * math.sin(theta) + x2 * math.cos(theta)\n\nprint(f\"x1_rotated: {x1_rot:.4f}\")\nprint(f\"x2_rotated: {x2_rot:.4f}\")"
   },
   {
@@ -1035,9 +1035,9 @@
     "type": "coding",
     "question": "Implement GELU activation: GELU(x) = x * Phi(x) where Phi is CDF of standard normal, or approximate: 0.5 * x * (1 + tanh(sqrt(2/pi) * (x + 0.044715 * x^3))).",
     "code_hint": "Use torch.nn.functional.gelu or implement approximation",
-    "expected_output": "GELU(1.0) ≈ 0.8412",
-    "template": "import torch\nimport torch.nn.functional as F\n\nx = torch.tensor([1.0])\ngelu_approx = 0.5 * x * (1 + torch.tanh(torch.sqrt(torch.tensor(2.0/3.14159)) * (x + 0.044715 * x**3)))\nprint(f\"GELU(1.0) ≈ {gelu_approx.item():.4f}\")\nprint(f\"F.gelu: {F.gelu(x).item():.4f}\")",
-    "answer": "import torch\nimport torch.nn.functional as F\n\nx = torch.tensor([1.0])\ngelu_approx = 0.5 * x * (1 + torch.tanh(torch.sqrt(torch.tensor(2.0/3.14159)) * (x + 0.044715 * x**3)))\nprint(f\"GELU(1.0) ≈ {gelu_approx.item():.4f}\")\nprint(f\"F.gelu: {F.gelu(x).item():.4f}\")"
+    "expected_output": "GELU(1.0) \u2248 0.8412",
+    "template": "import torch\nimport torch.nn.functional as F\n\nx = torch.tensor([1.0])\ngelu_approx = 0.5 * x * (1 + torch.tanh(torch.sqrt(torch.tensor(2.0/3.14159)) * (x + 0.044715 * x**3)))\nprint(f\"GELU(1.0) \u2248 {gelu_approx.item():.4f}\")\nprint(f\"F.gelu: {F.gelu(x).item():.4f}\")",
+    "answer": "import torch\nimport torch.nn.functional as F\n\nx = torch.tensor([1.0])\ngelu_approx = 0.5 * x * (1 + torch.tanh(torch.sqrt(torch.tensor(2.0/3.14159)) * (x + 0.044715 * x**3)))\nprint(f\"GELU(1.0) \u2248 {gelu_approx.item():.4f}\")\nprint(f\"F.gelu: {F.gelu(x).item():.4f}\")"
   },
   {
     "id": 105,
