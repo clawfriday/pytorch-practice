@@ -241,7 +241,6 @@
                             </div>
                             <textarea
                                 v-model="codeInput"
-                                @keydown.enter.exact.prevent="addNewLineInTerminal"
                                 @keydown.ctrl.enter.prevent="runCode"
                                 @keydown.tab.prevent="handleTabInTerminal"
                                 class="editor-textarea w-full h-32 font-mono text-sm"
@@ -348,6 +347,8 @@
                     try {
                         const response = await fetch('data/questions.json');
                         questions.value = await response.json();
+                        // Load template/code for first question after questions are loaded
+                        loadCurrentQuestionCode();
                     } catch (e) {
                         console.error('Failed to load questions:', e);
                     }

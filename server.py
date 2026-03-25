@@ -335,8 +335,9 @@ Question: {request.question}
 
 Examples of good feedback:
 - "✅ Correct! Just to add: torch.tensor() creates a copy while torch.from_numpy() shares memory with the numpy array."
-- "⚠️ You got the main idea about gradients, but missing: zero_grad() clears gradients BEFORE the backward pass to avoid accumulation across batches.""""
-    
+- "⚠️ You got the main idea about gradients, but missing: zero_grad() clears gradients BEFORE the backward pass to avoid accumulation across batches."
+"""
+
     try:
         response = client.invoke_model(
             modelId=BEDROCK_MODEL_ID,
