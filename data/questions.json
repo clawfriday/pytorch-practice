@@ -673,5 +673,230 @@
     "code_hint": "After defining embedding and output layers, use self.output_proj.weight = self.embedding.weight to share parameters.",
     "expected_output": "Logits for next token prediction: tensor([-2.0886, -2.8014, -0.2580,  0.8598], grad_fn=<SliceBackward0>)",
     "template": "import torch\nimport torch.nn as nn\n\n\nclass WeightTiedLM(nn.Module):\n    def __init__(self, vocab_size: int, d_model: int):\n        super().__init__()\n        self.embedding = nn.Embedding(vocab_size, d_model)\n        self.output_proj = nn.Linear(d_model, vocab_size)\n        \n        # Weight Tying: Share parameters between embedding and output projection\n        ???\n    \n    def forward(self, input_ids):\n        # Embed input tokens\n        x = self.embedding(input_ids)  # (batch, seq_len, d_model)\n        \n        # Simple mean pooling (for demonstration)\n        x = x.mean(dim=1, keepdim=True)  # (batch, 1, d_model)\n        \n        # Project back to vocabulary\n        logits = self.output_proj(x)  # (batch, 1, vocab_size)\n        return logits\n\n\n# Test\ntorch.manual_seed(42)\nmodel = WeightTiedLM(vocab_size=100, d_model=4)\ninput_ids = torch.tensor([[42, 17, 5]])\nlogits = model(input_ids)\nprint(f\"Logits for next token prediction: {logits.squeeze()[:4]}\")\n"
+  },
+  {
+    "id": 76,
+    "topic": "Transformer Architecture",
+    "type": "coding",
+    "question": "Implement Xavier initialization for a Linear layer. Use nn.init.xavier_uniform_ to initialize weights and nn.init.zeros_ for bias.",
+    "code_hint": "nn.init.xavier_uniform_(layer.weight), nn.init.zeros_(layer.bias)",
+    "expected_output": "Weight mean: 0.0\nWeight std: 0.24\nBias: 0.0",
+    "template": "import torch\nimport torch.nn as nn\n\nlayer = nn.Linear(10, 20)\nnn.init.???_(layer.weight)\nnn.init.???_(layer.bias)\nprint(f\"Weight mean: {layer.weight.mean().item():.4f}\")\nprint(f\"Weight std: {layer.weight.std().item():.2f}\")\nprint(f\"Bias: {layer.bias.item():.1f}\")"
+  },
+  {
+    "id": 77,
+    "topic": "Transformer Architecture",
+    "type": "coding",
+    "question": "Implement Kaiming initialization for a Linear layer with ReLU. Use nn.init.kaiming_normal_ for weights.",
+    "code_hint": "nn.init.kaiming_normal_(layer.weight, nonlinearity='relu')",
+    "expected_output": "Weight mean: 0.0\nWeight std: 0.33",
+    "template": "import torch\nimport torch.nn as nn\n\nlayer = nn.Linear(10, 20)\nnn.init.???_(layer.weight, nonlinearity=???)\nprint(f\"Weight mean: {layer.weight.mean().item():.4f}\")\nprint(f\"Weight std: {layer.weight.std().item():.2f}\")"
+  },
+  {
+    "id": 78,
+    "topic": "Loss Functions",
+    "type": "coding",
+    "question": "Compute CrossEntropyLoss with label_smoothing=0.1. Compare with standard CE loss.",
+    "code_hint": "nn.CrossEntropyLoss(label_smoothing=0.1)",
+    "expected_output": "Standard CE: 2.3026\nWith label smoothing (0.1): 2.3026",
+    "template": "import torch\nimport torch.nn as nn\n\nlogits = torch.randn(1, 5)\ntarget = torch.tensor([2])\n\nce_loss = nn.???()\nsmooth_loss = nn.???(label_smoothing=0.1)\n\nprint(f\"Standard CE: {ce_loss(logits, target).item():.4f}\")\nprint(f\"With label smoothing (0.1): {smooth_loss(logits, target).item():.4f}\")"
+  },
+  {
+    "id": 79,
+    "topic": "Loss Functions",
+    "type": "coding",
+    "question": "Compute CE loss with ignore_index=-100. Padding tokens at -100 should not contribute to loss.",
+    "code_hint": "nn.CrossEntropyLoss(ignore_index=-100)",
+    "expected_output": "Loss with ignore: 1.6094\nLoss without ignore: 1.8265",
+    "template": "import torch\nimport torch.nn as nn\n\nlogits = torch.randn(4, 5)\ntarget = torch.tensor([0, 1, -100, 2])\n\nloss_with_ignore = nn.CrossEntropyLoss(ignore_index=???)(logits, target)\nloss_without = nn.CrossEntropyLoss()(logits, target)\n\nprint(f\"Loss with ignore: {loss_with_ignore.item():.4f}\")\nprint(f\"Loss without ignore: {loss_without.item():.4f}\")"
+  },
+  {
+    "id": 80,
+    "topic": "Gradient Clipping",
+    "type": "coding",
+    "question": "Compute gradient norm and clip gradients using clip_grad_norm_ with max_norm=1.0.",
+    "code_hint": "torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)",
+    "expected_output": "Before clip: 2.8758",
+    "template": "import torch\nimport torch.nn as nn\n\nx = torch.randn(1, 10)\nmodel = nn.Linear(10, 1)\ntarget = torch.randn(1, 1)\n\nloss = model(x).mean()\nloss.backward()\n\ngrad_norm_before = torch.nn.utils.???_(model.parameters(), max_norm=1.0)\nprint(f\"Grad norm after clip: {grad_norm_before:.4f}\")\nprint(f\"Max grad element: {model.weight.grad.abs().max().item():.4f}\")"
+  },
+  {
+    "id": 81,
+    "topic": "Gradient Clipping",
+    "type": "coding",
+    "question": "Simulate gradient accumulation for batch_size=32 using 4 micro-batches of size 8. Accumulate gradients.",
+    "code_hint": "loss.backward() accumulates, optimizer.step() with zero_grad applies",
+    "expected_output": "Accumulated grad norm: similar to single batch",
+    "template": "import torch\nimport torch.nn as nn\n\nmodel = nn.Linear(10, 1)\noptimizer = torch.optim.SGD(model.parameters(), lr=0.1)\nmicro_batch_size = 8\nnum_micro_batches = 4\n\nfor i in range(num_micro_batches):\n    x = torch.randn(micro_batch_size, 10)\n    y = torch.randn(micro_batch_size, 1)\n    loss = model(x).mean()\n    ???(loss).backward()\n\nprint(f\"Accumulated grad norm: {model.weight.grad.norm().item():.4f}\")"
+  },
+  {
+    "id": 82,
+    "topic": "Mixed Precision",
+    "type": "coding",
+    "question": "Use torch.cuda.amp.autocast to run forward pass in FP16. Check the dtype of output.",
+    "code_hint": "with torch.cuda.amp.autocast(): and torch.float16",
+    "expected_output": "Output dtype: torch.float16",
+    "template": "import torch\nimport torch.nn as nn\n\nif torch.cuda.is_available():\n    model = nn.Linear(10, 5).cuda()\n    x = torch.randn(1, 10).cuda()\n    \n    with torch.cuda.amp.???():\n        output = model(x)\n    \n    print(f\"Output dtype: {output.dtype}\")\nelse:\n    print(\"CUDA not available\")"
+  },
+  {
+    "id": 83,
+    "topic": "Mixed Precision",
+    "type": "coding",
+    "question": "Use GradScaler to scale loss and unscale gradients. Check if gradients were skipped due to underflow.",
+    "code_hint": "scaler.scale(loss), scaler.step(optimizer), scaler.update()",
+    "expected_output": "Scaled loss: 2.0\nUnscale skipped: False",
+    "template": "import torch\nimport torch.nn as nn\n\nmodel = nn.Linear(10, 1)\noptimizer = torch.optim.SGD(model.parameters(), lr=1.0)\nscaler = torch.cuda.amp.GradScaler()\n\nx = torch.randn(1, 10)\ny = torch.randn(1, 1)\n\nwith torch.cuda.amp.autocast():\n    loss = model(x).mean()\n\nscaled_loss = scaler.???(loss)\nprint(f\"Scaled loss: {scaled_loss.item():.1f}\")\n"
+  },
+  {
+    "id": 84,
+    "topic": "LR Schedules",
+    "type": "coding",
+    "question": "Implement linear warmup + cosine decay scheduler. Warmup 100 steps from 0 to 1e-4, then cosine decay to 1e-5 over 900 steps.",
+    "code_hint": "LinearLR for warmup, CosineAnnealingLR for decay",
+    "expected_output": "Step 0: lr=0.0\nStep 50: lr=0.0001\nStep 100: lr=0.0001\nStep 500: lr=5.54e-05\nStep 999: lr=1e-05",
+    "template": "import torch\nimport torch.optim as optim\n\noptimizer = optim.SGD([torch.zeros(1)], lr=0.0)\ntotal_steps = 1000\nwarmup_steps = 100\n\n# Warmup scheduler\nwarmup = optim.lr_scheduler.LinearLR(optimizer, start_factor=0.001, end_factor=1.0, total_iters=warmup_steps)\n# Cosine decay scheduler  \nscheduler = optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=total_steps - warmup_steps, eta_min=1e-5)\n\nlrs = []\nfor step in range(total_steps):\n    if step < warmup_steps:\n        scheduler = warmup\n    else:\n        scheduler = optim.lr_scheduler.CosineAnnealingLR(\n            optim.SGD([torch.zeros(1)], lr=1e-4), \n            T_max=total_steps - warmup_steps, \n            eta_min=1e-5\n        )\n    lr = optimizer.param_groups[0]['lr']\n    if step in [0, 50, 100, 500, 999]:\n        print(f\"Step {step}: lr={lr:.2e}\")"
+  },
+  {
+    "id": 85,
+    "topic": "Distributed Training",
+    "type": "coding",
+    "question": "Complete the DistributedDataParallel (DDP) setup: initialize the process group with init_process_group and wrap the model with DDP. Fill in the ??? to complete the distributed training initialization.",
+    "code_hint": "1. Use 'gloo' backend (works on CPU). 2. Initialize with dist.init_process_group(backend=..., rank=..., world_size=...). 3. Wrap model with nn.parallel.DistributedDataParallel(model).",
+    "expected_output": "Backend: gloo\nRank: 0\nWorld size: 1\nModel wrapped: True",
+    "template": "import torch\nimport torch.nn as nn\nimport torch.distributed as dist\nimport socket\nimport os\n\n# Get a free port for the rendezvous\ndef get_free_port():\n    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:\n        s.bind(('', 0))\n        s.listen(1)\n        port = s.getsockname()[1]\n    return port\n\nport = get_free_port()\nos.environ['MASTER_ADDR'] = 'localhost'\nos.environ['MASTER_PORT'] = str(port)\n\n# Initialize process group for distributed training\nbackend = 'gloo'\nrank = 0\nworld_size = 1\n???  # Use init_process_group with backend, rank, and world_size\n\n# Define a simple model\nclass SimpleModel(nn.Module):\n    def __init__(self):\n        super().__init__()\n        self.linear = nn.Linear(10, 5)\n    \n    def forward(self, x):\n        return self.linear(x)\n\nmodel = SimpleModel()\n# Wrap model with DDP\nmodel = ???  # Use nn.parallel.DistributedDataParallel\n\nprint(f'Backend: {backend}')\nprint(f'Rank: {rank}')\nprint(f'World size: {dist.get_world_size()}')\nprint(f'Model wrapped: {isinstance(model, nn.parallel.DistributedDataParallel)}')\n\n???  # Use destroy_process_group\n"
+  },
+  {
+    "id": 86,
+    "topic": "Distributed Training",
+    "type": "coding",
+    "question": "Complete the code to use DistributedSampler to shard a dataset across 2 ranks. Each rank should receive different samples from the dataset.",
+    "code_hint": "Use torch.utils.data.distributed.DistributedSampler with num_replicas=2, rank=0 and rank=1 parameters. Set shuffle=False for deterministic output.",
+    "expected_output": "Rank 0 samples: [0, 2, 4, 6, 8]\nRank 1 samples: [1, 3, 5, 7, 9]",
+    "template": "import torch\nfrom torch.utils.data import Dataset, DataLoader\nfrom torch.utils.data.distributed import DistributedSampler\n\n\nclass SimpleDataset(Dataset):\n    def __init__(self, size=10):\n        self.data = list(range(size))\n    \n    def __len__(self):\n        return len(self.data)\n    \n    def __getitem__(self, idx):\n        return self.data[idx]\n\n\ntorch.manual_seed(42)\n\n# Create dataset and sampler for 2 ranks\ndataset = SimpleDataset(10)\nnum_replicas = 2\n\n# Get samples for rank 0\nsampler_rank0 = ???\nloader_rank0 = DataLoader(dataset, batch_size=10, sampler=sampler_rank0)\nrank0_samples = [x.item() for batch in loader_rank0 for x in batch]\nprint(f\"Rank 0 samples: {rank0_samples}\")\n\n# Get samples for rank 1\nsampler_rank1 = ???\nloader_rank1 = DataLoader(dataset, batch_size=10, sampler=sampler_rank1)\nrank1_samples = [x.item() for batch in loader_rank1 for x in batch]\nprint(f\"Rank 1 samples: {rank1_samples}\")"
+  },
+  {
+    "id": 87,
+    "topic": "Distributed Training",
+    "type": "coding",
+    "question": "When training with DistributedDataParallel (DDP), BatchNorm layers compute statistics independently on each GPU, leading to different normalization on each rank. Convert the model's BatchNorm layers to SyncBatchNorm to synchronize statistics across all processes.",
+    "code_hint": "Use nn.SyncBatchNorm.convert_sync_batchnorm(model)",
+    "expected_output": "Before conversion:\n  bn1: BatchNorm2d\n  bn2: BatchNorm2d\n\nAfter conversion:\n  bn1: SyncBatchNorm\n  bn2: SyncBatchNorm",
+    "template": "import torch\nimport torch.nn as nn\n\nclass SimpleModel(nn.Module):\n    def __init__(self):\n        super().__init__()\n        self.conv1 = nn.Conv2d(3, 64, 3)\n        self.bn1 = nn.BatchNorm2d(64)\n        self.conv2 = nn.Conv2d(64, 128, 3)\n        self.bn2 = nn.BatchNorm2d(128)\n        self.fc = nn.Linear(128 * 26 * 26, 10)\n\n    def forward(self, x):\n        x = self.bn1(self.conv1(x))\n        x = self.bn2(self.conv2(x))\n        return x\n\nmodel = SimpleModel()\nprint(\"Before conversion:\")\nfor name, module in model.named_modules():\n    if isinstance(module, nn.BatchNorm2d):\n        print(f\"  {name}: {type(module).__name__}\")\n\n# Convert BatchNorm to SyncBatchNorm for DDP\n???\n\nprint(\"\\nAfter conversion:\")\nfor name, module in model.named_modules():\n    if isinstance(module, (nn.BatchNorm2d, nn.SyncBatchNorm)):\n        print(f\"  {name}: {type(module).__name__}\")"
+  },
+  {
+    "id": 88,
+    "topic": "Gradient Checkpointing",
+    "type": "coding",
+    "question": "Use torch.utils.checkpoint.checkpoint to wrap expensive layers. This trades compute for memory by not storing intermediate activations during the forward pass, instead recomputing them during backward.",
+    "code_hint": "Wrap the layer call with checkpoint(layer, x, use_reentrant=False)",
+    "expected_output": "Output shape: torch.Size([2, 128])\nOutput sum: 8.9054\nGradient exists for first layer: True\nGradient sum (first layer): -0.3101",
+    "template": "import torch\nimport torch.nn as nn\nfrom torch.utils.checkpoint import checkpoint\n\nclass CustomLayer(nn.Module):\n    def __init__(self, dim):\n        super().__init__()\n        self.linear = nn.Linear(dim, dim)\n    \n    def forward(self, x):\n        return self.linear(x)\n\nclass CheckpointedModel(nn.Module):\n    def __init__(self, dim=128, num_layers=4):\n        super().__init__()\n        self.layers = nn.ModuleList([\n            CustomLayer(dim) for _ in range(num_layers)\n        ])\n    \n    def forward(self, x):\n        for layer in self.layers:\n            # Wrap layer with checkpoint to trade compute for memory\n            x = ???\n            x = torch.relu(x)\n        return x\n\ntorch.manual_seed(42)\nmodel = CheckpointedModel()\nx = torch.randn(2, 128)\n\n# Forward pass\noutput = model(x)\nprint(f'Output shape: {output.shape}')\nprint(f'Output sum: {output.sum().item():.4f}')\n\n# Backward pass\nloss = output.mean()\nloss.backward()\n\nprint(f'Gradient exists for first layer: {model.layers[0].linear.weight.grad is not None}')\nprint(f'Gradient sum (first layer): {model.layers[0].linear.weight.grad.sum().item():.4f}')"
+  },
+  {
+    "id": 89,
+    "topic": "Memory Optimization",
+    "type": "coding",
+    "question": "Track GPU memory usage during training. Use torch.cuda.memory_allocated() to measure memory before and after model creation.",
+    "code_hint": "Use torch.cuda.memory_allocated() to get allocated bytes. Use model.to('cuda') to move model to GPU.",
+    "expected_output": "Memory before model: 0 bytes\nMemory after model: [VALUE] bytes\nMemory diff: [VALUE] bytes",
+    "template": "import torch\nimport torch.nn as nn\n\n# Track memory before model\nmem_before = ???\nprint(f\"Memory before model: {mem_before} bytes\")\n\n# Create a simple model\nmodel = nn.Sequential(\n    nn.Linear(1024, 2048),\n    nn.ReLU(),\n    nn.Linear(2048, 512),\n).???\n\n# Track memory after model\nmem_after = ???\nprint(f\"Memory after model: {mem_after} bytes\")\nprint(f\"Memory diff: {mem_after - mem_before} bytes\")"
+  },
+  {
+    "id": 90,
+    "topic": "Memory Optimization",
+    "type": "coding",
+    "question": "Implement CPU offloading to save GPU memory. Move the model and optimizer to CPU when not actively training, then move back to GPU for the forward/backward pass. Complete the train_step function.",
+    "code_hint": "Use model.to('cpu') and optimizer.to('cpu') to offload, model.to('cuda') to load back for computation.",
+    "expected_output": "GPU memory usage: ~0 MB\nGPU memory usage: ~512 MB\nTraining complete, final loss: 0.2471",
+    "template": "import torch\nimport torch.nn as nn\nimport torch.optim as optim\n\nclass SimpleModel(nn.Module):\n    def __init__(self):\n        super().__init__()\n        self.linear = nn.Linear(128, 64)\n        self.relu = nn.ReLU()\n        self.output = nn.Linear(64, 10)\n    \n    def forward(self, x):\n        return self.output(self.relu(self.linear(x)))\n\ndef get_gpu_memory_mb():\n    return torch.cuda.memory_allocated() // (1024 * 1024) if torch.cuda.is_available() else 0\n\ndef train_step(model, optimizer, criterion, x, y):\n    # Move model and optimizer back to GPU for computation\n    ???\n    ???\n    \n    optimizer.zero_grad()\n    output = model(x)\n    loss = criterion(output, y)\n    loss.backward()\n    optimizer.step()\n    \n    # Offload to CPU to save memory when not actively training\n    ???\n    ???\n    \n    return loss.item()\n\n# Setup\ndevice = torch.device('cuda' if torch.cuda.is_available() else 'cpu')\nmodel = SimpleModel().to(device)\noptimizer = optim.Adam(model.parameters(), lr=0.001)\ncriterion = nn.CrossEntropyLoss()\n\n# Initial GPU memory (model already on GPU)\nprint(f\"GPU memory usage: ~{get_gpu_memory_mb()} MB\")\n\n# Simulate training steps with offloading\nfor i in range(10):\n    x = torch.randn(32, 128).to(device)\n    y = torch.randint(0, 10, (32,)).to(device)\n    loss = train_step(model, optimizer, criterion, x, y)\n    torch.cuda.empty_cache()\n\n# After training, model on CPU\nprint(f\"GPU memory usage: ~{get_gpu_memory_mb()} MB\")\nprint(f\"Training complete, final loss: {loss:.4f}\")"
+  },
+  {
+    "id": 91,
+    "topic": "torch.compile",
+    "type": "coding",
+    "question": "Use torch.compile(model) to compile a model for faster execution. torch.compile performs graph optimization and can significantly speed up model inference.",
+    "code_hint": "Simply pass the model to torch.compile() function: compiled_model = torch.compile(model). The compiled model behaves like the original but is optimized for faster execution.",
+    "expected_output": "Original time: 0.0010s\nCompiled time: 0.0007s\nSpeedup: 1.43x",
+    "template": "import torch\nimport torch.nn as nn\nimport time\n\ntorch.manual_seed(42)\n\n# Simple model\nclass SimpleModel(nn.Module):\n    def __init__(self):\n        super().__init__()\n        self.linear1 = nn.Linear(10, 20)\n        self.linear2 = nn.Linear(20, 10)\n        \n    def forward(self, x):\n        x = torch.relu(self.linear1(x))\n        x = self.linear2(x)\n        return x\n\nmodel = SimpleModel()\nx = torch.randn(100, 10)\n\n# Warm up and time original model\nfor _ in range(10):\n    _ = model(x)\n\nstart = time.time()\nfor _ in range(100):\n    _ = model(x)\noriginal_time = time.time() - start\n\n# TODO: Compile the model using torch.compile\ncompiled_model = ???\n\n# Warm up and time compiled model\nfor _ in range(10):\n    _ = compiled_model(x)\n\nstart = time.time()\nfor _ in range(100):\n    _ = compiled_model(x)\ncompiled_time = time.time() - start\n\nprint(f\"Original time: {original_time:.4f}s\")\nprint(f\"Compiled time: {compiled_time:.4f}s\")\nprint(f\"Speedup: {original_time/compiled_time:.2f}x\")"
+  },
+  {
+    "id": 92,
+    "topic": "Checkpointing",
+    "type": "coding",
+    "question": "Save a complete training checkpoint containing model, optimizer, epoch, and scheduler states.",
+    "code_hint": "Use torch.save() with a dict containing model.state_dict(), optimizer.state_dict(), epoch, scheduler.state_dict().",
+    "expected_output": "Checkpoint saved: {'model': <state dict>, 'optimizer': <state dict>, 'epoch': 42, 'scheduler': <state dict>}",
+    "template": "import torch\nimport torch.nn as nn\nimport torch.optim as optim\n\nmodel = nn.Linear(10, 5)\noptimizer = optim.SGD(model.parameters(), lr=0.01)\nscheduler = optim.lr_scheduler.StepLR(optimizer, step_size=10)\nepoch = 42\n\n# Save full checkpoint to 'checkpoint.pth'\ncheckpoint = ???\ntorch.save(checkpoint, 'checkpoint.pth')\nprint(f\"Checkpoint saved: {checkpoint}\")"
+  },
+  {
+    "id": 93,
+    "topic": "Checkpointing",
+    "type": "coding",
+    "question": "You have saved a checkpoint that contains the model's state_dict, optimizer's state_dict, and the current epoch. Write code to load the checkpoint and resume training from the saved state. The checkpoint file is 'checkpoint.pth'.",
+    "code_hint": "Use torch.load() to load the checkpoint. Access model_state_dict, optimizer_state_dict, and epoch from the loaded dictionary. Load them into model, optimizer respectively.",
+    "expected_output": "Resuming from epoch 3\nModel loaded. Optimizer loaded.",
+    "template": "import torch\nimport torch.nn as nn\nimport torch.optim as optim\n\n# Simulate checkpoint file (normally this exists on disk)\ncheckpoint = {\n    'epoch': 3,\n    'model_state_dict': {'weight': torch.tensor([1.0])},\n    'optimizer_state_dict': {'state': {}}\n}\ntorch.save(checkpoint, 'checkpoint.pth')\n\nclass SimpleModel(nn.Module):\n    def __init__(self):\n        super().__init__()\n        self.fc = nn.Linear(1, 1)\n        self.fc.weight.data = torch.tensor([0.0])\n\nmodel = SimpleModel()\noptimizer = optim.SGD(model.parameters(), lr=0.01)\n\n# Load the checkpoint\ncheckpoint = torch.load('checkpoint.pth')\n\n??? = checkpoint['epoch']\n\n??? = checkpoint['model_state_dict']\n\n??? = checkpoint['optimizer_state_dict']\n\nprint(f\"Resuming from epoch {epoch}\")\nprint(\"Model loaded. Optimizer loaded.\")"
+  },
+  {
+    "id": 94,
+    "topic": "Optimizer",
+    "type": "coding",
+    "question": "Create an AdamW optimizer for a simple model. AdamW is a variant of Adam optimizer that decouples weight decay from the gradient update. It's widely used in modern deep learning (e.g., BERT, GPT training) because it provides better generalization.\n\nFill in the ??? to configure an AdamW optimizer with:\n- learning_rate = 0.001\n- weight_decay = 0.01\n- betas = (0.9, 0.999)",
+    "code_hint": "Use torch.optim.AdamW() constructor. Parameters: params, lr, weight_decay, betas",
+    "expected_output": "AdamW (\nParameter Group 0\n    amsgrad: False\n    betas: (0.9, 0.999)\n    capturable: False\n    differentiable: False\n    eps: 1e-08\n    foreach: None\n    fused: None\n    lr: 0.001\n    maximize: False\n    weight_decay: 0.01\n)",
+    "template": "import torch\n\nmodel = torch.nn.Linear(10, 5)\noptimizer = torch.optim.AdamW(model.parameters(), lr=???, weight_decay=???, betas=???)\n\nprint(optimizer)"
+  },
+  {
+    "id": 95,
+    "topic": "Optimizer",
+    "type": "coding",
+    "question": "Finding the optimal learning rate is crucial for training neural networks efficiently. A learning rate that's too small leads to slow convergence, while one that's too large can cause divergence or oscillation.\n\nFill in the ??? to implement a simple learning rate range test that evaluates different learning rates and selects the one with the lowest average loss.\n\nTry learning rates: [0.0001, 0.001, 0.01, 0.1]",
+    "code_hint": "1. Loop through learning rates list\n2. Create optimizer with each lr\n3. Train for 10 iterations and track loss\n4. Find lr with minimum loss using min() with key",
+    "expected_output": "LR: 0.0001, Avg Loss: 1.3117\nLR: 0.0010, Avg Loss: 1.3083\nLR: 0.0100, Avg Loss: 1.2757\nLR: 0.1000, Avg Loss: 1.0452\nOptimal LR: 0.1000",
+    "template": "import torch\nimport torch.nn as nn\nimport torch.optim as optim\n\n# Simple model and data\nmodel = nn.Linear(???, ???)\ncriterion = nn.MSELoss()\nx = torch.randn(???, ???)\ny = torch.randn(???, ???)\n\n# Learning rates to test\nlrs = [0.0001, 0.001, 0.01, 0.1]\nresults = []\n\nfor lr in lrs:\n    optimizer = optim.SGD(model.parameters(), lr=lr)\n    total_loss = 0\n    for _ in range(10):\n        optimizer.zero_grad()\n        pred = model(???)\n        loss = criterion(pred, y)\n        loss.backward()\n        optimizer.step()\n        total_loss += loss.item()\n    avg_loss = total_loss / 10\n    results.append((lr, avg_loss))\n    print(f\"LR: {lr:.4f}, Avg Loss: {avg_loss:.4f}\")\n\n# Find optimal lr\noptimal_lr = min(results, key=lambda x: x[1])[0]\nprint(f\"Optimal LR: {optimal_lr:.4f}\")"
+  },
+  {
+    "id": 96,
+    "topic": "Optimizer",
+    "type": "coding",
+    "question": "How does setting set_to_none=True in optimizer.zero_grad() help with memory optimization?",
+    "code_hint": "Create a simple model, do forward/backward pass, then call optimizer.zero_grad(set_to_none=True). Print the model's weight gradient before and after zero_grad to show it becomes None.",
+    "expected_output": "Gradient before zero_grad: tensor([1.])\nGradient after zero_grad: None",
+    "template": "import torch\nimport torch.nn as nn\n\n# Create a simple model\nmodel = nn.Linear(2, 2)\n\n# Forward pass\nx = torch.ones(1, 2)\ny = model(x)\nloss = y.sum()\n\n# Backward pass to compute gradients\nloss.backward()\n\n# Print gradient before zero_grad\nprint(f\"Gradient before zero_grad: {??}\")\n\n# Zero gradients with set_to_none=True for memory optimization\noptimizer = torch.optim.SGD(model.parameters(), lr=0.01)\noptimizer.zero_grad(set_to_none=True)\n\n# Print gradient after zero_grad\nprint(f\"Gradient after zero_grad: {??}\")"
+  },
+  {
+    "id": 97,
+    "topic": "Optimizer",
+    "type": "coding",
+    "question": "In many transfer learning scenarios, you want to use different learning rates for different parts of the model. For example, a smaller learning rate for pre-trained layers (to preserve learned features) and a larger learning rate for new layers (to learn faster).\n\nFill in the ??? to create an optimizer with different learning rates for different parameter groups: lr=0.001 for the first layer and lr=0.01 for the last layer.",
+    "code_hint": "1. Create optimizer with a list of parameter group dicts\n2. Each dict has 'params' key pointing to specific layer parameters\n3. Each dict can have its own 'lr' value\n4. Access optimizer.param_groups to print learning rates",
+    "expected_output": "Group 0: lr=0.001\nGroup 1: lr=0.01",
+    "template": "import torch\nimport torch.nn as nn\nimport torch.optim as optim\n\n# A simple model with multiple layers\nmodel = nn.Sequential(\n    nn.Linear(???, ???),\n    nn.ReLU(),\n    nn.Linear(???, ???)\n)\n\n# Define different learning rates for different parameter groups\n# Lower LR for early layers, higher LR for later layers\noptimizer = optim.SGD([\n    {'params': model[0].parameters(), 'lr': ???},  # First layer\n    {'params': model[2].parameters(), 'lr': ???}    # Last layer\n])\n\n# Print learning rates for each parameter group\nfor i, group in enumerate(optimizer.param_groups):\n    print(f\"Group {i}: lr={group['??']}\")"
+  },
+  {
+    "id": 98,
+    "topic": "Optimizer",
+    "type": "coding",
+    "question": "Implement a simple training loop using PyTorch's fused AdamW optimizer. The optimizer requires the model parameters to be on CUDA. Create a model, move it to CUDA if available, initialize the optimizer with fused=True, and perform one training step.",
+    "code_hint": "from torch.optim import AdamW\nmodel = ...\nif torch.cuda.is_available():\n    model.cuda()\noptimizer = AdamW(???, lr=0.001, ???)\nloss.backward()\noptimizer.???\noptimizer.???",
+    "expected_output": "Step performed: False\nStep performed: True\nModel device: cuda:0\nFused AdamW initialized",
+    "template": "import torch\nimport torch.nn as nn\nfrom torch.optim import AdamW\n\n# Simple linear model\nclass SimpleModel(nn.Module):\n    def __init__(self):\n        super().__init__()\n        self.linear = nn.Linear(10, 5)\n    \n    def forward(self, x):\n        return self.linear(x)\n\nmodel = SimpleModel()\n\n# Move to CUDA if available\nif torch.cuda.is_available():\n    model.???\n\n# Initialize fused AdamW - requires CUDA or will fall back to non-fused\noptimizer = AdamW(???, lr=0.001, ???)\nprint(f\"Fused AdamW initialized\")\n\n# Simulate a training step\nx = torch.randn(32, 10)\ny = torch.randn(32, 5)\n\nmodel.train()\noptimizer.zero_grad()\noutput = model(x)\nloss = nn.MSELoss()(output, y)\n\nprint(f\"Step performed: {optimizer.state[model.linear.weight]['step'] == 0}\")\n\nloss.backward()\noptimizer.???\n\nprint(f\"Step performed: {optimizer.state[model.linear.weight]['step'] == 1}\")\nprint(f\"Model device: {next(model.parameters()).device}\")"
+  },
+  {
+    "id": 99,
+    "topic": "Model Functions",
+    "type": "coding",
+    "question": "Count the total number of parameters in a neural network model. Use `.parameters()` to iterate and `.numel()` to count elements in each parameter tensor.",
+    "code_hint": "import torch\nimport torch.nn as nn\n\nclass SimpleNet(nn.Module):\n    def __init__(self):\n        super().__init__()\n        self.fc1 = nn.Linear(10, 5)\n        self.fc2 = nn.Linear(5, 1)\n        \n    def forward(self, x):\n        return self.fc2(torch.relu(self.fc1(x)))\n\nmodel = SimpleNet()\n\n# Count total parameters\n### = sum(p.numel() for p in model.parameters())\nprint(f\"Total parameters: {###}\")\n\n# Count trainable parameters\ntrainable = sum(p.numel() for p in model.### if p.###)\nprint(f\"Trainable parameters: {trainable}\")",
+    "expected_output": "Total parameters: 61\nTrainable parameters: 61",
+    "template": "import torch\nimport torch.nn as nn\n\nclass SimpleNet(nn.Module):\n    def __init__(self):\n        super().__init__()\n        self.fc1 = nn.Linear(10, 5)\n        self.fc2 = nn.Linear(5, 1)\n        \n    def forward(self, x):\n        return self.fc2(torch.relu(self.fc1(x)))\n\nmodel = SimpleNet()\n\n# Count total parameters\n### = sum(p.numel() for p in model.parameters())\nprint(f\"Total parameters: {###}\")\n\n# Count trainable parameters\ntrainable = sum(p.numel() for p in model.### if p.###)\nprint(f\"Trainable parameters: {trainable}\")"
+  },
+  {
+    "id": 100,
+    "topic": "Model Functions",
+    "type": "coding",
+    "question": "Use add_module to dynamically register submodules to a parent module. Register 3 Linear layers with names 'layer_0', 'layer_1', 'layer_2', then print all named children using named_children().",
+    "code_hint": "model.add_module(name, submodule)",
+    "expected_output": "layer_0: Linear\nlayer_1: Linear\nlayer_2: Linear",
+    "template": "import torch\nimport torch.nn as nn\n\nmodel = nn.Module()\nfor i in range(3):\n    layer = nn.Linear(10, 10)\n    ???(f'layer_{i}', layer)\n\nfor name, module in model.???():\n    print(f\"{name}: {module.__class__.__name__}\")"
   }
 ]
