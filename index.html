@@ -112,7 +112,7 @@
                     <h3 class="text-sm font-medium text-gray-300">Questions</h3>
                     <span class="text-xs text-gray-500">{{ filteredQuestions.length }}/{{ questions.length }}</span>
                 </div>
-                <div class="grid grid-cols-8 lg:grid-cols-6 gap-1">
+                <div class="flex flex-wrap gap-1">
                     <button
                         v-for="(q, idx) in filteredQuestions"
                         :key="q.id"
