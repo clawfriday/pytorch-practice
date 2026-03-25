@@ -507,7 +507,7 @@
     "code_hint": "model1.state_dict(), model2.load_state_dict()",
     "expected_output": "Weights match after load: True",
     "template": "import torch\nimport torch.nn as nn\n\ntorch.manual_seed(42)\nmodel1 = nn.Linear(5, 2)\nmodel2 = nn.Linear(5, 2)\nsd = model1.???()\nmodel2.???(???)\nmatch = torch.allclose(model1.weight, model2.weight)\nprint(f\"Weights match after load: {match}\")",
-    "answer": "import torch\n\n# Gradient of y = x^2 at x=3\nx = torch.tensor([3.0], requires_grad=True)\ny = x ** 2\ny.backward()\nprint(f\"Gradient dy/dx at x=3: {x.grad.item()}\")"
+    "answer": "import torch\nimport torch.nn as nn\n\ntorch.manual_seed(42)\nmodel1 = nn.Linear(5, 2)\nmodel2 = nn.Linear(5, 2)\nsd = model1.state_dict()\nmodel2.load_state_dict(sd)\nmatch = torch.allclose(model1.weight, model2.weight)\nprint(f\"Weights match after load: {match}\")"
   },
   {
     "id": 52,
@@ -517,7 +517,7 @@
     "code_hint": ".parameters(), .named_parameters()",
     "expected_output": "parameters() count: 4\nnamed_parameters() count: 4",
     "template": "import torch\nimport torch.nn as nn\n\nmodel = nn.Sequential(\n    nn.Linear(10, 5),\n    nn.ReLU(),\n    nn.Linear(5, 2)\n)\nparams = list(model.???())\nnamed = list(model.???())\nprint(f\"parameters() count: {len(params)}\")\nprint(f\"named_parameters() count: {len(named)}\")",
-    "answer": "import torch\n\n# Jacobian for vector function\nx = torch.tensor([1.0, 2.0], requires_grad=True)\ny = x ** 2\nz = y.sum()\nz.backward()\nprint(f\"Gradient: {x.grad}\")"
+    "answer": "import torch\nimport torch.nn as nn\n\nmodel = nn.Sequential(\n    nn.Linear(10, 5),\n    nn.ReLU(),\n    nn.Linear(5, 2)\n)\nparams = list(model.parameters())\nnamed = list(model.named_parameters())\nprint(f\"parameters() count: {len(params)}\")\nprint(f\"named_parameters() count: {len(named)}\")"
   },
   {
     "id": 53,
@@ -527,7 +527,7 @@
     "code_hint": ".children(), .modules()",
     "expected_output": "children() count: 3\nmodules() count: 4",
     "template": "import torch\nimport torch.nn as nn\n\nmodel = nn.Sequential(\n    nn.Linear(10, 5),\n    nn.ReLU(),\n    nn.Linear(5, 2)\n)\nchildren = list(model.???())\nmodules = list(model.???())\nprint(f\"children() count: {len(children)}\")\nprint(f\"modules() count: {len(modules)}\")",
-    "answer": "import torch\n\n# Hessian matrix\nx = torch.tensor([1.0, 2.0], requires_grad=True)\ny = x[0]**2 + x[1]**2\ngrads = torch.autograd.grad(y, x, create_graph=True)[0]\nhessian = torch.autograd.grad(grads.sum(), x)[0]\nprint(f\"Hessian: {hessian}\")"
+    "answer": "import torch\nimport torch.nn as nn\n\nmodel = nn.Sequential(\n    nn.Linear(10, 5),\n    nn.ReLU(),\n    nn.Linear(5, 2)\n)\nchildren = list(model.children())\nmodules = list(model.modules())\nprint(f\"children() count: {len(children)}\")\nprint(f\"modules() count: {len(modules)}\")"
   },
   {
     "id": 54,
@@ -537,7 +537,7 @@
     "code_hint": "class MyDataset(Dataset): with __init__, __len__, __getitem__",
     "expected_output": "Dataset length: 100\nSample shape: torch.Size([10])",
     "template": "import torch\nfrom torch.utils.data import Dataset\n\nclass MyDataset(Dataset):\n    def __init__(self):\n        self.data = torch.???(???, ???)\n    def __len__(self):\n        return ???(self.data)\n    def __getitem__(self, idx):\n        return ???[???]\n\nds = MyDataset()\nprint(f\"Dataset length: {???(ds)}\")\nprint(f\"Sample shape: {ds[0].shape}\")",
-    "answer": "import torch\n\n# Compute gradients of sin(x) at x=pi/2\nx = torch.tensor([3.14159/2], requires_grad=True)\ny = torch.sin(x)\ny.backward()\nprint(f\"Gradient d/dx(sin(x)) at x=pi/2: {x.grad.item():.4f}\")"
+    "answer": "import torch\nfrom torch.utils.data import Dataset\n\nclass MyDataset(Dataset):\n    def __init__(self):\n        self.data = torch.randn(100, 10)\n    def __len__(self):\n        return len(self.data)\n    def __getitem__(self, idx):\n        return self.data[idx]\n\nds = MyDataset()\nprint(f\"Dataset length: {len(ds)}\")\nprint(f\"Sample shape: {ds[0].shape}\")"
   },
   {
     "id": 55,
@@ -547,7 +547,7 @@
     "code_hint": "DataLoader(dataset, batch_size, shuffle)",
     "expected_output": "Batch shape: torch.Size([16, 10])\nBatch count per epoch: 7",
     "template": "import torch\nfrom torch.utils.data import Dataset, DataLoader\n\nclass MyDataset(Dataset):\n    def __init__(self):\n        self.data = torch.randn(100, 10)\n    def __len__(self):\n        return len(self.data)\n    def __getitem__(self, idx):\n        return self.data[idx]\n\nds = MyDataset()\nloader = DataLoader(???, batch_size=???, shuffle=???, num_workers=0)\nbatch = next(???(loader))\nprint(f\"Batch shape: {batch.shape}\")\nprint(f\"Batch count per epoch: {???(loader)}\")",
-    "answer": "import torch\n\n# No gradient tracking\nx = torch.tensor([1.0, 2.0], requires_grad=False)\ny = x ** 2\nprint(f\"y requires_grad: {y.requires_grad}\")"
+    "answer": "import torch\nfrom torch.utils.data import Dataset, DataLoader\n\nclass MyDataset(Dataset):\n    def __init__(self):\n        self.data = torch.randn(100, 10)\n    def __len__(self):\n        return len(self.data)\n    def __getitem__(self, idx):\n        return self.data[idx]\n\nds = MyDataset()\nloader = DataLoader(ds, batch_size=16, shuffle=False, num_workers=0)\nbatch = next(iter(loader))\nprint(f\"Batch shape: {batch.shape}\")\nprint(f\"Batch count per epoch: {len(loader)}\")"
   },
   {
     "id": 56,
@@ -557,7 +557,7 @@
     "code_hint": "TensorDataset(*tensors), DataLoader",
     "expected_output": "x batch shape: torch.Size([8, 10])\ny batch shape: torch.Size([8])",
     "template": "import torch\nfrom torch.utils.data import TensorDataset, DataLoader\n\nx = torch.randn(100, 10)\ny = torch.randint(0, 5, (100,))\nds = TensorDataset(???, ???)\nloader = DataLoader(???, batch_size=8)\nbatch_x, batch_y = next(???(loader))\nprint(f\"x batch shape: {batch_x.shape}\")\nprint(f\"y batch shape: {batch_y.shape}\")",
-    "answer": "import torch\n\n# Detach tensor\nx = torch.tensor([1.0, 2.0], requires_grad=True)\ny = x ** 2\nz = y.detach()\nprint(f\"z requires_grad: {z.requires_grad}\")"
+    "answer": "import torch\nfrom torch.utils.data import TensorDataset, DataLoader\n\nx = torch.randn(100, 10)\ny = torch.randint(0, 5, (100,))\nds = TensorDataset(x, y)\nloader = DataLoader(ds, batch_size=8)\nbatch_x, batch_y = next(iter(loader))\nprint(f\"x batch shape: {batch_x.shape}\")\nprint(f\"y batch shape: {batch_y.shape}\")"
   },
   {
     "id": 57,
@@ -567,7 +567,7 @@
     "code_hint": "torch.utils.data.random_split(dataset, [train_size, val_size])",
     "expected_output": "Train size: 80\nVal size: 20",
     "template": "import torch\nfrom torch.utils.data import random_split\n\nds = torch.randn(100, 10)\ntrain, val = random_split(???, [???, ???])\nprint(f\"Train size: {???(train)}\")\nprint(f\"Val size: {???(val)}\")",
-    "answer": "import torch\n\n# Gradient check for numerical approximation\nx = torch.tensor([1.0], requires_grad=True)\neps = 1e-5\ny = x ** 2\ny.backward()\nanalytical = x.grad.item()\n\nx_plus = torch.tensor([1.0 + eps], requires_grad=True)\ny_plus = x_plus ** 2\nnumerical = (y_plus.item() - 1.0) / eps\nprint(f\"Analytical: {analytical}, Numerical: {numerical:.6f}\")"
+    "answer": "import torch\nfrom torch.utils.data import random_split\n\nds = torch.randn(100, 10)\ntrain, val = random_split(ds, [80, 20])\nprint(f\"Train size: {len(train)}\")\nprint(f\"Val size: {len(val)}\")"
   },
   {
     "id": 58,
@@ -577,7 +577,7 @@
     "code_hint": "model(X), criterion(outputs, y), optimizer.zero_grad(), loss.backward(), optimizer.step()",
     "expected_output": "Loss: 0.7331",
     "template": "import torch\nimport torch.nn as nn\nimport torch.optim as optim\n\ntorch.manual_seed(42)\nmodel = nn.???(???, ???)\ncriterion = nn.???()\noptimizer = optim.???(model.parameters(), lr=0.01)\n\nX = torch.randn(4, 10)\ny = torch.randint(0, 2, (4,))\n\noptimizer.???()\noutputs = ???(???)\nloss = ???(???, ???)\nloss.???()\noptimizer.???()\nprint(f\"Loss: {loss.item():.4f}\")",
-    "answer": "import torch\n\n# Enable gradient tracking\nx = torch.tensor([1.0, 2.0], requires_grad=True)\nprint(f\"x.requires_grad: {x.requires_grad}\")"
+    "answer": "import torch\nimport torch.nn as nn\nimport torch.optim as optim\n\ntorch.manual_seed(42)\nmodel = nn.Linear(10, 2)\ncriterion = nn.CrossEntropyLoss()\noptimizer = optim.SGD(model.parameters(), lr=0.01)\n\nX = torch.randn(4, 10)\ny = torch.randint(0, 2, (4,))\n\noptimizer.zero_grad()\noutputs = model(X)\nloss = criterion(outputs, y)\nloss.backward()\noptimizer.step()\nprint(f\"Loss: {loss.item():.4f}\")"
   },
   {
     "id": 59,
@@ -587,7 +587,7 @@
     "code_hint": "model.eval(), with torch.no_grad():",
     "expected_output": "Output shape: torch.Size([4, 2])",
     "template": "import torch\nimport torch.nn as nn\n\ntorch.manual_seed(42)\nmodel = nn.Linear(10, 2)\nmodel.???()\nX = torch.randn(4, 10)\n\nwith torch.???():\n    outputs = ???(???)\nprint(f\"Output shape: {outputs.shape}\")",
-    "answer": "import torch\n\n# Muliple gradients accumulation\nx = torch.tensor([1.0], requires_grad=True)\nfor _ in range(3):\n    y = x ** 2\n    y.backward()\nprint(f\"Gradient (accumulated): {x.grad.item()}\")"
+    "answer": "import torch\nimport torch.nn as nn\n\ntorch.manual_seed(42)\nmodel = nn.Linear(10, 2)\nmodel.eval()\nX = torch.randn(4, 10)\n\nwith torch.no_grad():\n    outputs = model(X)\nprint(f\"Output shape: {outputs.shape}\")"
   },
   {
     "id": 60,
@@ -597,7 +597,7 @@
     "code_hint": "torch.save(model.state_dict(), path), torch.load(path), model.load_state_dict()",
     "expected_output": "Models match: True",
     "template": "import torch\nimport torch.nn as nn\n\ntorch.manual_seed(42)\nmodel1 = nn.Linear(10, 2)\ntorch.save(model1.???(), '/tmp/model.pt')\nmodel2 = nn.Linear(10, 2)\nmodel2.???(torch.load('/tmp/model.pt'))\nmatch = torch.allclose(model1.weight, model2.weight)\nprint(f\"Models match: {match}\")",
-    "answer": "import torch\n\n# Clear gradients\nx = torch.tensor([2.0], requires_grad=True)\ny = x ** 2\ny.backward()\nprint(f\"Before clear: {x.grad.item()}\")\nx.grad.zero_()\nprint(f\"After clear: {x.grad}\")"
+    "answer": "import torch\nimport torch.nn as nn\n\ntorch.manual_seed(42)\nmodel1 = nn.Linear(10, 2)\ntorch.save(model1.state_dict(), '/tmp/model.pt')\nmodel2 = nn.Linear(10, 2)\nmodel2.load_state_dict(torch.load('/tmp/model.pt'))\nmatch = torch.allclose(model1.weight, model2.weight)\nprint(f\"Models match: {match}\")"
   },
   {
     "id": 61,
