@@ -105,39 +105,7 @@
         </header>
 
         <!-- Main Content -->
-        <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
-            <!-- Left: Question List -->
-            <div class="question-card rounded-xl p-4 lg:col-span-1 max-h-[80vh] overflow-y-auto">
-                <div class="flex items-center justify-between mb-3">
-                    <h3 class="text-sm font-medium text-gray-300">Questions</h3>
-                    <span class="text-xs text-gray-500">{{ filteredQuestions.length }}/{{ questions.length }}</span>
-                </div>
-                <div class="flex flex-wrap gap-1">
-                    <button
-                        v-for="(q, idx) in filteredQuestions"
-                        :key="q.id"
-                        @click="jumpToQuestion(idx)"
-                        class="w-8 h-8 rounded text-xs font-mono flex items-center justify-center transition-all"
-                        :class="[
-                            currentQuestionIndex === idx && selectedTopic === '' ? 'bg-orange-500 text-white ring-2 ring-orange-400' : 
-                            currentQuestionIndex === idx ? 'bg-orange-500 text-white' :
-                            q.correct ? 'bg-green-900/50 text-green-400 hover:bg-green-800/50' :
-                            q.attempted ? 'bg-red-900/50 text-red-400 hover:bg-red-800/50' :
-                            'bg-gray-700/50 text-gray-400 hover:bg-gray-600/50'
-                        ]"
-                    >
-                        {{ q.id }}
-                    </button>
-                </div>
-                <div class="mt-3 text-xs text-gray-500">
-                    <span class="inline-block w-3 h-3 bg-green-900/50 rounded mr-1"></span>Correct
-                    <span class="inline-block w-3 h-3 bg-red-900/50 rounded ml-3 mr-1"></span>Wrong
-                    <span class="inline-block w-3 h-3 bg-gray-700/50 rounded ml-3 mr-1"></span>Pending
-                </div>
-            </div>
-
-            <!-- Center: Question Panel -->
-            <div class="space-y-4 lg:col-span-2">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <!-- Topic Selector -->
                 <div class="question-card rounded-xl p-4">
                     <label class="text-sm text-gray-400 mb-2 block">Select Topic</label>
@@ -163,7 +131,7 @@
                         </span>
                     </div>
                     
-                    <h3 class="text-lg font-medium mb-4">{{ currentQuestion.question }}</h3>
+                    <h3 class="text-lg font-medium mb-4">{{ currentQuestion.id }}. {{ currentQuestion.question }}</h3>
 
                     <!-- Hint -->
                     <div v-if="currentQuestion.code_hint && !result" class="text-sm text-gray-400 mb-4 p-2 bg-gray-800/50 rounded">
@@ -570,14 +538,6 @@
                         currentQuestionIndex.value--;
                         loadCurrentQuestionCode();
                     }
-                }
-
-                function jumpToQuestion(idx) {
-                    saveCurrentCode();
-                    currentQuestionIndex.value = idx;
-                    selectedTopic.value = ''; // Clear filter when jumping
-                    filterQuestions();
-                    loadCurrentQuestionCode();
                 }
 
                 function saveCurrentCode() {
