@@ -311,29 +311,31 @@ Be SPECIFIC and HELPFUL. Don't just say "incorrect" - explain the concept they m
 
 IMPORTANT: Your feedback MUST include the correct answer code at the end."""""
     else:
-        system_prompt = f"""You are a helpful PyTorch expert tutor. The user attempted an explanation question and their answer needs evaluation.
+        system_prompt = f"""You are a helpful PyTorch tutor evaluating a student's explanation.
 
 ## TASK:
 Question: {request.question}
 
-## USER'S ANSWER:
+## STUDENT'S ANSWER:
 {request.user_answer}
 
-## YOUR TASK:
-1. Evaluate if the user's answer is CORRECT and COMPLETE
-2. If INCORRECT or INCOMPLETE:
-   - Explain what they missed or got wrong
-   - Provide the CORRECT answer with proper explanation
-3. If CORRECT:
-   - Confirm their answer is correct
-   - Optionally add extra insights
-
-Be ENCOURAGING but ACCURATE. Education over criticism.
+## EVALUATION CRITERIA:
+- Check if the student CAPTURED THE GIST (key concepts) - be LENIENT on exact wording
+- Minor omissions or imprecise language should NOT mark wrong if the core concept is correct
+- If the gist is captured but incomplete: mark CORRECT but provide complementary info
 
 ## RESPONSE FORMAT:
-{{"correct": boolean, "feedback": "YOUR EXPLANATION INCLUDING THE CORRECT ANSWER IF NEEDED"}}
+{{"correct": boolean, "feedback": "YOUR CONCISE FEEDBACK"}}
 
-IMPORTANT: If the answer is wrong, your feedback MUST include the correct answer and explanation."""
+## FEEDBACK STYLE:
+- Be encouraging and concise
+- If CORRECT: briefly confirm, then add any complementary insights
+- If WRONG (missed gist): explain what's missing clearly
+- Keep feedback focused - no long essays
+
+Examples of good feedback:
+- "✅ Correct! Just to add: torch.tensor() creates a copy while torch.from_numpy() shares memory with the numpy array."
+- "⚠️ You got the main idea about gradients, but missing: zero_grad() clears gradients BEFORE the backward pass to avoid accumulation across batches.""""
     
     try:
         response = client.invoke_model(

@@ -4,24 +4,26 @@
     "topic": "Tensor Creation",
     "type": "coding",
     "question": "Create a 3x3 identity matrix using PyTorch.",
-    "code_hint": "torch.eye(3)",
-    "expected_output": "tensor([[1., 0., 0.],\n        [0., 1., 0.],\n        [0., 0., 1.]])"
+    "code_hint": "torch.eye(n)",
+    "expected_output": "tensor([[1., 0., 0.],\n        [0., 1., 0.],\n        [0., 0., 1.]])",
+    "template": "# Create a 3x3 identity matrix\n# An identity matrix has 1s on the diagonal, 0s elsewhere\n\nimport torch\n\n# Your code here:\nresult = ???\n\n# Print result (don't modify)\nprint(result)"
   },
   {
     "id": 2,
     "topic": "Tensor Creation",
     "type": "coding",
     "question": "Create a tensor with shape (2, 3) filled with zeros.",
-    "code_hint": "torch.zeros(2, 3)",
-    "expected_output": "tensor([[0., 0., 0.],\n        [0., 0., 0.]])"
+    "code_hint": "torch.zeros(rows, cols)",
+    "expected_output": "tensor([[0., 0., 0.],\n        [0., 0., 0.]])",
+    "template": "# Create a tensor with shape (2, 3) filled with zeros\n\nimport torch\n\n# Your code here:\nresult = ???\n\n# Print result (don't modify)\nprint(result)"
   },
   {
     "id": 3,
     "topic": "Tensor Creation",
     "type": "coding",
     "question": "Create a tensor with random values from a standard normal distribution with shape (4, 4).",
-    "code_hint": "torch.randn(4, 4)",
-    "test_code": "result = torch.randn(4, 4)\nprint(result.shape)\nassert result.shape == (4, 4)"
+    "code_hint": "torch.randn(rows, cols)",
+    "template": "# Create a 4x4 tensor with random values from standard normal distribution\n# Standard normal: mean=0, std=1\n\nimport torch\n\n# Your code here:\nresult = ???\n\n# Print shape (don't modify)\nprint(result.shape)"
   },
   {
     "id": 4,
@@ -35,18 +37,17 @@
     "topic": "Tensor Operations",
     "type": "coding",
     "question": "Reshape a tensor from shape (12,) to shape (3, 4).",
-    "code_hint": "t.view(3, 4)",
-    "test_code": "t = torch.randn(12)\nresult = t.view(3, 4)\nprint(result.shape)\nassert result.shape == (3, 4)",
-    "template": "# Create a tensor with 12 elements\nt = torch.randn(12)\n\n# Reshape to 3x4\nresult = t.view(3, 4)\nprint(result.shape)"
+    "code_hint": "t.view(rows, cols)",
+    "template": "# Reshape tensor from (12,) to (3, 4)\n# Hint: view() returns a new view of the tensor with different shape\n\nimport torch\n\n# Create a tensor with 12 elements (don't modify)\nt = torch.randn(12)\n\n# Your code here - reshape to (3, 4):\nresult = ???\n\n# Print shape (don't modify)\nprint(result.shape)"
   },
   {
     "id": 6,
     "topic": "Tensor Operations",
     "type": "coding",
     "question": "Perform matrix multiplication of two 2x2 matrices A=[[1,2],[3,4]] and B=[[2,0],[1,3]]. Show the result.",
-    "code_hint": "A @ B or torch.matmul(A, B)",
+    "code_hint": "A @ B",
     "expected_output": "tensor([[ 4.,  6.],\n        [10., 12.]]",
-    "template": "# Define the matrices\nA = torch.tensor([[1., 2.], [3., 4.]])\nB = torch.tensor([[2., 0.], [1., 3.]])\n\n# Perform matrix multiplication\nC = A @ B\nprint(C)"
+    "template": "# Matrix multiplication: C = A @ B\n# Given:\n# A = [[1, 2], [3, 4]]\n# B = [[2, 0], [1, 3]]\n\nimport torch\n\n# Define A (don't modify)\nA = torch.tensor([[1., 2.], [3., 4.]])\n\n# Define B (don't modify)\nB = torch.tensor([[2., 0.], [1., 3.]])\n\n# Your code here - compute C = A @ B:\nC = ???\n\n# Print result (don't modify)\nprint(C)"
   },
   {
     "id": 7,
@@ -61,8 +62,7 @@
     "type": "coding",
     "question": "Use squeeze() to remove a dimension of size 1 from a tensor with shape (1, 3, 1, 4).",
     "code_hint": "t.squeeze()",
-    "test_code": "t = torch.randn(1, 3, 1, 4)\nresult = t.squeeze()\nprint(result.shape)\nassert result.shape == (3, 4)",
-    "template": "# Create a tensor with shape (1, 3, 1, 4)\nt = torch.randn(1, 3, 1, 4)\n\n# Use squeeze() to remove dimensions of size 1\nresult = t.squeeze()\nprint(result.shape)"
+    "template": "# Use squeeze() to remove dimensions of size 1\n# Input shape: (1, 3, 1, 4) → Output shape: (3, 4)\n\nimport torch\n\n# Create tensor with shape (1, 3, 1, 4) (don't modify)\nt = torch.randn(1, 3, 1, 4)\n\n# Your code here - squeeze to remove size-1 dimensions:\nresult = ???\n\n# Print shape (don't modify)\nprint(result.shape)"
   },
   {
     "id": 9,
@@ -71,8 +71,7 @@
     "question": "Create x=2.0 with requires_grad=True, compute y=x^2, then calculate gradient dy/dx at x=2.",
     "code_hint": "x.requires_grad=True, y.backward(), x.grad",
     "expected_output": "tensor([4.])",
-    "test_code": "x = torch.tensor([2.], requires_grad=True)\ny = x ** 2\ny.backward()\nprint(x.grad)",
-    "template": "# Create x with requires_grad=True\nx = torch.tensor([2.], requires_grad=True)\n\n# Compute y = x^2\ny = x ** 2\n\n# Backward pass to compute gradients\ny.backward()\n\n# Print the gradient\nprint(x.grad)"
+    "template": "# Compute gradient of y = x^2 at x = 2\n# Steps:\n# 1. Create x = 2.0 with requires_grad=True\n# 2. Compute y = x^2\n# 3. Call backward() to compute gradients\n# 4. Check x.grad\n\nimport torch\n\n# Your code here:\nx = ???\ny = ???\n???\n\n# Print gradient (don't modify)\nprint(x.grad)"
   },
   {
     "id": 10,
@@ -88,8 +87,7 @@
     "question": "Use torch.no_grad() context to evaluate y=2*x where x=[1,2,3] with requires_grad=True. What is y.requires_grad after?",
     "code_hint": "with torch.no_grad():",
     "expected_output": "False",
-    "test_code": "x = torch.tensor([1., 2., 3.], requires_grad=True)\nwith torch.no_grad():\n    y = x * 2\nprint(y.requires_grad)",
-    "template": "# Create x with requires_grad=True\nx = torch.tensor([1., 2., 3.], requires_grad=True)\n\n# Use no_grad context for forward pass\nwith torch.no_grad():\n    y = x * 2\n\n# Check if gradients are tracked\nprint(y.requires_grad)"
+    "template": "# Check if gradients are tracked inside no_grad() context\n# x has requires_grad=True\n# After y = 2*x in no_grad(), is y.requires_grad True or False?\n\nimport torch\n\n# Create x with requires_grad=True (don't modify)\nx = torch.tensor([1., 2., 3.], requires_grad=True)\n\n# Your code here - compute y in no_grad context:\nwith torch.no_grad():\n    y = ???\n\n# Print y.requires_grad (don't modify)\nprint(y.requires_grad)"
   },
   {
     "id": 12,
@@ -103,9 +101,8 @@
     "topic": "nn.Module",
     "type": "coding",
     "question": "Create a linear layer that transforms input of size 10 to output of size 5. Then test it with a random input.",
-    "code_hint": "torch.nn.Linear(10, 5)",
-    "test_code": "layer = torch.nn.Linear(10, 5)\nx = torch.randn(1, 10)\ny = layer(x)\nprint(y.shape)\nassert y.shape == (1, 5)",
-    "template": "import torch.nn as nn\n\n# Create a linear layer\nlayer = nn.Linear(10, 5)\n\n# Test with random input\nx = torch.randn(1, 10)\ny = layer(x)\nprint(y.shape)"
+    "code_hint": "nn.Linear(in_features, out_features)",
+    "template": "# Create a linear layer: input=10, output=5\n# Linear layer: y = xW^T + b\n\nimport torch\nimport torch.nn as nn\n\n# Your code here - create the layer:\nlayer = ???\n\n# Test with random input (don't modify)\nx = torch.randn(1, 10)\ny = layer(x)\n\n# Print output shape (don't modify)\nprint(y.shape)"
   },
   {
     "id": 14,
@@ -126,9 +123,8 @@
     "topic": "Loss Functions",
     "type": "coding",
     "question": "Calculate CrossEntropyLoss for predictions=[[0.8, 0.1, 0.1], [0.3, 0.6, 0.1]] and targets=[0, 1].",
-    "code_hint": "torch.nn.CrossEntropyLoss()(predictions, targets)",
-    "test_code": "criterion = torch.nn.CrossEntropyLoss()\npredictions = torch.tensor([[0.8, 0.1, 0.1], [0.3, 0.6, 0.1]])\ntargets = torch.tensor([0, 1])\nloss = criterion(predictions, targets)\nprint(f\"Loss: {loss.item():.4f}\")\nassert loss.item() > 0",
-    "template": "import torch.nn as nn\n\n# Define predictions and targets\npredictions = torch.tensor([[0.8, 0.1, 0.1], [0.3, 0.6, 0.1]])\ntargets = torch.tensor([0, 1])\n\n# Calculate CrossEntropyLoss\ncriterion = nn.CrossEntropyLoss()\nloss = criterion(predictions, targets)\nprint(f\"Loss: {loss.item():.4f}\")"
+    "code_hint": "nn.CrossEntropyLoss()(predictions, targets)",
+    "template": "# Calculate Cross Entropy Loss\n# predictions: model outputs (raw logits, NOT probabilities)\n# targets: ground truth class indices [0, 1]\n\nimport torch\nimport torch.nn as nn\n\n# Model predictions (don't modify)\npredictions = torch.tensor([[0.8, 0.1, 0.1], [0.3, 0.6, 0.1]])\n\n# Ground truth (don't modify)\ntargets = torch.tensor([0, 1])\n\n# Your code here - compute loss:\nloss = ???\n\n# Print loss (don't modify)\nprint(f\"Loss: {loss.item():.4f}\")"
   },
   {
     "id": 17,
@@ -142,9 +138,8 @@
     "topic": "Data Loading",
     "type": "coding",
     "question": "Create a DataLoader for a tensor dataset with batch_size=4 and shuffle=True. Get the first batch.",
-    "code_hint": "DataLoader(TensorDataset(x, y), batch_size=4, shuffle=True)",
-    "test_code": "x = torch.randn(100, 10)\ny = torch.randn(100, 1)\ndataset = torch.utils.data.TensorDataset(x, y)\nloader = torch.utils.data.DataLoader(dataset, batch_size=4, shuffle=True)\nbatch_x, batch_y = next(iter(loader))\nprint(f\"{batch_x.shape}, {batch_y.shape}\")\nassert batch_x.shape[0] == 4",
-    "template": "import torch.utils.data as data\n\n# Create sample data\nx = torch.randn(100, 10)\ny = torch.randn(100, 1)\n\n# Create dataset and dataloader\ndataset = data.TensorDataset(x, y)\nloader = data.DataLoader(dataset, batch_size=4, shuffle=True)\n\n# Get first batch\nbatch_x, batch_y = next(iter(loader))\nprint(f\"batch_x: {batch_x.shape}, batch_y: {batch_y.shape}\")"
+    "code_hint": "DataLoader(dataset, batch_size=4, shuffle=True)",
+    "template": "# Create DataLoader and get first batch\n\nimport torch\nfrom torch.utils.data import TensorDataset, DataLoader\n\n# Create sample data (don't modify)\nx = torch.randn(100, 10)  # 100 samples, 10 features\ny = torch.randn(100, 1)    # 100 targets\n\n# Your code here - create dataset and dataloader:\ndataset = ???\nloader = ???\n\n# Get first batch (don't modify)\nbatch_x, batch_y = next(iter(loader))\n\n# Print shapes (don't modify)\nprint(f\"batch_x: {batch_x.shape}, batch_y: {batch_y.shape}\")"
   },
   {
     "id": 19,
@@ -158,8 +153,7 @@
     "topic": "GPU Training",
     "type": "coding",
     "question": "Check if CUDA (GPU) is available. If yes, move a tensor to GPU. If no, keep on CPU.",
-    "code_hint": "torch.cuda.is_available(), .to(device)",
-    "test_code": "device = torch.device(\"cuda\" if torch.cuda.is_available() else \"cpu\")\nx = torch.randn(3, 3)\nx_gpu = x.to(device)\nprint(str(x_gpu.device))\nassert \"cuda\" in str(x_gpu.device) or \"cpu\" in str(x_gpu.device)",
-    "template": "# Check if CUDA is available\ndevice = torch.device(\"cuda\" if torch.cuda.is_available() else \"cpu\")\nprint(f\"Using device: {device}\")\n\n# Create a tensor and move to device\nx = torch.randn(3, 3)\nx_on_device = x.to(device)\nprint(f\"Tensor device: {x_on_device.device}\")"
+    "code_hint": "torch.cuda.is_available(), device = torch.device('cuda' if ... else 'cpu'), tensor.to(device)",
+    "template": "# Check CUDA availability and move tensor to correct device\n\nimport torch\n\n# Check if CUDA is available (don't modify)\ndevice = ???\n\n# Create a tensor (don't modify)\nx = torch.randn(3, 3)\n\n# Your code here - move tensor to device:\nx_on_device = ???\n\n# Print device (don't modify)\nprint(f\"Tensor on: {x_on_device.device}\")"
   }
 ]

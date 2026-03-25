@@ -147,7 +147,7 @@
                             <div class="code-input-area p-3">
                                 <div class="flex items-center gap-2 mb-2 text-gray-500 text-xs">
                                     <span>››</span>
-                                    <span>Write your code (Ctrl+Enter to run)</span>
+                                    <span>Fill in the ??? part (Ctrl+Enter to run)</span>
                                 </div>
                                 <textarea
                                     ref="codeEditorRef"
@@ -155,15 +155,8 @@
                                     @keydown.ctrl.enter.prevent="submitCodeAnswer"
                                     @keydown.tab.prevent="handleTabInEditor"
                                     class="editor-textarea w-full h-40 font-mono text-sm"
-                                    placeholder="Start typing or use the template below..."
+                                    placeholder="Write your code here..."
                                 ></textarea>
-                            </div>
-                            
-                            <!-- Template hint -->
-                            <div v-if="getEditorTemplate()" class="bg-gray-100 border-t border-gray-200 p-2">
-                                <button @click="loadTemplate" class="text-xs text-blue-600 hover:text-blue-800">
-                                    📋 Load template
-                                </button>
                             </div>
                             
                             <!-- Submit Button -->
@@ -436,12 +429,18 @@
                 function loadCurrentQuestionCode() {
                     if (!currentQuestion.value) return;
                     
-                    // Restore previously saved code or load template
-                    if (currentQuestion.value.userCode) {
-                        codeAnswer.value = currentQuestion.value.userCode;
+                    // For coding questions: restore previous code OR show template
+                    if (currentQuestion.value.type === 'coding') {
+                        // Restore user's previous attempt (if any)
+                        if (currentQuestion.value.userCode) {
+                            codeAnswer.value = currentQuestion.value.userCode;
+                        } else {
+                            // Show template for new questions
+                            const template = getEditorTemplate();
+                            codeAnswer.value = template || '';
+                        }
                     } else {
-                        const template = getEditorTemplate();
-                        codeAnswer.value = template || '';
+                        codeAnswer.value = '';
                     }
                     textAnswer.value = currentQuestion.value.textAnswer || '';
                     result.value = null;
