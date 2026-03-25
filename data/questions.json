@@ -107,7 +107,7 @@
     "code_hint": "\u5206\u522b\u8bbe\u7f6e batch_size=2, shuffle=True, num_workers=0",
     "expected_output": "First batch shape: torch.Size([2, 3, 224, 224])\nDataset size: 10 samples",
     "template": "import torch\nfrom torch.utils.data import Dataset, DataLoader\n\nclass DummyDataset(Dataset):\n    def __init__(self):\n        self.data = torch.randn(10, 3, 224, 224)\n    def __len__(self):\n        return len(self.data)\n    def __getitem__(self, idx):\n        return self.data[idx]\n\ndataset = DummyDataset()\nloader = DataLoader(???, batch_size=???, shuffle=???, num_workers=???)\n\nbatch = next(iter(loader))\nprint(f\"First batch shape: {batch.shape}\")\nprint(f\"Dataset size: {len(dataset)} samples\")",
-    "answer": "import torch\n\n# Slice tensor to get first row\nx = torch.randn(3, 4)\nfirst_row = x[0]\nprint(f\"First row: {first_row}\")"
+    "answer": "import torch\nfrom torch.utils.data import Dataset, DataLoader\n\nclass DummyDataset(Dataset):\n    def __init__(self):\n        self.data = torch.randn(10, 3, 224, 224)\n    def __len__(self):\n        return len(self.data)\n    def __getitem__(self, idx):\n        return self.data[idx]\n\ndataset = DummyDataset()\nloader = DataLoader(dataset, batch_size=2, shuffle=False, num_workers=0)\n\nbatch = next(iter(loader))\nprint(f\"First batch shape: {batch.shape}\")\nprint(f\"Dataset size: {len(dataset)} samples\")"
   },
   {
     "id": 12,
@@ -117,7 +117,7 @@
     "code_hint": "\u4f7f\u7528 CrossEntropyLoss \u4f5c\u4e3a\u635f\u5931\u51fd\u6570\uff0cSGD \u4f18\u5316\u5668\uff0c\u5b66\u4e60\u7387\u4e3a 0.01",
     "expected_output": "loss=0.733107",
     "template": "import torch\nimport torch.nn as nn\n\nmodel = nn.Linear(10, 2)\ncriterion = ???\noptimizer = torch.optim.SGD(model.parameters(), lr=0.01)\n\nX = torch.randn(4, 10)\ny = torch.randint(0, 2, (4,))\n\noutputs = ???\nloss = ???\n\n???\n???\n\nprint(f\"loss={loss.item():.6f}\")",
-    "answer": "import torch\n\n# Select elements at indices [0,2] and [1,3]\nx = torch.arange(16).view(4, 4)\nselected = x[[0, 2], [1, 3]]\nprint(f\"Selected: {selected}\")"
+    "answer": "import torch\nimport torch.nn as nn\n\ntorch.manual_seed(42)\nmodel = nn.Linear(10, 2)\ncriterion = nn.CrossEntropyLoss()\noptimizer = torch.optim.SGD(model.parameters(), lr=0.01)\n\nX = torch.randn(4, 10)\ny = torch.randint(0, 2, (4,))\n\noutputs = model(X)\nloss = criterion(outputs, y)\n\nloss.backward()\n\nprint(f\"loss={loss.item():.6f}\")"
   },
   {
     "id": 13,
@@ -127,7 +127,7 @@
     "code_hint": "\u8bbe\u7f6e\u6253\u5370\u7cbe\u5ea6\u4e3a 4 \u4f4d\u5c0f\u6570\uff0c\u521b\u5efa\u4e0d\u540c\u8bbe\u5907\u548c dtype \u7684\u5f20\u91cf\u8fdb\u884c\u68c0\u67e5",
     "expected_output": "Tensor A shape: torch.Size([3, 4])\nTensor A dtype: torch.float32\nTensor A device: cpu\nTensor B shape: torch.Size([5, 6])\nTensor B dtype: torch.int64\nTensor B device: cpu\nAllclose check: True",
     "template": "import torch\n\n???\n\nA = torch.randn(3, 4)\nB = torch.randint(0, 10, (5, 6))\n\nprint(f\"Tensor A shape: {???}\")\nprint(f\"Tensor A dtype: {???}\")\nprint(f\"Tensor A device: {???}\")\nprint(f\"Tensor B shape: {???}\")\nprint(f\"Tensor B dtype: {???}\")\nprint(f\"Tensor B device: {???}\")\n\nresult = torch.allclose(A, A)\nprint(f\"Allclose check: {???}\")",
-    "answer": "import torch\n\n# Boolean indexing - select elements > 5\nx = torch.tensor([1, 6, 3, 8, 2, 9, 4])\nmask = x > 5\nfiltered = x[mask]\nprint(f\"Filtered: {filtered}\")"
+    "answer": "import torch\n\nA = torch.randn(3, 4)\nB = torch.randint(0, 10, (5, 6))\n\nprint(f\"Tensor A shape: {A.shape}\")\nprint(f\"Tensor A dtype: {A.dtype}\")\nprint(f\"Tensor A device: {A.device}\")\nprint(f\"Tensor B shape: {B.shape}\")\nprint(f\"Tensor B dtype: {B.dtype}\")\nprint(f\"Tensor B device: {B.device}\")\n\nresult = torch.allclose(A, A)\nprint(f\"Allclose check: {result}\")"
   },
   {
     "id": 14,
@@ -137,7 +137,7 @@
     "code_hint": "Use torch.manual_seed(42) before torch.randn(), torch.zeros((rows, cols)) for zeros, and torch.ones((rows, cols)) for ones",
     "expected_output": "tensor([[ 0.3367,  0.1288,  0.2345],\n        [ 0.2303, -1.1229, -0.1863]])\ntensor([[0., 0., 0.],\n        [0., 0., 0.]])\ntensor([[1., 1., 1.],\n        [1., 1., 1.]])",
     "template": "import torch\n\ntorch.manual_seed(42)\na = torch.???((???, ???))\nprint(a)\n\nb = torch.???((???, ???))\nprint(b)\n\nc = torch.???((???, ???))\nprint(c)",
-    "answer": "import torch\n\n# Select rows 1 to 3 (exclusive)\nx = torch.arange(20).view(4, 5)\nselected = x[1:3]\nprint(f\"Selected rows:\\n{selected}\")"
+    "answer": "import torch\n\ntorch.manual_seed(42)\na = torch.randn((2, 3))\nprint(a)\n\nb = torch.zeros((2, 3))\nprint(b)\n\nc = torch.ones((2, 3))\nprint(c)"
   },
   {
     "id": 15,
@@ -147,7 +147,7 @@
     "code_hint": "Use .reshape(), .transpose(0,1), .squeeze()",
     "expected_output": "Original tensor shape: torch.Size([2, 6])\nReshaped (3, 4):\ntensor([[ 0.3367,  0.1288,  0.2345,  0.2303],\n        [-1.1229, -0.1863,  2.2082, -0.6380],\n        [ 0.4617,  0.2674,  0.5349,  0.8094]])\nTransposed (6, 2):\ntensor([[ 0.3367,  2.2082],\n        [ 0.1288, -0.6380],\n        [ 0.2345,  0.4617],\n        [ 0.2303,  0.2674],\n        [-1.1229,  0.5349],\n        [-0.1863,  0.8094]])\nSqueezed shape: torch.Size([3, 4])\ntensor([[ 1.1103, -1.6898, -0.9890,  0.9580],\n        [ 1.3221,  0.8172, -0.7658, -0.7506],\n        [ 1.3525,  0.6863, -0.3278,  0.7950]])",
     "template": "import torch\n\ntorch.manual_seed(42)\nt = torch.randn(2, 6)\nprint(f\"Original tensor shape: {t.shape}\")\n\nt_reshaped = t.???(???, ???)\nprint(f\"Reshaped (3, 4):\")\nprint(t_reshaped)\n\nt_transposed = t.???(???, ???)\nprint(f\"Transposed (6, 2):\")\nprint(t_transposed)\n\nt2 = torch.randn(1, 3, 1, 4)\nt_squeezed = t2.???\nprint(f\"Squeezed shape: {t_squeezed.shape}\")\nprint(t_squeezed)",
-    "answer": "import torch\n\n# Get last column\nx = torch.randn(3, 4)\nlast_col = x[:, -1]\nprint(f\"Last column: {last_col}\")"
+    "answer": "import torch\n\ntorch.manual_seed(42)\nt = torch.randn(2, 6)\nprint(f\"Original tensor shape: {t.shape}\")\n\nt_reshaped = t.reshape(3, 4)\nprint(f\"Reshaped (3, 4):\")\nprint(t_reshaped)\n\nt_transposed = t.transpose(0, 1)\nprint(f\"Transposed (6, 2):\")\nprint(t_transposed)\n\nt2 = torch.randn(1, 3, 1, 4)\nt_squeezed = t2.squeeze()\nprint(f\"Squeezed shape: {t_squeezed.shape}\")\nprint(t_squeezed)"
   },
   {
     "id": 16,
@@ -157,7 +157,7 @@
     "code_hint": "torch.arange(0, 10, 2), torch.linspace(0, 1, 5), torch.full((2, 3), 7)",
     "expected_output": "tensor([0, 2, 4, 6, 8])\ntensor([0.0000, 0.2500, 0.5000, 0.7500, 1.0000])\ntensor([[7, 7, 7],\n        [7, 7, 7]])",
     "template": "import torch\n\na = torch.???(???, ???, ???)\nprint(a)\n\nb = torch.???(???, ???, ???)\nprint(b)\n\nc = torch.???((???, ???), ???)\nprint(c)",
-    "answer": "import torch\n\n# Change diagonal elements to 1\nx = torch.randn(3, 3)\nx.fill_diagonal_(1)\nprint(f\"Diagonal set to 1:\\n{x}\")"
+    "answer": "import torch\n\na = torch.arange(0, 10, 2)\nprint(a)\n\nb = torch.linspace(0, 1, 5)\nprint(b)\n\nc = torch.full((2, 3), 7)\nprint(c)"
   },
   {
     "id": 17,
@@ -167,7 +167,7 @@
     "code_hint": "torch.randint(0, 100, (3, 4)), torch.eye(4)",
     "expected_output": "tensor([[91, 65, 7, 41],\n        [54, 59, 32, 90],\n        [47, 78, 8, 25]])\ntensor([[1., 0., 0., 0.],\n        [0., 1., 0., 0.],\n        [0., 0., 1., 0.],\n        [0., 0., 0., 1.]])",
     "template": "import torch\n\ntorch.manual_seed(456)\na = torch.???(???, (???, ???))\nprint(a)\n\nb = torch.???(???)\nprint(b)",
-    "answer": "import torch\n\n# Select submatrix using start:end\nx = torch.arange(25).view(5, 5)\nsub = x[1:4, 2:5]\nprint(f\"Submatrix:\\n{sub}\")"
+    "answer": "import torch\n\ntorch.manual_seed(456)\na = torch.randint(0, 100, (3, 4))\nprint(a)\n\nb = torch.eye(4)\nprint(b)"
   },
   {
     "id": 18,
@@ -177,7 +177,7 @@
     "code_hint": ".flatten() for all, .flatten(1) for from dim 1",
     "expected_output": "Original shape: torch.Size([2, 3, 4])\nFlattened: torch.Size([24])\nFlattened from dim 1: torch.Size([2, 12])",
     "template": "import torch\n\nt = torch.randn(2, 3, 4)\nprint(f\"Original shape: {t.shape}\")\n\nflat = t.???\nprint(f\"Flattened: {flat.shape}\")\n\nflat_dim = t.???(???)\nprint(f\"Flattened from dim 1: {flat_dim.shape}\")",
-    "answer": "import torch\n\n# Get center element [1,1]\nx = torch.arange(9).view(3, 3)\ncenter = x[1, 1]\nprint(f\"Center element: {center}\")"
+    "answer": "import torch\n\nt = torch.randn(2, 3, 4)\nprint(f\"Original shape: {t.shape}\")\n\nflat = t.flatten()\nprint(f\"Flattened: {flat.shape}\")\n\nflat_dim = t.flatten(start_dim=1)\nprint(f\"Flattened from dim 1: {flat_dim.shape}\")"
   },
   {
     "id": 19,
@@ -187,7 +187,7 @@
     "code_hint": ".unsqueeze(0), .permute(1, 0)",
     "expected_output": "Original: torch.Size([3, 4])\nUnsqueezed: torch.Size([1, 3, 4])\nPermuted: torch.Size([4, 3])",
     "template": "import torch\n\nt = torch.randn(3, 4)\nprint(f\"Original: {t.shape}\")\n\nu = t.???(???)\nprint(f\"Unsqueezed: {u.shape}\")\n\np = t.???(???, ???)\nprint(f\"Permuted: {p.shape}\")",
-    "answer": "import torch\n\n# Reverse first dimension\nx = torch.arange(6).view(2, 3)\nreversed_x = x.flip(0)\nprint(f\"Reversed:\\n{reversed_x}\")"
+    "answer": "import torch\n\nt = torch.randn(3, 4)\nprint(f\"Original: {t.shape}\")\n\nu = t.unsqueeze(0)\nprint(f\"Unsqueezed: {u.shape}\")\n\np = t.permute(1, 0)\nprint(f\"Permuted: {p.shape}\")"
   },
   {
     "id": 20,
@@ -197,7 +197,7 @@
     "code_hint": "torch.cat([a, b], dim=0), torch.stack([a, b], dim=0)",
     "expected_output": "a shape: torch.Size([2, 3])\nb shape: torch.Size([2, 3])\nConcatenated: torch.Size([4, 3])\nStacked: torch.Size([2, 2, 3])",
     "template": "import torch\n\na = torch.randn(2, 3)\nb = torch.randn(2, 3)\nprint(f\"a shape: {a.shape}\")\nprint(f\"b shape: {b.shape}\")\n\ncat = torch.???([???, ???], dim=???)\nprint(f\"Concatenated: {cat.shape}\")\n\nstack = torch.???([???, ???], dim=???)\nprint(f\"Stacked: {stack.shape}\")",
-    "answer": "import torch\n\n# Use take to get flattened indices\nx = torch.tensor([[0, 1], [2, 3], [4, 5]])\nindices = torch.tensor([0, 2, 5])\ntaken = x.take(indices)\nprint(f\"Taken: {taken}\")"
+    "answer": "import torch\n\na = torch.randn(2, 3)\nb = torch.randn(2, 3)\nprint(f\"a shape: {a.shape}\")\nprint(f\"b shape: {b.shape}\")\n\ncat = torch.cat([a, b], dim=0)\nprint(f\"Concatenated: {cat.shape}\")\n\nstack = torch.stack([a, b], dim=1)\nprint(f\"Stacked: {stack.shape}\")"
   },
   {
     "id": 21,
