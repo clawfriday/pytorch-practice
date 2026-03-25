@@ -607,7 +607,7 @@
     "code_hint": "torch.device('cuda' if torch.cuda.is_available() else 'cpu'), .to(device)",
     "expected_output": "Model device: cuda\nOutput device: cuda",
     "template": "import torch\nimport torch.nn as nn\n\ndevice = torch.???('cuda' if torch.cuda.???() else 'cpu')\nmodel = nn.Linear(10, 2).???(???)\nx = torch.randn(4, 10).???(???)\noutput = model(x)\nprint(f\"Model device: {???}\")\nprint(f\"Output device: {???}\")",
-    "answer": "import torch\n\n# ReLU activation\nx = torch.tensor([-1.0, 2.0, -3.0, 4.0])\nrelu = torch.nn.functional.relu(x)\nprint(f\"ReLU: {relu}\")"
+    "answer": "import torch\nimport torch.nn as nn\n\ndevice = torch.device('cuda' if torch.cuda.is_available() else 'cpu')\nmodel = nn.Linear(10, 2).to(device)\nx = torch.randn(4, 10).to(device)\noutput = model(x)\nprint(f\"Model device: {next(model.parameters()).device}\")\nprint(f\"Output device: {output.device}\")"
   },
   {
     "id": 62,
@@ -617,7 +617,7 @@
     "code_hint": "torch.set_printoptions(precision=4)",
     "expected_output": "Tensor with 4 decimal places:\ntensor([[-0.0673,  0.7070,  2.5085, -0.6659],\n        [-1.0626, -0.6107, -0.2654, -0.6340],\n        [ 0.6344,  0.6958, -1.4137, -0.0165]])",
     "template": "import torch\n\ntorch.???(precision=???)\na = torch.randn(3, 4)\nprint(f\"Tensor with 4 decimal places:\")\nprint(???)",
-    "answer": "import torch\n\n# Sigmoid activation\nx = torch.tensor([0.0, 1.0, -1.0])\nsigmoid = torch.sigmoid(x)\nprint(f\"Sigmoid: {sigmoid}\")"
+    "answer": "import torch\n\ntorch.manual_seed(193)\ntorch.set_printoptions(precision=4)\na = torch.randn(3, 4)\nprint(f\"Tensor with 4 decimal places:\")\nprint(a)"
   },
   {
     "id": 63,
@@ -627,7 +627,7 @@
     "code_hint": ".shape, .dtype, .device",
     "expected_output": "a: shape=torch.Size([3, 4]), dtype=torch.float32, device=cpu\nb: shape=torch.Size([5, 6]), dtype=torch.int64, device=cpu",
     "template": "import torch\n\ntorch.manual_seed(42)\na = torch.randn(3, 4)\nb = torch.randint(0, 10, (5, 6))\nprint(f\"a: shape={a.???}, dtype={a.???}, device={a.???}\")\nprint(f\"b: shape={b.???}, dtype={b.???}, device={b.???}\")",
-    "answer": "import torch\n\n# Tanh activation\nx = torch.tensor([0.0, 1.0, -1.0])\ntanh = torch.tanh(x)\nprint(f\"Tanh: {tanh}\")"
+    "answer": "import torch\n\ntorch.manual_seed(42)\na = torch.randn(3, 4)\nb = torch.randint(0, 10, (5, 6))\nprint(f\"a: shape={a.shape}, dtype={a.dtype}, device={a.device}\")\nprint(f\"b: shape={b.shape}, dtype={b.dtype}, device={b.device}\")"
   },
   {
     "id": 64,
@@ -637,7 +637,7 @@
     "code_hint": "torch.isclose(a, b), torch.allclose(a, b)",
     "expected_output": "isclose result: tensor([[True, True, True, True],\n        [True, True, True, True],\n        [True, True, True, True]])\nallclose result: True",
     "template": "import torch\n\ntorch.manual_seed(42)\na = torch.randn(3, 4)\nb = a.clone()\nb[0, 0] += 1e-10\nisclose = torch.???(???, ???, rtol=1e-5, atol=1e-8)\nallclose = torch.???(???, ???, rtol=1e-5, atol=1e-8)\nprint(f\"isclose result: {isclose}\")\nprint(f\"allclose result: {allclose}\")",
-    "answer": "import torch\n\n# Softmax along last dim\nx = torch.tensor([1.0, 2.0, 3.0])\nsoftmax = torch.nn.functional.softmax(x, dim=0)\nprint(f\"Softmax: {softmax}\")\nprint(f\"Sum: {softmax.sum().item()}\")"
+    "answer": "import torch\n\ntorch.manual_seed(42)\na = torch.randn(3, 4)\nb = a.clone()\nb[0, 0] += 1e-10\nisclose = torch.isclose(a, b, rtol=1e-5, atol=1e-8)\nallclose = torch.allclose(a, b, rtol=1e-5, atol=1e-8)\nprint(f\"isclose result: {isclose}\")\nprint(f\"allclose result: {allclose}\")"
   },
   {
     "id": 65,
@@ -647,7 +647,7 @@
     "code_hint": ".numel(), .element_size()",
     "expected_output": "Shape: torch.Size([3, 4])\nnumel: 12\nelement_size: 4\nTotal bytes: 48",
     "template": "import torch\n\na = torch.randn(3, 4)\nnumel = a.???()\nelement_size = a.???()\nprint(f\"Shape: {a.shape}\")\nprint(f\"numel: {numel}\")\nprint(f\"element_size: {element_size}\")\nprint(f\"Total bytes: {numel * element_size}\")",
-    "answer": "import torch\n\n# Log softmax\nx = torch.tensor([1.0, 2.0, 3.0])\nlog_softmax = torch.nn.functional.log_softmax(x, dim=0)\nprint(f\"Log softmax: {log_softmax}\")"
+    "answer": "import torch\n\na = torch.randn(3, 4)\nnumel = a.numel()\nelement_size = a.element_size()\nprint(f\"Shape: {a.shape}\")\nprint(f\"numel: {numel}\")\nprint(f\"element_size: {element_size}\")\nprint(f\"Total bytes: {numel * element_size}\")"
   },
   {
     "id": 66,
@@ -677,7 +677,7 @@
     "code_hint": "Use math.cos() and math.sin() to compute the rotated values.",
     "expected_output": "x1_rotated: -0.7071\nx2_rotated: 4.9497",
     "template": "import torch\nimport math\n\ntorch.manual_seed(42)\n\n# Input vector (x1, x2) and angle theta\nx1, x2 = 3.0, 4.0\ntheta = math.pi / 4  # 45 degrees\n\n# TODO: Implement 2D rotation using RoPE formula\n# rotate (x1,x2) to (x1*cos(\u03b8) - x2*sin(\u03b8), x1*sin(\u03b8) + x2*cos(\u03b8))\nx1_rotated = ???\nx2_rotated = ???\n\nprint(f\"x1_rotated: {x1_rotated:.4f}\")\nprint(f\"x2_rotated: {x2_rotated:.4f}\")",
-    "answer": "import torch\nimport math\n\nx1, x2 = 3.0, 4.0\ntheta = math.pi / 4\n\nx1_rot = x1 * math.cos(theta) - x2 * math.sin(theta)\nx2_rot = x1 * math.sin(theta) + x2 * math.cos(theta)\n\nprint(f\"x1_rotated: {x1_rot:.4f}\")\nprint(f\"x2_rotated: {x2_rot:.4f}\")"
+    "answer": "import torch\nimport math\n\ntorch.manual_seed(42)\n\nx1, x2 = 3.0, 4.0\ntheta = math.pi / 4\n\nx1_rotated = x1 * math.cos(theta) - x2 * math.sin(theta)\nx2_rotated = x1 * math.sin(theta) + x2 * math.cos(theta)\n\nprint(f\"x1_rotated: {x1_rotated:.4f}\")\nprint(f\"x2_rotated: {x2_rotated:.4f}\")"
   },
   {
     "id": 69,
@@ -687,7 +687,7 @@
     "code_hint": "Compute slopes using exponent formula. Create distance matrix |i-j| using torch.arange. Multiply by slopes with broadcasting.",
     "expected_output": "tensor([[[ 0.0000, -0.0625, -0.1250, -0.1875],\n         [-0.0625,  0.0000, -0.0625, -0.1250],\n         [-0.1250, -0.0625,  0.0000, -0.0625],\n         [-0.1875, -0.1250, -0.0625,  0.0000]],\n\n        [[ 0.0000, -0.0039, -0.0078, -0.0117],\n         [-0.0039,  0.0000, -0.0039, -0.0078],\n         [-0.0078, -0.0039,  0.0000, -0.0039],\n         [-0.0117, -0.0078, -0.0039,  0.0000]]])",
     "template": "import torch\nimport torch.nn as nn\n\n\ndef alibi_bias(seq_len: int, n_heads: int) -> torch.Tensor:\n    \"\"\"\n    Compute AliBi positional bias matrix.\n\n    Args:\n        seq_len: sequence length\n        n_heads: number of attention heads\n\n    Returns:\n        bias: shape (n_heads, seq_len, seq_len)\n        bias[h, i, j] = -|i-j| * slope[h]\n        where slope[h] = 2^(-8 * (h+1) / n_heads)\n    \"\"\"\n    # TODO: Implement AliBi bias computation\n    # 1. Compute slopes for each head\n    # 2. Create distance matrix |i-j|\n    # 3. Multiply and apply negative sign\n    ???\n\n\n# Test\ntorch.manual_seed(42)\nseq_len = 4\nn_heads = 2\n\nbias = alibi_bias(seq_len, n_heads)\nprint(bias)",
-    "answer": "import torch\n\ndef alibi_bias(seq_len, n_heads):\n    slopes = 2.0 ** (-8.0 * (torch.arange(n_heads) + 1) / n_heads)\n    positions = torch.arange(seq_len)\n    distance = torch.abs(positions.unsqueeze(0) - positions.unsqueeze(1))\n    bias = -distance.unsqueeze(0) * slopes.view(n_heads, 1, 1)\n    return bias\n\ntorch.manual_seed(42)\nbias = alibi_bias(4, 2)\nprint(bias)"
+    "answer": "import torch\nimport torch.nn as nn\n\ndef alibi_bias(seq_len: int, n_heads: int) -> torch.Tensor:\n    slopes = 2.0 ** (-8.0 * (torch.arange(n_heads) + 1) / n_heads)\n    positions = torch.arange(seq_len)\n    distance = (positions.unsqueeze(0) - positions.unsqueeze(1)).abs()\n    bias = -distance.unsqueeze(0) * slopes.view(n_heads, 1, 1)\n    return bias\n\ntorch.manual_seed(42)\nseq_len = 4\nn_heads = 2\n\nbias = alibi_bias(seq_len, n_heads)\nprint(bias)"
   },
   {
     "id": 70,
@@ -697,7 +697,7 @@
     "code_hint": "Compute RMS(x) = sqrt(mean(x**2, dim=-1, keepdim=True)). Apply normalization with learned gain parameter g (initialized to 1).",
     "expected_output": "tensor([[[ 1.3434,  1.0369, -0.3468],\n         [ 0.5480, -0.9450,  1.3441],\n         [ 0.7318,  1.5358,  0.3252]],\n\n        [[-0.7339,  0.6525,  1.4267],\n         [-1.1645,  0.2099, -1.2648],\n         [ 1.4954, -0.5387, -0.6882]]], grad_fn=<MulBackward0>)",
     "template": "import torch\nimport torch.nn as nn\n\n\nclass RMSNorm(nn.Module):\n    def __init__(self, dim: int, eps: float = 1e-6):\n        super().__init__()\n        self.eps = eps\n        self.g = nn.Parameter(torch.ones(dim))\n\n    def forward(self, x: torch.Tensor) -> torch.Tensor:\n        \"\"\"\n        Apply RMSNorm: output = x / RMS(x) * g\n        where RMS(x) = sqrt(mean(x^2)) computed over last dimension\n        \"\"\"\n        # TODO: Implement RMSNorm\n        # 1. Compute RMS(x) = sqrt(mean(x**2, dim=-1, keepdim=True) + eps)\n        # 2. Normalize x by dividing by RMS(x)\n        # 3. Multiply by gain parameter g\n        rms = torch.sqrt(x.pow(2).mean(dim=-1, keepdim=True) + self.eps)\n        return ???\n\n\n# Test\ntorch.manual_seed(42)\nnorm = RMSNorm(3)\nx = torch.randn(2, 3, 3)\nresult = norm(x)\nprint(result)\n",
-    "answer": "import torch\nimport torch.nn as nn\n\nclass RMSNorm(nn.Module):\n    def __init__(self, dim, eps=1e-6):\n        super().__init__()\n        self.eps = eps\n        self.g = nn.Parameter(torch.ones(dim))\n    \n    def forward(self, x):\n        rms = torch.sqrt(x.pow(2).mean(dim=-1, keepdim=True) + self.eps)\n        return x / rms * self.g\n\ntorch.manual_seed(42)\nnorm = RMSNorm(3)\nx = torch.randn(2, 3, 3)\nresult = norm(x)\nprint(result)"
+    "answer": "import torch\nimport torch.nn as nn\n\nclass RMSNorm(nn.Module):\n    def __init__(self, dim: int, eps: float = 1e-6):\n        super().__init__()\n        self.eps = eps\n        self.g = nn.Parameter(torch.ones(dim))\n\n    def forward(self, x: torch.Tensor) -> torch.Tensor:\n        rms = torch.sqrt(x.pow(2).mean(dim=-1, keepdim=True) + self.eps)\n        return x / rms * self.g\n\ntorch.manual_seed(42)\nnorm = RMSNorm(3)\nx = torch.randn(2, 3, 3)\nresult = norm(x)\nprint(result)"
   },
   {
     "id": 71,
