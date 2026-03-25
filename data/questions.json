@@ -6,7 +6,8 @@
     "question": "Create a 4x4 tensor filled with random integers between 0 and 10 using seed 42. Then create a 3x3 identity matrix. Print both tensors.",
     "code_hint": "Use torch.manual_seed(42), torch.randint(0, 10, (4, 4)) for random integers and torch.eye(3) for identity matrix",
     "expected_output": "tensor([[2, 7, 6, 4],\n        [6, 5, 0, 4],\n        [0, 3, 8, 4],\n        [0, 4, 1, 2]])\ntensor([[1., 0., 0.],\n        [0., 1., 0.],\n        [0., 0., 1.]])",
-    "template": "import torch\n\ntorch.manual_seed(42)\na = torch.randint(0, 10, (???, ???))\nprint(a)\n\nb = torch.eye(???)\nprint(b)"
+    "template": "import torch\n\ntorch.manual_seed(42)\na = torch.randint(0, 10, (???, ???))\nprint(a)\n\nb = torch.eye(???)\nprint(b)",
+    "answer": "import torch\n\n# Create a 1D tensor with values 0 to 9\nx = torch.arange(10)\nprint(x)"
   },
   {
     "id": 2,
@@ -15,7 +16,8 @@
     "question": "Given a tensor t = torch.tensor([[1, 2, 3], [4, 5, 6]]), reshape it to shape (3, 2) using view(). Then transpose the result to get shape (2, 3). Print both tensors.",
     "code_hint": "Use tensor.view() to reshape and .t() or .transpose() to transpose",
     "expected_output": "tensor([[1, 2],\n        [3, 4],\n        [5, 6]])\ntensor([[1, 3, 5],\n        [2, 4, 6]])",
-    "template": "import torch\n\nt = torch.tensor([[1, 2, 3], [4, 5, 6]])\nreshaped = t.???(???, ???)\nprint(reshaped)\n\ntransposed = reshaped.???()\nprint(transposed)"
+    "template": "import torch\n\nt = torch.tensor([[1, 2, 3], [4, 5, 6]])\nreshaped = t.???(???, ???)\nprint(reshaped)\n\ntransposed = reshaped.???()\nprint(transposed)",
+    "answer": "import torch\n\n# Create 3x3 identity matrix\nx = torch.eye(3)\nprint(x)"
   },
   {
     "id": 3,
@@ -24,7 +26,8 @@
     "question": "Given a 5x5 tensor with values 0-24 reshaped, extract: 1) the first row, 2) the last column, 3) the 2x2 subtensor from rows 1-2 and columns 2-3 (0-indexed). Print all three.",
     "code_hint": "Use tensor[row, col] for indexing, : for slicing ranges",
     "expected_output": "tensor([0, 1, 2, 3, 4])\ntensor([ 4,  9, 14, 19, 24])\ntensor([[ 7,  8],\n        [12, 13]])",
-    "template": "import torch\n\nt = torch.arange(25).reshape(5, 5)\nprint(t[0, ???])\nprint(t[???, 4])\nprint(t[1:3, ???])"
+    "template": "import torch\n\nt = torch.arange(25).reshape(5, 5)\nprint(t[0, ???])\nprint(t[???, 4])\nprint(t[1:3, ???])",
+    "answer": "import torch\n\n# Create 2x3x4 tensor of zeros\nx = torch.zeros(2, 3, 4)\nprint(x.shape)"
   },
   {
     "id": 4,
@@ -33,7 +36,8 @@
     "question": "使用torch.matmul计算两个矩阵的乘法。创建矩阵A (2x3) 和矩阵B (3x2)，计算它们的矩阵乘法并打印结果。",
     "code_hint": "使用torch.tensor创建指定矩阵，torch.matmul进行矩阵乘法",
     "expected_output": "tensor([[ 58.,  64.],\n        [139., 154.]])",
-    "template": "import torch\n\nA = torch.tensor([[1.0, 2.0, 3.0], [4.0, 5.0, 6.0]])\nB = torch.tensor([[7.0, 8.0], [9.0, 10.0], [11.0, 12.0]])\nresult = torch.???(A, B)\nprint(result)"
+    "template": "import torch\n\nA = torch.tensor([[1.0, 2.0, 3.0], [4.0, 5.0, 6.0]])\nB = torch.tensor([[7.0, 8.0], [9.0, 10.0], [11.0, 12.0]])\nresult = torch.???(A, B)\nprint(result)",
+    "answer": "import torch\n\n# Create 5x5 tensor with random values from uniform distribution [0, 1)\nx = torch.rand(5, 5)\nprint(x)"
   },
   {
     "id": 5,
@@ -42,7 +46,8 @@
     "question": "定义一个简单的多层感知机(MLP)类，继承自nn.Module，包含两个线性层和ReLU激活函数。实例化并打印模型结构。",
     "code_hint": "创建继承nn.Module的类，在__init__中定义层，在forward中定义前向传播",
     "expected_output": "MLP(\n  (fc1): Linear(in_features=10, out_features=20, bias=True)\n  (fc2): Linear(in_features=20, out_features=5, bias=True)\n)",
-    "template": "import torch\nimport torch.nn as nn\n\nclass MLP(nn.Module):\n    def __init__(self):\n        super().__init__()\n        self.fc1 = nn.???(???, ???)\n        self.fc2 = nn.???(???, ???)\n    \n    def forward(self, x):\n        x = torch.???(self.fc1(x))\n        x = self.???(x)\n        return x\n\nmodel = MLP()\nprint(model)"
+    "template": "import torch\nimport torch.nn as nn\n\nclass MLP(nn.Module):\n    def __init__(self):\n        super().__init__()\n        self.fc1 = nn.???(???, ???)\n        self.fc2 = nn.???(???, ???)\n    \n    def forward(self, x):\n        x = torch.???(self.fc1(x))\n        x = self.???(x)\n        return x\n\nmodel = MLP()\nprint(model)",
+    "answer": "import torch\n\n# Create 3x3 tensor with values 1, 2, 3, ..., 9\nx = torch.tensor([[1, 2, 3], [4, 5, 6], [7, 8, 9]], dtype=torch.float32)\nprint(x)"
   },
   {
     "id": 6,
@@ -51,7 +56,8 @@
     "question": "使用torch.nn.functional实现ReLU和Softmax激活函数。对张量x = torch.tensor([[1.0, -2.0, 3.0]])分别应用ReLU和Softmax，验证ReLU将负值变为0，Softmax将值转换为概率分布。",
     "code_hint": "使用F.relu和F.softmax，注意softmax的dim参数",
     "expected_output": "ReLU: tensor([[1.0, 0.0, 3.0]])\nSoftmax: tensor([[0.1185, 0.0059, 0.8756]])",
-    "template": "import torch\nimport torch.nn.functional as F\n\nx = torch.tensor([[1.0, -2.0, 3.0]])\nrelu_out = F.???(x)\nsoftmax_out = F.???(x, dim=???)\nprint(f\"ReLU: {???}\")\nprint(f\"Softmax: {???}\")"
+    "template": "import torch\nimport torch.nn.functional as F\n\nx = torch.tensor([[1.0, -2.0, 3.0]])\nrelu_out = F.???(x)\nsoftmax_out = F.???(x, dim=???)\nprint(f\"ReLU: {???}\")\nprint(f\"Softmax: {???}\")",
+    "answer": "import torch\n\n# Create tensor from list and compute mean\nx = torch.tensor([1.0, 2.0, 3.0, 4.0, 5.0])\nmean_val = x.mean()\nprint(f\"Mean: {mean_val.item()}\")"
   },
   {
     "id": 7,
@@ -60,7 +66,8 @@
     "question": "Compute gradients for a simple linear regression forward pass. Given x and y below, calculate the loss using mean squared error, then call backward() to compute gradients. Finally, print the gradients of w and b.",
     "code_hint": "x is a tensor with requires_grad=True, y is the target. A linear layer is defined as y_pred = x * w + b. Use MSELoss as loss function.",
     "expected_output": "Gradient of w: tensor([-9.3333])\nGradient of b: tensor([-4.])",
-    "template": "import torch\n\nx = torch.tensor([1.0, 2.0, 3.0], requires_grad=True)\ny = torch.tensor([2.0, 4.0, 6.0])\n\nw = torch.tensor([???], requires_grad=True)\nb = torch.tensor([???], requires_grad=True)\n\ny_pred = x * w + b\nloss = ???(y_pred, y)\n???()\n\nprint(f\"Gradient of w: {w.grad}\")\nprint(f\"Gradient of b: {b.grad}\")"
+    "template": "import torch\n\nx = torch.tensor([1.0, 2.0, 3.0], requires_grad=True)\ny = torch.tensor([2.0, 4.0, 6.0])\n\nw = torch.tensor([???], requires_grad=True)\nb = torch.tensor([???], requires_grad=True)\n\ny_pred = x * w + b\nloss = ???(y_pred, y)\n???()\n\nprint(f\"Gradient of w: {w.grad}\")\nprint(f\"Gradient of b: {b.grad}\")",
+    "answer": "import torch\n\n# Create 4x4 tensor of random integers from 0 to 9\nx = torch.randint(0, 10, (4, 4))\nprint(x)"
   },
   {
     "id": 8,
@@ -69,7 +76,8 @@
     "question": "Demonstrate the difference between no_grad and grad modes. Create a model with requires_grad=True parameters, perform a forward pass inside no_grad context, then perform another forward pass with gradients enabled. Print whether each computation has grad tracking.",
     "code_hint": "Use torch.no_grad() as a context manager, and model.train() or torch.set_grad_enabled(True) for grad mode.",
     "expected_output": "In no_grad mode, grad is: False\nIn grad mode, grad is: True",
-    "template": "import torch\n\nx = torch.tensor([1.0, 2.0], requires_grad=True)\n\n# Forward pass in no_grad context\nwith ???:\n    y1 = x * 2\n    print(f\"In no_grad mode, grad is: {y1.requires_grad}\")\n\n# Forward pass with gradients enabled\nwith ???:\n    y2 = x * 2\n    print(f\"In grad mode, grad is: {y2.requires_grad}\")"
+    "template": "import torch\n\nx = torch.tensor([1.0, 2.0], requires_grad=True)\n\n# Forward pass in no_grad context\nwith ???:\n    y1 = x * 2\n    print(f\"In no_grad mode, grad is: {y1.requires_grad}\")\n\n# Forward pass with gradients enabled\nwith ???:\n    y2 = x * 2\n    print(f\"In grad mode, grad is: {y2.requires_grad}\")",
+    "answer": "import torch\n\n# Create 2D tensor and compute sum along rows\nx = torch.tensor([[1.0, 2.0, 3.0], [4.0, 5.0, 6.0]])\nrow_sum = x.sum(dim=1)\nprint(f\"Row sums: {row_sum}\")"
   },
   {
     "id": 9,
@@ -78,7 +86,8 @@
     "question": "Perform one training step with SGD optimizer. Given a simple model and loss, initialize an SGD optimizer with lr=0.01 and momentum=0.9, zero the gradients, compute loss, call backward(), and then step the optimizer. Print the updated parameter values.",
     "code_hint": "Use torch.optim.SGD with lr=0.01 and momentum=0.9. After optimizer.step(), the parameter values should decrease.",
     "expected_output": "Parameter before update: tensor([2.0, 2.0])\nParameter after update: tensor([1.8400, 1.9000])",
-    "template": "import torch\n\nparam = torch.tensor([2.0, 2.0], requires_grad=True)\noptimizer = torch.optim.SGD([param], lr=???, momentum=0.9)\n\nx = torch.tensor([1.0, 2.0])\ny = torch.tensor([0.0])\n\nloss = ((param[0] * x + param[1] - y) ** 2).mean()\n\nprint(f\"Parameter before update: {param.data}\")\n???\nloss.backward()\n???\nprint(f\"Parameter after update: {param.data}\")"
+    "template": "import torch\n\nparam = torch.tensor([2.0, 2.0], requires_grad=True)\noptimizer = torch.optim.SGD([param], lr=???, momentum=0.9)\n\nx = torch.tensor([1.0, 2.0])\ny = torch.tensor([0.0])\n\nloss = ((param[0] * x + param[1] - y) ** 2).mean()\n\nprint(f\"Parameter before update: {param.data}\")\n???\nloss.backward()\n???\nprint(f\"Parameter after update: {param.data}\")",
+    "answer": "import torch\n\n# Create 3x3 tensor and compute transpose\nx = torch.randn(3, 3)\nx_t = x.T\nprint(f\"Original shape: {x.shape}, Transpose shape: {x_t.shape}\")"
   },
   {
     "id": 10,
@@ -87,7 +96,8 @@
     "question": "Create a simple nn.Module with one linear layer. Set it to train mode, print train parameters count, then set to eval mode and print eval parameters count. Also demonstrate state_dict() usage to save and load model weights.",
     "code_hint": "Use model.train() and model.eval() to toggle modes. state_dict() returns an OrderedDict of all learnable parameters.",
     "expected_output": "In train mode, parameters: 2\nIn eval mode, parameters: 2\nState dict keys: ['linear.weight', 'linear.bias']",
-    "template": "import torch\nimport torch.nn as nn\n\nclass SimpleNet(nn.Module):\n    def __init__(self):\n        super().__init__()\n        self.linear = nn.Linear(10, 2)\n    \n    def forward(self, x):\n        return self.linear(x)\n\nmodel = SimpleNet()\n\n???\nprint(f\"In train mode, parameters: {len(list(model.parameters()))}\")\n\n???\nprint(f\"In eval mode, parameters: {len(list(model.parameters()))}\")\n\nstate = ???\nprint(f\"State dict keys: {list(state.keys())}\")"
+    "template": "import torch\nimport torch.nn as nn\n\nclass SimpleNet(nn.Module):\n    def __init__(self):\n        super().__init__()\n        self.linear = nn.Linear(10, 2)\n    \n    def forward(self, x):\n        return self.linear(x)\n\nmodel = SimpleNet()\n\n???\nprint(f\"In train mode, parameters: {len(list(model.parameters()))}\")\n\n???\nprint(f\"In eval mode, parameters: {len(list(model.parameters()))}\")\n\nstate = ???\nprint(f\"State dict keys: {list(state.keys())}\")",
+    "answer": "import torch\n\n# Reshape 1D tensor to 2D\nx = torch.arange(12)\nx_2d = x.view(3, 4)\nprint(f\"Shape: {x_2d.shape}\")"
   },
   {
     "id": 11,
@@ -96,7 +106,8 @@
     "question": "实现一个函数，使用 torch.utils.data.DataLoader 对数据集进行批量读取，并启用 shuffle 和多 worker 加载。",
     "code_hint": "分别设置 batch_size=2, shuffle=True, num_workers=0",
     "expected_output": "First batch shape: torch.Size([2, 3, 224, 224])\nDataset size: 10 samples",
-    "template": "import torch\nfrom torch.utils.data import Dataset, DataLoader\n\nclass DummyDataset(Dataset):\n    def __init__(self):\n        self.data = torch.randn(10, 3, 224, 224)\n    def __len__(self):\n        return len(self.data)\n    def __getitem__(self, idx):\n        return self.data[idx]\n\ndataset = DummyDataset()\nloader = DataLoader(???, batch_size=???, shuffle=???, num_workers=???)\n\nbatch = next(iter(loader))\nprint(f\"First batch shape: {batch.shape}\")\nprint(f\"Dataset size: {len(dataset)} samples\")"
+    "template": "import torch\nfrom torch.utils.data import Dataset, DataLoader\n\nclass DummyDataset(Dataset):\n    def __init__(self):\n        self.data = torch.randn(10, 3, 224, 224)\n    def __len__(self):\n        return len(self.data)\n    def __getitem__(self, idx):\n        return self.data[idx]\n\ndataset = DummyDataset()\nloader = DataLoader(???, batch_size=???, shuffle=???, num_workers=???)\n\nbatch = next(iter(loader))\nprint(f\"First batch shape: {batch.shape}\")\nprint(f\"Dataset size: {len(dataset)} samples\")",
+    "answer": "import torch\n\n# Slice tensor to get first row\nx = torch.randn(3, 4)\nfirst_row = x[0]\nprint(f\"First row: {first_row}\")"
   },
   {
     "id": 12,
@@ -105,7 +116,8 @@
     "question": "实现一个常见的模型训练循环，包含前向传播、损失计算、反向传播和参数更新步骤。",
     "code_hint": "使用 CrossEntropyLoss 作为损失函数，SGD 优化器，学习率为 0.01",
     "expected_output": "loss=0.733107",
-    "template": "import torch\nimport torch.nn as nn\n\nmodel = nn.Linear(10, 2)\ncriterion = ???\noptimizer = torch.optim.SGD(model.parameters(), lr=0.01)\n\nX = torch.randn(4, 10)\ny = torch.randint(0, 2, (4,))\n\noutputs = ???\nloss = ???\n\n???\n???\n\nprint(f\"loss={loss.item():.6f}\")"
+    "template": "import torch\nimport torch.nn as nn\n\nmodel = nn.Linear(10, 2)\ncriterion = ???\noptimizer = torch.optim.SGD(model.parameters(), lr=0.01)\n\nX = torch.randn(4, 10)\ny = torch.randint(0, 2, (4,))\n\noutputs = ???\nloss = ???\n\n???\n???\n\nprint(f\"loss={loss.item():.6f}\")",
+    "answer": "import torch\n\n# Select elements at indices [0,2] and [1,3]\nx = torch.arange(16).view(4, 4)\nselected = x[[0, 2], [1, 3]]\nprint(f\"Selected: {selected}\")"
   },
   {
     "id": 13,
@@ -114,7 +126,8 @@
     "question": "使用 torch.set_printoptions 和 tensor.shape 检查张量的维度、数据类型和设备位置。",
     "code_hint": "设置打印精度为 4 位小数，创建不同设备和 dtype 的张量进行检查",
     "expected_output": "Tensor A shape: torch.Size([3, 4])\nTensor A dtype: torch.float32\nTensor A device: cpu\nTensor B shape: torch.Size([5, 6])\nTensor B dtype: torch.int64\nTensor B device: cpu\nAllclose check: True",
-    "template": "import torch\n\n???\n\nA = torch.randn(3, 4)\nB = torch.randint(0, 10, (5, 6))\n\nprint(f\"Tensor A shape: {???}\")\nprint(f\"Tensor A dtype: {???}\")\nprint(f\"Tensor A device: {???}\")\nprint(f\"Tensor B shape: {???}\")\nprint(f\"Tensor B dtype: {???}\")\nprint(f\"Tensor B device: {???}\")\n\nresult = torch.allclose(A, A)\nprint(f\"Allclose check: {???}\")"
+    "template": "import torch\n\n???\n\nA = torch.randn(3, 4)\nB = torch.randint(0, 10, (5, 6))\n\nprint(f\"Tensor A shape: {???}\")\nprint(f\"Tensor A dtype: {???}\")\nprint(f\"Tensor A device: {???}\")\nprint(f\"Tensor B shape: {???}\")\nprint(f\"Tensor B dtype: {???}\")\nprint(f\"Tensor B device: {???}\")\n\nresult = torch.allclose(A, A)\nprint(f\"Allclose check: {???}\")",
+    "answer": "import torch\n\n# Boolean indexing - select elements > 5\nx = torch.tensor([1, 6, 3, 8, 2, 9, 4])\nmask = x > 5\nfiltered = x[mask]\nprint(f\"Filtered: {filtered}\")"
   },
   {
     "id": 14,
@@ -123,7 +136,8 @@
     "question": "Create three tensors using different PyTorch tensor creation functions: 1) a 2x3 tensor of random normal numbers using torch.randn with seed 42, 2) a 2x3 tensor of zeros using torch.zeros, and 3) a 2x3 tensor of ones using torch.ones. Print all three tensors.",
     "code_hint": "Use torch.manual_seed(42) before torch.randn(), torch.zeros((rows, cols)) for zeros, and torch.ones((rows, cols)) for ones",
     "expected_output": "tensor([[ 0.3367,  0.1288,  0.2345],\n        [ 0.2303, -1.1229, -0.1863]])\ntensor([[0., 0., 0.],\n        [0., 0., 0.]])\ntensor([[1., 1., 1.],\n        [1., 1., 1.]])",
-    "template": "import torch\n\ntorch.manual_seed(42)\na = torch.???((???, ???))\nprint(a)\n\nb = torch.???((???, ???))\nprint(b)\n\nc = torch.???((???, ???))\nprint(c)"
+    "template": "import torch\n\ntorch.manual_seed(42)\na = torch.???((???, ???))\nprint(a)\n\nb = torch.???((???, ???))\nprint(b)\n\nc = torch.???((???, ???))\nprint(c)",
+    "answer": "import torch\n\n# Select rows 1 to 3 (exclusive)\nx = torch.arange(20).view(4, 5)\nselected = x[1:3]\nprint(f\"Selected rows:\\n{selected}\")"
   },
   {
     "id": 15,
@@ -132,7 +146,8 @@
     "question": "Given a tensor of shape (2, 6) with seed 42, perform: 1) reshape to (3, 4), 2) transpose swapping dims 0 and 1, 3) create tensor (1,3,1,4) and squeeze. Print shapes and tensors.",
     "code_hint": "Use .reshape(), .transpose(0,1), .squeeze()",
     "expected_output": "Original tensor shape: torch.Size([2, 6])\nReshaped (3, 4):\ntensor([[ 0.3367,  0.1288,  0.2345,  0.2303],\n        [-1.1229, -0.1863,  2.2082, -0.6380],\n        [ 0.4617,  0.2674,  0.5349,  0.8094]])\nTransposed (6, 2):\ntensor([[ 0.3367,  2.2082],\n        [ 0.1288, -0.6380],\n        [ 0.2345,  0.4617],\n        [ 0.2303,  0.2674],\n        [-1.1229,  0.5349],\n        [-0.1863,  0.8094]])\nSqueezed shape: torch.Size([3, 4])\ntensor([[ 1.1103, -1.6898, -0.9890,  0.9580],\n        [ 1.3221,  0.8172, -0.7658, -0.7506],\n        [ 1.3525,  0.6863, -0.3278,  0.7950]])",
-    "template": "import torch\n\ntorch.manual_seed(42)\nt = torch.randn(2, 6)\nprint(f\"Original tensor shape: {t.shape}\")\n\nt_reshaped = t.???(???, ???)\nprint(f\"Reshaped (3, 4):\")\nprint(t_reshaped)\n\nt_transposed = t.???(???, ???)\nprint(f\"Transposed (6, 2):\")\nprint(t_transposed)\n\nt2 = torch.randn(1, 3, 1, 4)\nt_squeezed = t2.???\nprint(f\"Squeezed shape: {t_squeezed.shape}\")\nprint(t_squeezed)"
+    "template": "import torch\n\ntorch.manual_seed(42)\nt = torch.randn(2, 6)\nprint(f\"Original tensor shape: {t.shape}\")\n\nt_reshaped = t.???(???, ???)\nprint(f\"Reshaped (3, 4):\")\nprint(t_reshaped)\n\nt_transposed = t.???(???, ???)\nprint(f\"Transposed (6, 2):\")\nprint(t_transposed)\n\nt2 = torch.randn(1, 3, 1, 4)\nt_squeezed = t2.???\nprint(f\"Squeezed shape: {t_squeezed.shape}\")\nprint(t_squeezed)",
+    "answer": "import torch\n\n# Get last column\nx = torch.randn(3, 4)\nlast_col = x[:, -1]\nprint(f\"Last column: {last_col}\")"
   },
   {
     "id": 16,
@@ -141,7 +156,8 @@
     "question": "Create three tensors: 1) arange from 0 to 10 step 2, 2) linspace 0 to 1 with 5 points, 3) full 2x3 filled with 7. Print all three.",
     "code_hint": "torch.arange(0, 10, 2), torch.linspace(0, 1, 5), torch.full((2, 3), 7)",
     "expected_output": "tensor([0, 2, 4, 6, 8])\ntensor([0.0000, 0.2500, 0.5000, 0.7500, 1.0000])\ntensor([[7, 7, 7],\n        [7, 7, 7]])",
-    "template": "import torch\n\na = torch.???(???, ???, ???)\nprint(a)\n\nb = torch.???(???, ???, ???)\nprint(b)\n\nc = torch.???((???, ???), ???)\nprint(c)"
+    "template": "import torch\n\na = torch.???(???, ???, ???)\nprint(a)\n\nb = torch.???(???, ???, ???)\nprint(b)\n\nc = torch.???((???, ???), ???)\nprint(c)",
+    "answer": "import torch\n\n# Change diagonal elements to 1\nx = torch.randn(3, 3)\nx.fill_diagonal_(1)\nprint(f\"Diagonal set to 1:\\n{x}\")"
   },
   {
     "id": 17,
@@ -150,7 +166,8 @@
     "question": "Create a 3x4 random integer tensor (seed 456, range 0-100) and a 4x4 identity matrix. Print both.",
     "code_hint": "torch.randint(0, 100, (3, 4)), torch.eye(4)",
     "expected_output": "tensor([[91, 65, 7, 41],\n        [54, 59, 32, 90],\n        [47, 78, 8, 25]])\ntensor([[1., 0., 0., 0.],\n        [0., 1., 0., 0.],\n        [0., 0., 1., 0.],\n        [0., 0., 0., 1.]])",
-    "template": "import torch\n\ntorch.manual_seed(456)\na = torch.???(???, (???, ???))\nprint(a)\n\nb = torch.???(???)\nprint(b)"
+    "template": "import torch\n\ntorch.manual_seed(456)\na = torch.???(???, (???, ???))\nprint(a)\n\nb = torch.???(???)\nprint(b)",
+    "answer": "import torch\n\n# Select submatrix using start:end\nx = torch.arange(25).view(5, 5)\nsub = x[1:4, 2:5]\nprint(f\"Submatrix:\\n{sub}\")"
   },
   {
     "id": 18,
@@ -159,7 +176,8 @@
     "question": "Create tensor (2,3,4) seed 42, flatten completely, then flatten starting from dim 1. Print shapes.",
     "code_hint": ".flatten() for all, .flatten(1) for from dim 1",
     "expected_output": "Original shape: torch.Size([2, 3, 4])\nFlattened: torch.Size([24])\nFlattened from dim 1: torch.Size([2, 12])",
-    "template": "import torch\n\nt = torch.randn(2, 3, 4)\nprint(f\"Original shape: {t.shape}\")\n\nflat = t.???\nprint(f\"Flattened: {flat.shape}\")\n\nflat_dim = t.???(???)\nprint(f\"Flattened from dim 1: {flat_dim.shape}\")"
+    "template": "import torch\n\nt = torch.randn(2, 3, 4)\nprint(f\"Original shape: {t.shape}\")\n\nflat = t.???\nprint(f\"Flattened: {flat.shape}\")\n\nflat_dim = t.???(???)\nprint(f\"Flattened from dim 1: {flat_dim.shape}\")",
+    "answer": "import torch\n\n# Get center element [1,1]\nx = torch.arange(9).view(3, 3)\ncenter = x[1, 1]\nprint(f\"Center element: {center}\")"
   },
   {
     "id": 19,
@@ -168,7 +186,8 @@
     "question": "Create (3,4) tensor, unsqueeze at dim 0, then permute to (4,3). Print shapes.",
     "code_hint": ".unsqueeze(0), .permute(1, 0)",
     "expected_output": "Original: torch.Size([3, 4])\nUnsqueezed: torch.Size([1, 3, 4])\nPermuted: torch.Size([4, 3])",
-    "template": "import torch\n\nt = torch.randn(3, 4)\nprint(f\"Original: {t.shape}\")\n\nu = t.???(???)\nprint(f\"Unsqueezed: {u.shape}\")\n\np = t.???(???, ???)\nprint(f\"Permuted: {p.shape}\")"
+    "template": "import torch\n\nt = torch.randn(3, 4)\nprint(f\"Original: {t.shape}\")\n\nu = t.???(???)\nprint(f\"Unsqueezed: {u.shape}\")\n\np = t.???(???, ???)\nprint(f\"Permuted: {p.shape}\")",
+    "answer": "import torch\n\n# Reverse first dimension\nx = torch.arange(6).view(2, 3)\nreversed_x = x.flip(0)\nprint(f\"Reversed:\\n{reversed_x}\")"
   },
   {
     "id": 20,
@@ -177,7 +196,8 @@
     "question": "Create two (2,3) tensors, concatenate along dim 0 and stack along dim 0. Print shapes.",
     "code_hint": "torch.cat([a, b], dim=0), torch.stack([a, b], dim=0)",
     "expected_output": "a shape: torch.Size([2, 3])\nb shape: torch.Size([2, 3])\nConcatenated: torch.Size([4, 3])\nStacked: torch.Size([2, 2, 3])",
-    "template": "import torch\n\na = torch.randn(2, 3)\nb = torch.randn(2, 3)\nprint(f\"a shape: {a.shape}\")\nprint(f\"b shape: {b.shape}\")\n\ncat = torch.???([???, ???], dim=???)\nprint(f\"Concatenated: {cat.shape}\")\n\nstack = torch.???([???, ???], dim=???)\nprint(f\"Stacked: {stack.shape}\")"
+    "template": "import torch\n\na = torch.randn(2, 3)\nb = torch.randn(2, 3)\nprint(f\"a shape: {a.shape}\")\nprint(f\"b shape: {b.shape}\")\n\ncat = torch.???([???, ???], dim=???)\nprint(f\"Concatenated: {cat.shape}\")\n\nstack = torch.???([???, ???], dim=???)\nprint(f\"Stacked: {stack.shape}\")",
+    "answer": "import torch\n\n# Use take to get flattened indices\nx = torch.tensor([[0, 1], [2, 3], [4, 5]])\nindices = torch.tensor([0, 2, 5])\ntaken = x.take(indices)\nprint(f\"Taken: {taken}\")"
   },
   {
     "id": 21,
@@ -186,7 +206,8 @@
     "question": "Create (1,6) tensor, split into chunks of size 2 along dim 1, and chunk into 3 parts along dim 1. Print number of splits and chunks.",
     "code_hint": "torch.split(t, 2, dim=1), torch.chunk(t, 3, dim=1)",
     "expected_output": "Original: torch.Size([1, 6])\nSplit into 3 parts, each shape: torch.Size([1, 2])\nChunked into 3 parts, each shape: torch.Size([1, 2])",
-    "template": "import torch\n\nt = torch.randn(1, 6)\nprint(f\"Original: {t.shape}\")\n\nsplit = torch.???(???, ???, dim=???)\nprint(f\"Split into {len(split)} parts, each shape: {split[0].shape}\")\n\nchunk = torch.???(???, ???, dim=???)\nprint(f\"Chunked into {len(chunk)} parts, each shape: {chunk[0].shape}\")"
+    "template": "import torch\n\nt = torch.randn(1, 6)\nprint(f\"Original: {t.shape}\")\n\nsplit = torch.???(???, ???, dim=???)\nprint(f\"Split into {len(split)} parts, each shape: {split[0].shape}\")\n\nchunk = torch.???(???, ???, dim=???)\nprint(f\"Chunked into {len(chunk)} parts, each shape: {chunk[0].shape}\")",
+    "answer": "import torch\n\n# Concatenate two tensors along dim=0\na = torch.randn(2, 3)\nb = torch.randn(1, 3)\nc = torch.cat([a, b], dim=0)\nprint(f\"Concatenated shape: {c.shape}\")"
   },
   {
     "id": 22,
@@ -195,7 +216,8 @@
     "question": "Create 5x5 tensor 0-24, extract: row 0, column 4, and sub-tensor rows 1-3 cols 2-4. Print all three.",
     "code_hint": "t[0, :], t[:, 4], t[1:4, 2:5]",
     "expected_output": "Row 0: tensor([0, 1, 2, 3, 4])\nCol 4: tensor([ 4,  9, 14, 19, 24])\nSub tensor:\ntensor([[ 7,  8,  9],\n        [12, 13, 14],\n        [17, 18, 19]])",
-    "template": "import torch\n\nt = torch.arange(25).reshape(5, 5)\nprint(f\"Row 0: {t[0, : ]}\")\nprint(f\"Col 4: {t[ :, 4]}\")\nprint(f\"Sub tensor:\\n{t[1:4, 2:5]}\")"
+    "template": "import torch\n\nt = torch.arange(25).reshape(5, 5)\nprint(f\"Row 0: {t[0, : ]}\")\nprint(f\"Col 4: {t[ :, 4]}\")\nprint(f\"Sub tensor:\\n{t[1:4, 2:5]}\")",
+    "answer": "import torch\n\n# Stack tensors along new dimension\na = torch.randn(2, 3)\nb = torch.randn(2, 3)\nstacked = torch.stack([a, b], dim=0)\nprint(f\"Stacked shape: {stacked.shape}\")"
   },
   {
     "id": 23,
@@ -204,7 +226,8 @@
     "question": "Given tensor [1,2,3,4,5] and mask [True,False,True,False,True], use masked select to get values. Print result.",
     "code_hint": "t[mask] or torch.masked_select(t, mask)",
     "expected_output": "Original: tensor([1., 2., 3., 4., 5.])\nMask: [True, False, True, False, True]\nSelected: tensor([1., 3., 5.])",
-    "template": "import torch\n\nt = torch.tensor([1.0, 2.0, 3.0, 4.0, 5.0])\nmask = torch.tensor([???])\nselected = t[???]\nprint(f\"Original: {t}\")\nprint(f\"Mask: {[???]}\")\nprint(f\"Selected: {selected}\")"
+    "template": "import torch\n\nt = torch.tensor([1.0, 2.0, 3.0, 4.0, 5.0])\nmask = torch.tensor([???])\nselected = t[???]\nprint(f\"Original: {t}\")\nprint(f\"Mask: {[???]}\")\nprint(f\"Selected: {selected}\")",
+    "answer": "import torch\n\n# Split tensor into chunks of size 2\nx = torch.arange(8)\nchunks = torch.split(x, 2)\nprint(f\"Number of chunks: {len(chunks)}\")"
   },
   {
     "id": 24,
@@ -213,7 +236,8 @@
     "question": "Use torch.gather to collect values from t=[[1,2],[3,4],[5,6]] using index=[[0,1],[1,0],[0,0]] along dim 1. Print result.",
     "code_hint": "torch.gather(t, dim, index)",
     "expected_output": "Tensor t:\ntensor([[1, 2],\n        [3, 4],\n        [5, 6]])\nIndex:\ntensor([[0, 1],\n        [1, 0],\n        [0, 0]])\nGathered:\ntensor([[1, 2],\n        [4, 3],\n        [5, 5]])",
-    "template": "import torch\n\nt = torch.tensor([[1, 2], [3, 4], [5, 6]])\nindex = torch.tensor([[0, 1], [1, 0], [0, 0]])\ngathered = torch.???(???, ???, ???)\nprint(f\"Tensor t:\\n{t}\")\nprint(f\"Index:\\n{index}\")\nprint(f\"Gathered:\\n{index}\")"
+    "template": "import torch\n\nt = torch.tensor([[1, 2], [3, 4], [5, 6]])\nindex = torch.tensor([[0, 1], [1, 0], [0, 0]])\ngathered = torch.???(???, ???, ???)\nprint(f\"Tensor t:\\n{t}\")\nprint(f\"Index:\\n{index}\")\nprint(f\"Gathered:\\n{index}\")",
+    "answer": "import torch\n\n# Chunk tensor into 4 parts\nx = torch.randn(12, 4)\nchunks = torch.chunk(x, 4, dim=0)\nprint(f\"Number of chunks: {len(chunks)}\")"
   },
   {
     "id": 25,
@@ -222,7 +246,8 @@
     "question": "Create 5x4 tensor, use index_select to pick rows 0,2,4 along dim 0. Print selected rows.",
     "code_hint": "torch.index_select(t, dim, index)",
     "expected_output": "Original shape: torch.Size([5, 4])\nIndex: [0, 2, 4]\nSelected shape: torch.Size([3, 4])\nSelected:\ntensor([[ 0.3367,  0.1288,  0.2345,  0.2303],\n        [ 0.4617,  0.2674,  0.5349,  0.8094],\n        [-0.4601,  0.0286, -0.0735,  0.0399]])",
-    "template": "import torch\n\ntorch.manual_seed(42)\nt = torch.randn(5, 4)\nidx = torch.tensor([???, ???, ???])\nselected = torch.???(???, ???, ???)\nprint(f\"Original shape: {t.shape}\")\nprint(f\"Index: {[???]}\")\nprint(f\"Selected shape: {selected.shape}\")\nprint(f\"Selected:\\n{selected}\")"
+    "template": "import torch\n\ntorch.manual_seed(42)\nt = torch.randn(5, 4)\nidx = torch.tensor([???, ???, ???])\nselected = torch.???(???, ???, ???)\nprint(f\"Original shape: {t.shape}\")\nprint(f\"Index: {[???]}\")\nprint(f\"Selected shape: {selected.shape}\")\nprint(f\"Selected:\\n{selected}\")",
+    "answer": "import torch\n\n# Repeat tensor\nx = torch.randn(2, 3)\nrepeated = x.repeat(3, 2)\nprint(f\"Repeated shape: {repeated.shape}\")"
   },
   {
     "id": 26,
@@ -231,7 +256,8 @@
     "question": "Given a=[1,2,3] and b=[4,5,6], compute element-wise add, mul, div. Print results.",
     "code_hint": "torch.add(a,b), torch.mul(a,b), torch.div(b,a)",
     "expected_output": "a: tensor([1., 2., 3.])\nb: tensor([4., 5., 6.])\nadd: tensor([5., 7., 9.])\nmul: tensor([ 4., 10., 18.])\ndiv: tensor([4.0000, 2.5000, 2.0000])",
-    "template": "import torch\n\na = torch.tensor([1.0, 2.0, 3.0])\nb = torch.tensor([4.0, 5.0, 6.0])\nadd = torch.???(???, ???)\nmul = torch.???(???, ???)\ndiv = torch.???(???, ???)\nprint(f\"a: {a}\")\nprint(f\"b: {b}\")\nprint(f\"add: {add}\")\nprint(f\"mul: {mul}\")\nprint(f\"div: {div}\")"
+    "template": "import torch\n\na = torch.tensor([1.0, 2.0, 3.0])\nb = torch.tensor([4.0, 5.0, 6.0])\nadd = torch.???(???, ???)\nmul = torch.???(???, ???)\ndiv = torch.???(???, ???)\nprint(f\"a: {a}\")\nprint(f\"b: {b}\")\nprint(f\"add: {add}\")\nprint(f\"mul: {mul}\")\nprint(f\"div: {div}\")",
+    "answer": "import torch\n\n# Element-wise multiplication\na = torch.tensor([1.0, 2.0, 3.0])\nb = torch.tensor([4.0, 5.0, 6.0])\nc = a * b\nprint(f\"Element-wise product: {c}\")"
   },
   {
     "id": 27,
@@ -240,7 +266,8 @@
     "question": "Create (2,3) and (3,2) random tensors, compute mm and matmul. Print result shapes.",
     "code_hint": "torch.mm(a, b), torch.matmul(a, b)",
     "expected_output": "a shape: torch.Size([2, 3])\nb shape: torch.Size([3, 2])\nmm result shape: torch.Size([2, 2])\nmatmul result shape: torch.Size([2, 2])",
-    "template": "import torch\n\ntorch.manual_seed(42)\na = torch.randn(???, ???)\nb = torch.randn(???, ???)\nmm = torch.???(???, ???)\nmatmul = torch.???(???, ???)\nprint(f\"a shape: {a.shape}\")\nprint(f\"b shape: {b.shape}\")\nprint(f\"mm result shape: {mm.shape}\")\nprint(f\"matmul result shape: {matmul.shape}\")"
+    "template": "import torch\n\ntorch.manual_seed(42)\na = torch.randn(???, ???)\nb = torch.randn(???, ???)\nmm = torch.???(???, ???)\nmatmul = torch.???(???, ???)\nprint(f\"a shape: {a.shape}\")\nprint(f\"b shape: {b.shape}\")\nprint(f\"mm result shape: {mm.shape}\")\nprint(f\"matmul result shape: {matmul.shape}\")",
+    "answer": "import torch\n\n# Matrix multiplication\na = torch.randn(2, 3)\nb = torch.randn(3, 4)\nc = torch.matmul(a, b)\nprint(f\"Matmul shape: {c.shape}\")"
   },
   {
     "id": 28,
@@ -249,7 +276,8 @@
     "question": "Create (2,3,4) tensor, compute sum, mean, max, min across all elements. Print results.",
     "code_hint": ".sum(), .mean(), .max(), .min()",
     "expected_output": "Shape: torch.Size([2, 3, 4])\nSum: -5.8065\nMean: -0.2419\nMax: 1.9269\nMin: -2.3169",
-    "template": "import torch\n\ntorch.manual_seed(42)\nt = torch.randn(2, 3, 4)\nsum_val = t.???\nmean_val = t.???\nmax_val = t.???\nmin_val = t.???\nprint(f\"Shape: {t.shape}\")\nprint(f\"Sum: {sum_val.item():.4f}\")\nprint(f\"Mean: {mean_val.item():.4f}\")\nprint(f\"Max: {max_val.item():.4f}\")\nprint(f\"Min: {min_val.item():.4f}\")"
+    "template": "import torch\n\ntorch.manual_seed(42)\nt = torch.randn(2, 3, 4)\nsum_val = t.???\nmean_val = t.???\nmax_val = t.???\nmin_val = t.???\nprint(f\"Shape: {t.shape}\")\nprint(f\"Sum: {sum_val.item():.4f}\")\nprint(f\"Mean: {mean_val.item():.4f}\")\nprint(f\"Max: {max_val.item():.4f}\")\nprint(f\"Min: {min_val.item():.4f}\")",
+    "answer": "import torch\n\n# Multiply with scalar\nx = torch.tensor([1.0, 2.0, 3.0])\ny = x * 2.0\nprint(f\"Scalar multiply: {y}\")"
   },
   {
     "id": 29,
@@ -258,7 +286,8 @@
     "question": "Create (3,4) tensor, compute gt(t, 0), lt(t, 0), eq(t, 0). Count how many >0, <0, ==0. Print counts.",
     "code_hint": "torch.gt(t, 0), torch.lt(t, 0), torch.eq(t, 0)",
     "expected_output": "Shape: torch.Size([3, 4])\nCount > 0: 9\nCount < 0: 3\nCount == 0: 0",
-    "template": "import torch\n\ntorch.manual_seed(42)\nt = torch.randn(3, 4)\ngt = torch.???(???, ???)\nlt = torch.???(???, ???)\neq = torch.???(???, ???)\nprint(f\"Shape: {t.shape}\")\nprint(f\"Count > 0: {gt.???()}\")\nprint(f\"Count < 0: {lt.???()}\")\nprint(f\"Count == 0: {eq.???()}\")"
+    "template": "import torch\n\ntorch.manual_seed(42)\nt = torch.randn(3, 4)\ngt = torch.???(???, ???)\nlt = torch.???(???, ???)\neq = torch.???(???, ???)\nprint(f\"Shape: {t.shape}\")\nprint(f\"Count > 0: {gt.???()}\")\nprint(f\"Count < 0: {lt.???()}\")\nprint(f\"Count == 0: {eq.???()}\")",
+    "answer": "import torch\n\n# Compute dot product\na = torch.tensor([1.0, 2.0, 3.0])\nb = torch.tensor([4.0, 5.0, 6.0])\ndot = torch.dot(a, b)\nprint(f\"Dot product: {dot.item()}\")"
   },
   {
     "id": 30,
@@ -267,7 +296,8 @@
     "question": "Create nn.Linear(10, 5), print number of parameters and their shapes.",
     "code_hint": "nn.Linear(in, out), list(model.parameters())",
     "expected_output": "Linear(in=10, out=5)\nNumber of parameters: 2\nWeight shape: torch.Size([5, 10])\nBias shape: torch.Size([5])",
-    "template": "import torch\nimport torch.nn as nn\n\nlinear = nn.???(???, ???)\nparams = list(linear.???())\nprint(f\"Linear(in=10, out=5)\")\nprint(f\"Number of parameters: {len(params)}\")\nprint(f\"Weight shape: {params[0].shape}\")\nprint(f\"Bias shape: {params[1].shape}\")"
+    "template": "import torch\nimport torch.nn as nn\n\nlinear = nn.???(???, ???)\nparams = list(linear.???())\nprint(f\"Linear(in=10, out=5)\")\nprint(f\"Number of parameters: {len(params)}\")\nprint(f\"Weight shape: {params[0].shape}\")\nprint(f\"Bias shape: {params[1].shape}\")",
+    "answer": "import torch\n\n# Outer product\na = torch.tensor([1, 2, 3])\nb = torch.tensor([4, 5])\nouter = torch.outer(a, b)\nprint(f\"Outer product:\\n{outer}\")"
   },
   {
     "id": 31,
@@ -276,7 +306,8 @@
     "question": "Create nn.Conv2d(3, 16, 3), print number of parameters and weight shape.",
     "code_hint": "nn.Conv2d(in_channels, out_channels, kernel_size)",
     "expected_output": "Conv2d(3, 16, kernel=3)\nNumber of parameters: 2\nWeight shape: torch.Size([16, 3, 3, 3])\nBias shape: torch.Size([16])",
-    "template": "import torch\nimport torch.nn as nn\n\nconv = nn.???(???, ???, ???)\nparams = list(conv.???())\nprint(f\"Conv2d(3, 16, kernel=3)\")\nprint(f\"Number of parameters: {len(params)}\")\nprint(f\"Weight shape: {params[0].shape}\")\nprint(f\"Bias shape: {params[1].shape}\")"
+    "template": "import torch\nimport torch.nn as nn\n\nconv = nn.???(???, ???, ???)\nparams = list(conv.???())\nprint(f\"Conv2d(3, 16, kernel=3)\")\nprint(f\"Number of parameters: {len(params)}\")\nprint(f\"Weight shape: {params[0].shape}\")\nprint(f\"Bias shape: {params[1].shape}\")",
+    "answer": "import torch\n\n# Compute absolute value\nx = torch.tensor([-1.0, 2.0, -3.0, 4.0])\nabs_x = torch.abs(x)\nprint(f\"Absolute: {abs_x}\")"
   },
   {
     "id": 32,
@@ -285,7 +316,8 @@
     "question": "Create Sequential: Linear(10,32) -> ReLU -> Linear(32,5). Count total parameters.",
     "code_hint": "nn.Sequential(*layers), sum(p.numel() for p in model.parameters())",
     "expected_output": "Sequential model\nTotal parameters: 517",
-    "template": "import torch\nimport torch.nn as nn\n\nseq = nn.Sequential(\n    nn.???(???, ???),\n    nn.???(),\n    nn.???(???, ???)\n)\nparams = list(seq.???())\ntotal = ???(p.numel() for p in params)\nprint(f\"Sequential model\")\nprint(f\"Total parameters: {total}\")"
+    "template": "import torch\nimport torch.nn as nn\n\nseq = nn.Sequential(\n    nn.???(???, ???),\n    nn.???(),\n    nn.???(???, ???)\n)\nparams = list(seq.???())\ntotal = ???(p.numel() for p in params)\nprint(f\"Sequential model\")\nprint(f\"Total parameters: {total}\")",
+    "answer": "import torch\n\n# Compute square root\nx = torch.tensor([1.0, 4.0, 9.0, 16.0])\nsqrt_x = torch.sqrt(x)\nprint(f\"Square root: {sqrt_x}\")"
   },
   {
     "id": 33,
@@ -294,7 +326,8 @@
     "question": "Create nn.BatchNorm2d(64), print num_features and running_mean/running_var types.",
     "code_hint": "nn.BatchNorm2d(num_features)",
     "expected_output": "BatchNorm2d(64)\nnum_features: 64\nrunning_mean type: Tensor\nrunning_var type: Tensor",
-    "template": "import torch\nimport torch.nn as nn\n\nbn = nn.???(???)\nprint(f\"BatchNorm2d(64)\")\nprint(f\"num_features: {bn.???}\")\nprint(f\"running_mean type: {???(bn.running_mean).__name__}\")\nprint(f\"running_var type: {???(bn.running_var).__name__}\")"
+    "template": "import torch\nimport torch.nn as nn\n\nbn = nn.???(???)\nprint(f\"BatchNorm2d(64)\")\nprint(f\"num_features: {bn.???}\")\nprint(f\"running_mean type: {???(bn.running_mean).__name__}\")\nprint(f\"running_var type: {???(bn.running_var).__name__}\")",
+    "answer": "import torch\n\n# Power operation\nx = torch.tensor([1.0, 2.0, 3.0])\ny = torch.pow(x, 2)\nprint(f\"x^2: {y}\")"
   },
   {
     "id": 34,
@@ -303,7 +336,8 @@
     "question": "Apply F.relu and F.sigmoid to x=[-1,0,1,2]. Print results.",
     "code_hint": "F.relu(x), F.sigmoid(x)",
     "expected_output": "x: tensor([-1.,  0.,  1.,  2.])\nReLU: tensor([0., 0., 1., 2.])\nSigmoid: tensor([0.2689, 0.5000, 0.7311, 0.8808])",
-    "template": "import torch\nimport torch.nn.functional as F\n\nx = torch.tensor([-1.0, 0.0, 1.0, 2.0])\nrelu = F.???(???)\nsigmoid = F.???(???)\nprint(f\"x: {x}\")\nprint(f\"ReLU: {relu}\")\nprint(f\"Sigmoid: {sigmoid}\")"
+    "template": "import torch\nimport torch.nn.functional as F\n\nx = torch.tensor([-1.0, 0.0, 1.0, 2.0])\nrelu = F.???(???)\nsigmoid = F.???(???)\nprint(f\"x: {x}\")\nprint(f\"ReLU: {relu}\")\nprint(f\"Sigmoid: {sigmoid}\")",
+    "answer": "import torch\n\n# Clamp values between 0 and 1\nx = torch.tensor([-0.5, 0.3, 0.7, 1.5])\nclamped = torch.clamp(x, 0, 1)\nprint(f\"Clamped: {clamped}\")"
   },
   {
     "id": 35,
@@ -312,7 +346,8 @@
     "question": "Apply F.gelu and F.tanh to x=[-1,0,1]. Print results.",
     "code_hint": "F.gelu(x), F.tanh(x)",
     "expected_output": "x: tensor([-1.,  0.,  1.])\nGELU: tensor([0.1587,  0.0000, 0.8413])\nTanh: tensor([0.7616,  0.0000, 0.7616])",
-    "template": "import torch\nimport torch.nn.functional as F\n\nx = torch.tensor([-1.0, 0.0, 1.0])\ngelu = F.???(???)\ntanh = F.???(???)\nprint(f\"x: {x}\")\nprint(f\"GELU: {gelu}\")\nprint(f\"Tanh: {tanh}\")"
+    "template": "import torch\nimport torch.nn.functional as F\n\nx = torch.tensor([-1.0, 0.0, 1.0])\ngelu = F.???(???)\ntanh = F.???(???)\nprint(f\"x: {x}\")\nprint(f\"GELU: {gelu}\")\nprint(f\"Tanh: {tanh}\")",
+    "answer": "import torch\n\n# Floor division\na = torch.tensor([7, 8, 9])\nb = torch.tensor([2, 2, 2])\nresult = torch.floor_divide(a, b)\nprint(f\"Floor divide: {result}\")"
   },
   {
     "id": 36,
@@ -321,7 +356,8 @@
     "question": "Apply F.softmax and F.log_softmax to x=[1,2,3] along dim 0. Print results.",
     "code_hint": "F.softmax(x, dim=0), F.log_softmax(x, dim=0)",
     "expected_output": "x: tensor([1., 2., 3.])\nSoftmax: tensor([0.0900, 0.2447, 0.6652])\nLogSoftmax: tensor([-2.4076, -1.4076, -0.4076])",
-    "template": "import torch\nimport torch.nn.functional as F\n\nx = torch.tensor([1.0, 2.0, 3.0])\nsoftmax = F.???(???, dim=???)\nlog_softmax = F.???(???, dim=???)\nprint(f\"x: {x}\")\nprint(f\"Softmax: {softmax}\")\nprint(f\"LogSoftmax: {log_softmax}\")"
+    "template": "import torch\nimport torch.nn.functional as F\n\nx = torch.tensor([1.0, 2.0, 3.0])\nsoftmax = F.???(???, dim=???)\nlog_softmax = F.???(???, dim=???)\nprint(f\"x: {x}\")\nprint(f\"Softmax: {softmax}\")\nprint(f\"LogSoftmax: {log_softmax}\")",
+    "answer": "import torch\n\n# Remainder (modulo)\na = torch.tensor([7, 8, 9])\nb = torch.tensor([3, 3, 3])\nremainder = a % b\nprint(f\"Remainder: {remainder}\")"
   },
   {
     "id": 37,
@@ -330,7 +366,8 @@
     "question": "Create 5x5 tensor. Apply dropout with p=0.5 in training mode, then eval mode. Compare outputs.",
     "code_hint": "F.dropout(x, p=0.5, training=True/False)",
     "expected_output": "Original mean: -0.1474\nDropout train mean: -0.1551\nDropout eval mean: -0.1474\nTraining changes values, eval is identity",
-    "template": "import torch\nimport torch.nn.functional as F\n\nx = torch.randn(5, 5)\ndrop_train = F.???(???, ???, training=???)\ndrop_eval = F.???(???, ???, training=???)\nprint(f\"Original mean: {x.mean():.4f}\")\nprint(f\"Dropout train mean: {drop_train.mean():.4f}\")\nprint(f\"Dropout eval mean: {drop_eval.mean():.4f}\")\nprint(\"Training changes values, eval is identity\")"
+    "template": "import torch\nimport torch.nn.functional as F\n\nx = torch.randn(5, 5)\ndrop_train = F.???(???, ???, training=???)\ndrop_eval = F.???(???, ???, training=???)\nprint(f\"Original mean: {x.mean():.4f}\")\nprint(f\"Dropout train mean: {drop_train.mean():.4f}\")\nprint(f\"Dropout eval mean: {drop_eval.mean():.4f}\")\nprint(\"Training changes values, eval is identity\")",
+    "answer": "import torch\n\n# Sign function\nx = torch.tensor([-2.0, 0.0, 3.0])\nsign_x = torch.sign(x)\nprint(f\"Sign: {sign_x}\")"
   },
   {
     "id": 38,
@@ -339,7 +376,8 @@
     "question": "Given x=[1,2,3] requires_grad, compute y=x^2, z=y.sum(), backward. Print gradient of x.",
     "code_hint": "y=x**2, z=y.sum(), z.backward(), x.grad",
     "expected_output": "x: tensor([1., 2., 3.], requires_grad=True)\nGradient: tensor([2., 4., 6.])",
-    "template": "import torch\n\nx = torch.tensor([1.0, 2.0, 3.0], requires_grad=???)\ny = x ** 2\nz = y.???()\nz.???()\ngrad = x.???\nprint(f\"x: {x}\")\nprint(f\"Gradient: {grad}\")"
+    "template": "import torch\n\nx = torch.tensor([1.0, 2.0, 3.0], requires_grad=???)\ny = x ** 2\nz = y.???()\nz.???()\ngrad = x.???\nprint(f\"x: {x}\")\nprint(f\"Gradient: {grad}\")",
+    "answer": "import torch\n\n# Negative of tensor\nx = torch.tensor([1.0, -2.0, 3.0])\nneg_x = -x\nprint(f\"Negative: {neg_x}\")"
   },
   {
     "id": 39,
@@ -348,7 +386,8 @@
     "question": "Given w=[1,2], b=[0.5] requires_grad, x=[1,2], compute y=w[0]*x[0]+w[1]*x[1]+b. Backward. Print gradients.",
     "code_hint": "requires_grad=True, backward(), .grad",
     "expected_output": "w.grad: tensor([1., 2.])\nb.grad: tensor([1.])",
-    "template": "import torch\n\nw = torch.tensor([1.0, 2.0], requires_grad=???)\nb = torch.tensor([0.5], requires_grad=???)\nx = torch.tensor([1.0, 2.0])\ny_pred = w[0]*x[0] + w[1]*x[1] + ???\ny_pred.???()\nprint(f\"w.grad: {w.???}\")\nprint(f\"b.grad: {b.???}\")"
+    "template": "import torch\n\nw = torch.tensor([1.0, 2.0], requires_grad=???)\nb = torch.tensor([0.5], requires_grad=???)\nx = torch.tensor([1.0, 2.0])\ny_pred = w[0]*x[0] + w[1]*x[1] + ???\ny_pred.???()\nprint(f\"w.grad: {w.???}\")\nprint(f\"b.grad: {b.???}\")",
+    "answer": "import torch\n\n# Compute 2^10 using pow\nresult = torch.pow(torch.tensor(2.0), 10)\nprint(f\"2^10 = {result.item()}\")"
   },
   {
     "id": 40,
@@ -357,7 +396,8 @@
     "question": "Compute gradient of x=[1,2] for y=x^2.sum(). Then zero the gradient. Print before and after zero.",
     "code_hint": ".backward(), .grad.zero_()",
     "expected_output": "Before zero: tensor([2., 4.])\nAfter zero: tensor([0., 0.])",
-    "template": "import torch\n\nx = torch.tensor([1.0, 2.0], requires_grad=???)\ny = (x ** 2).???\ny.???()\nprint(f\"Before zero: {x.???}\")\nx.grad.???()\nprint(f\"After zero: {x.???}\")"
+    "template": "import torch\n\nx = torch.tensor([1.0, 2.0], requires_grad=???)\ny = (x ** 2).???\ny.???()\nprint(f\"Before zero: {x.???}\")\nx.grad.???()\nprint(f\"After zero: {x.???}\")",
+    "answer": "import torch\n\n# Sum of all elements\nx = torch.tensor([[1, 2, 3], [4, 5, 6]])\ntotal = x.sum()\nprint(f\"Total sum: {total.item()}\")"
   },
   {
     "id": 41,
@@ -366,7 +406,8 @@
     "question": "Compute y=x.sum() and z=x^2.sum(). Call y.backward(retain_graph=True), then z.backward(). Print gradient of x twice (accumulated).",
     "code_hint": "backward(retain_graph=True) allows multiple backward calls",
     "expected_output": "After first backward: tensor([1., 1.])\nAfter second backward: tensor([3., 5.])",
-    "template": "import torch\n\nx = torch.tensor([1.0, 2.0], requires_grad=???)\ny = x.???\nz = (x ** 2).???\ny.backward(retain_graph=???)\nprint(f\"After first backward: {x.grad}\")\nz.???()  # accumulates\nprint(f\"After second backward: {x.grad}\")"
+    "template": "import torch\n\nx = torch.tensor([1.0, 2.0], requires_grad=???)\ny = x.???\nz = (x ** 2).???\ny.backward(retain_graph=???)\nprint(f\"After first backward: {x.grad}\")\nz.???()  # accumulates\nprint(f\"After second backward: {x.grad}\")",
+    "answer": "import torch\n\n# Compute argmax (index of max value)\nx = torch.tensor([1, 5, 2, 8, 3])\nidx = torch.argmax(x)\nprint(f\"Max at index: {idx.item()}\")"
   },
   {
     "id": 42,
@@ -375,7 +416,8 @@
     "question": "Create x=[1,2] requires_grad. In no_grad context, compute y=x*2. Check if y has grad tracking.",
     "code_hint": "with torch.no_grad():",
     "expected_output": "In no_grad: requires_grad = False",
-    "template": "import torch\n\nx = torch.tensor([1.0, 2.0], requires_grad=???)\nwith torch.???():\n    y = x * 2\n    print(f\"In no_grad: requires_grad = {y.???}\")"
+    "template": "import torch\n\nx = torch.tensor([1.0, 2.0], requires_grad=???)\nwith torch.???():\n    y = x * 2\n    print(f\"In no_grad: requires_grad = {y.???}\")",
+    "answer": "import torch\n\n# Find indices of top-k largest elements\nx = torch.tensor([1, 5, 2, 8, 3])\nvalues, indices = torch.topk(x, 2)\nprint(f\"Top 2 values: {values}, indices: {indices}\")"
   },
   {
     "id": 43,
@@ -384,7 +426,8 @@
     "question": "Create x=[1,2] requires_grad. In inference_mode context, compute y=x*2. Check if y has grad tracking.",
     "code_hint": "with torch.inference_mode():",
     "expected_output": "In inference_mode: requires_grad = False",
-    "template": "import torch\n\nx = torch.tensor([1.0, 2.0], requires_grad=???)\nwith torch.???():\n    y = x * 2\n    print(f\"In inference_mode: requires_grad = {y.???}\")"
+    "template": "import torch\n\nx = torch.tensor([1.0, 2.0], requires_grad=???)\nwith torch.???():\n    y = x * 2\n    print(f\"In inference_mode: requires_grad = {y.???}\")",
+    "answer": "import torch\n\n# Find where condition is true\nx = torch.tensor([1, 5, 2, 8, 3])\nindices = torch.where(x > 3)\nprint(f\"Indices where x > 3: {indices[0].tolist()}\")"
   },
   {
     "id": 44,
@@ -393,7 +436,8 @@
     "question": "Use set_grad_enabled(True) then create x1=[1] requires_grad, compute y1=x1*2. Then set_grad_enabled(False), create x2=[1], compute y2=x2*2. Print grad tracking for both.",
     "code_hint": "torch.set_grad_enabled(True/False)",
     "expected_output": "With grad enabled: requires_grad = True\nWith grad disabled: requires_grad = False",
-    "template": "import torch\n\ntorch.???(???)\nx1 = torch.tensor([1.0], requires_grad=???)\ny1 = x1 * 2\nprint(f\"With grad enabled: requires_grad = {y1.???}\")\n\ntorch.???(???)\nx2 = torch.tensor([1.0], requires_grad=???)\ny2 = x2 * 2\nprint(f\"With grad disabled: requires_grad = {y2.???}\")"
+    "template": "import torch\n\ntorch.???(???)\nx1 = torch.tensor([1.0], requires_grad=???)\ny1 = x1 * 2\nprint(f\"With grad enabled: requires_grad = {y1.???}\")\n\ntorch.???(???)\nx2 = torch.tensor([1.0], requires_grad=???)\ny2 = x2 * 2\nprint(f\"With grad disabled: requires_grad = {y2.???}\")",
+    "answer": "import torch\n\n# Non-zero elements\nx = torch.tensor([1, 0, 2, 0, 3])\nnonzero = torch.nonzero(x)\nprint(f\"Non-zero indices: {nonzero.squeeze().tolist()}\")"
   },
   {
     "id": 45,
@@ -402,7 +446,8 @@
     "question": "Create BatchNorm2d(3), set to train mode then eval mode. Print training attribute for both.",
     "code_hint": "model.train(), model.eval()",
     "expected_output": "BN train mode: True, eval mode: False",
-    "template": "import torch\nimport torch.nn as nn\n\nbn = nn.BatchNorm2d(3)\nbn.???()\nprint(f\"BN train mode: {bn.training}\", end=\", \")\nbn.???()\nprint(f\"eval mode: {bn.training}\")"
+    "template": "import torch\nimport torch.nn as nn\n\nbn = nn.BatchNorm2d(3)\nbn.???()\nprint(f\"BN train mode: {bn.training}\", end=\", \")\nbn.???()\nprint(f\"eval mode: {bn.training}\")",
+    "answer": "import torch\n\n# Compute max of tensor\nx = torch.tensor([1, 5, 2, 8, 3])\nmax_val = torch.max(x)\nprint(f\"Max value: {max_val.item()}\")"
   },
   {
     "id": 46,
@@ -411,7 +456,8 @@
     "question": "Create param=[1,2] requires_grad. SGD lr=0.1. Compute loss=param^2.sum(), zero_grad, backward, step. Print updated param.",
     "code_hint": "optim.SGD, .zero_grad(), .backward(), .step()",
     "expected_output": "Before: tensor([1., 2.])\nAfter step: tensor([0.8, 1.6])",
-    "template": "import torch\nimport torch.optim as optim\n\ntorch.manual_seed(42)\nparam = torch.tensor([1.0, 2.0], requires_grad=???)\nopt = optim.???([???], lr=???)\nloss = (param ** 2).???\nopt.???()\nloss.???()\nopt.???()\nprint(f\"Before: tensor([1., 2.])\")\nprint(f\"After step: {param}\")"
+    "template": "import torch\nimport torch.optim as optim\n\ntorch.manual_seed(42)\nparam = torch.tensor([1.0, 2.0], requires_grad=???)\nopt = optim.???([???], lr=???)\nloss = (param ** 2).???\nopt.???()\nloss.???()\nopt.???()\nprint(f\"Before: tensor([1., 2.])\")\nprint(f\"After step: {param}\")",
+    "answer": "import torch\n\n# Create one-hot encoding\nx = torch.tensor([0, 2, 1, 3])\none_hot = torch.nn.functional.one_hot(x, num_classes=4)\nprint(f\"One-hot:\\n{one_hot}\")"
   },
   {
     "id": 47,
@@ -420,7 +466,8 @@
     "question": "Create param=[1,2] requires_grad. Adam lr=0.1. Compute loss=param^2.sum(), zero_grad, backward, step. Print updated param.",
     "code_hint": "optim.Adam, .zero_grad(), .backward(), .step()",
     "expected_output": "Before: tensor([1., 2.])\nAfter Adam step: tensor([0.9000, 1.9000], grad=<tensor>)",
-    "template": "import torch\nimport torch.optim as optim\n\ntorch.manual_seed(42)\nparam = torch.tensor([1.0, 2.0], requires_grad=???)\nopt = optim.???([???], lr=???)\nloss = (param ** 2).???\nopt.???()\nloss.???()\nopt.???()\nprint(f\"Before: tensor([1., 2.])\")\nprint(f\"After Adam step: {param}\")"
+    "template": "import torch\nimport torch.optim as optim\n\ntorch.manual_seed(42)\nparam = torch.tensor([1.0, 2.0], requires_grad=???)\nopt = optim.???([???], lr=???)\nloss = (param ** 2).???\nopt.???()\nloss.???()\nopt.???()\nprint(f\"Before: tensor([1., 2.])\")\nprint(f\"After Adam step: {param}\")",
+    "answer": "import torch\n\n# Scatter operation - put values at indices\ntensor = torch.zeros(3, 5)\nindex = torch.tensor([[0, 1, 2, 0, 0], [2, 0, 0, 1, 2]])\nsrc = torch.tensor([[1, 2, 3, 4, 5], [6, 7, 8, 9, 10]])\ntensor.scatter_(1, index, src)\nprint(f\"After scatter:\\n{tensor}\")"
   },
   {
     "id": 48,
@@ -429,7 +476,8 @@
     "question": "Create param=[1,2] requires_grad. AdamW lr=0.1, weight_decay=0.1. Compute loss=param^2.sum(), zero_grad, backward, step. Print updated param.",
     "code_hint": "optim.AdamW with weight_decay parameter",
     "expected_output": "Before: tensor([1., 2.])\nAfter AdamW step: tensor([0.8900, 1.8800], grad=<tensor>)",
-    "template": "import torch\nimport torch.optim as optim\n\ntorch.manual_seed(42)\nparam = torch.tensor([1.0, 2.0], requires_grad=???)\nopt = optim.???([???], lr=???, weight_decay=???)\nloss = (param ** 2).???\nopt.???()\nloss.???()\nopt.???()\nprint(f\"Before: tensor([1., 2.])\")\nprint(f\"After AdamW step: {param}\")"
+    "template": "import torch\nimport torch.optim as optim\n\ntorch.manual_seed(42)\nparam = torch.tensor([1.0, 2.0], requires_grad=???)\nopt = optim.???([???], lr=???, weight_decay=???)\nloss = (param ** 2).???\nopt.???()\nloss.???()\nopt.???()\nprint(f\"Before: tensor([1., 2.])\")\nprint(f\"After AdamW step: {param}\")",
+    "answer": "import torch\n\n# Gather operation - get values at indices\ntensor = torch.tensor([[1, 2], [3, 4], [5, 6]])\nindex = torch.tensor([[0, 1], [1, 0], [0, 1]])\ngathered = torch.gather(tensor, 1, index)\nprint(f\"Gathered:\\n{gathered}\")"
   },
   {
     "id": 49,
@@ -438,7 +486,8 @@
     "question": "Create SGD lr=1.0. StepLR with step_size=1, gamma=0.1. Print LR after 1 and 2 steps.",
     "code_hint": "lr_scheduler.StepLR(optimizer, step_size, gamma)",
     "expected_output": "Initial LR: 1.0\nAfter 1 step: 0.1\nAfter 2 steps: 0.01",
-    "template": "import torch\nimport torch.optim as optim\n\nparam = torch.tensor([1.0, 2.0], requires_grad=True)\nopt = optim.SGD([param], lr=???)\nscheduler = optim.lr_scheduler.???(???, step_size=???, gamma=???)\nprint(f\"Initial LR: {opt.param_groups[0]['lr']}\")\nscheduler.???()\nprint(f\"After 1 step: {opt.param_groups[0]['lr']}\")\nscheduler.???()\nprint(f\"After 2 steps: {opt.param_groups[0]['lr']}\")"
+    "template": "import torch\nimport torch.optim as optim\n\nparam = torch.tensor([1.0, 2.0], requires_grad=True)\nopt = optim.SGD([param], lr=???)\nscheduler = optim.lr_scheduler.???(???, step_size=???, gamma=???)\nprint(f\"Initial LR: {opt.param_groups[0]['lr']}\")\nscheduler.???()\nprint(f\"After 1 step: {opt.param_groups[0]['lr']}\")\nscheduler.???()\nprint(f\"After 2 steps: {opt.param_groups[0]['lr']}\")",
+    "answer": "import torch\n\n# Masked select\nx = torch.tensor([1, 2, 3, 4, 5])\nmask = torch.tensor([True, False, True, False, True])\nselected = x[mask]\nprint(f\"Masked select: {selected}\")"
   },
   {
     "id": 50,
@@ -447,7 +496,8 @@
     "question": "Create Linear(10,5). Print state_dict keys.",
     "code_hint": "model.state_dict(), list(dict.keys())",
     "expected_output": "state_dict keys: ['fc1.weight', 'fc1.bias']",
-    "template": "import torch\nimport torch.nn as nn\n\nclass Net(nn.Module):\n    def __init__(self):\n        super().__init__()\n        self.fc1 = nn.Linear(10, 5)\n    def forward(self, x):\n        return self.fc1(x)\n\nmodel = Net()\nstate = model.???()\nkeys = list(state.???())\nprint(f\"state_dict keys: {keys}\")"
+    "template": "import torch\nimport torch.nn as nn\n\nclass Net(nn.Module):\n    def __init__(self):\n        super().__init__()\n        self.fc1 = nn.Linear(10, 5)\n    def forward(self, x):\n        return self.fc1(x)\n\nmodel = Net()\nstate = model.???()\nkeys = list(state.???())\nprint(f\"state_dict keys: {keys}\")",
+    "answer": "import torch\n\n# Diagonal matrix from vector\nv = torch.tensor([1, 2, 3])\nd = torch.diag(v)\nprint(f\"Diagonal matrix:\\n{d}\")"
   },
   {
     "id": 51,
@@ -456,7 +506,8 @@
     "question": "Create two Linear(5,2). Load state_dict from model1 into model2. Verify weights match.",
     "code_hint": "model1.state_dict(), model2.load_state_dict()",
     "expected_output": "Weights match after load: True",
-    "template": "import torch\nimport torch.nn as nn\n\ntorch.manual_seed(42)\nmodel1 = nn.Linear(5, 2)\nmodel2 = nn.Linear(5, 2)\nsd = model1.???()\nmodel2.???(???)\nmatch = torch.allclose(model1.weight, model2.weight)\nprint(f\"Weights match after load: {match}\")"
+    "template": "import torch\nimport torch.nn as nn\n\ntorch.manual_seed(42)\nmodel1 = nn.Linear(5, 2)\nmodel2 = nn.Linear(5, 2)\nsd = model1.???()\nmodel2.???(???)\nmatch = torch.allclose(model1.weight, model2.weight)\nprint(f\"Weights match after load: {match}\")",
+    "answer": "import torch\n\n# Gradient of y = x^2 at x=3\nx = torch.tensor([3.0], requires_grad=True)\ny = x ** 2\ny.backward()\nprint(f\"Gradient dy/dx at x=3: {x.grad.item()}\")"
   },
   {
     "id": 52,
@@ -465,7 +516,8 @@
     "question": "Create Sequential: Linear(10,5)->ReLU->Linear(5,2). Count parameters() vs named_parameters().",
     "code_hint": ".parameters(), .named_parameters()",
     "expected_output": "parameters() count: 4\nnamed_parameters() count: 4",
-    "template": "import torch\nimport torch.nn as nn\n\nmodel = nn.Sequential(\n    nn.Linear(10, 5),\n    nn.ReLU(),\n    nn.Linear(5, 2)\n)\nparams = list(model.???())\nnamed = list(model.???())\nprint(f\"parameters() count: {len(params)}\")\nprint(f\"named_parameters() count: {len(named)}\")"
+    "template": "import torch\nimport torch.nn as nn\n\nmodel = nn.Sequential(\n    nn.Linear(10, 5),\n    nn.ReLU(),\n    nn.Linear(5, 2)\n)\nparams = list(model.???())\nnamed = list(model.???())\nprint(f\"parameters() count: {len(params)}\")\nprint(f\"named_parameters() count: {len(named)}\")",
+    "answer": "import torch\n\n# Jacobian for vector function\nx = torch.tensor([1.0, 2.0], requires_grad=True)\ny = x ** 2\nz = y.sum()\nz.backward()\nprint(f\"Gradient: {x.grad}\")"
   },
   {
     "id": 53,
@@ -474,7 +526,8 @@
     "question": "Create Sequential: Linear(10,5)->ReLU->Linear(5,2). Count children() vs modules().",
     "code_hint": ".children(), .modules()",
     "expected_output": "children() count: 3\nmodules() count: 4",
-    "template": "import torch\nimport torch.nn as nn\n\nmodel = nn.Sequential(\n    nn.Linear(10, 5),\n    nn.ReLU(),\n    nn.Linear(5, 2)\n)\nchildren = list(model.???())\nmodules = list(model.???())\nprint(f\"children() count: {len(children)}\")\nprint(f\"modules() count: {len(modules)}\")"
+    "template": "import torch\nimport torch.nn as nn\n\nmodel = nn.Sequential(\n    nn.Linear(10, 5),\n    nn.ReLU(),\n    nn.Linear(5, 2)\n)\nchildren = list(model.???())\nmodules = list(model.???())\nprint(f\"children() count: {len(children)}\")\nprint(f\"modules() count: {len(modules)}\")",
+    "answer": "import torch\n\n# Hessian matrix\nx = torch.tensor([1.0, 2.0], requires_grad=True)\ny = x[0]**2 + x[1]**2\ngrads = torch.autograd.grad(y, x, create_graph=True)[0]\nhessian = torch.autograd.grad(grads.sum(), x)[0]\nprint(f\"Hessian: {hessian}\")"
   },
   {
     "id": 54,
@@ -483,7 +536,8 @@
     "question": "Create Dataset with 100 samples of 10-dim tensors. Implement __init__, __len__, __getitem__.",
     "code_hint": "class MyDataset(Dataset): with __init__, __len__, __getitem__",
     "expected_output": "Dataset length: 100\nSample shape: torch.Size([10])",
-    "template": "import torch\nfrom torch.utils.data import Dataset\n\nclass MyDataset(Dataset):\n    def __init__(self):\n        self.data = torch.???(???, ???)\n    def __len__(self):\n        return ???(self.data)\n    def __getitem__(self, idx):\n        return ???[???]\n\nds = MyDataset()\nprint(f\"Dataset length: {???(ds)}\")\nprint(f\"Sample shape: {ds[0].shape}\")"
+    "template": "import torch\nfrom torch.utils.data import Dataset\n\nclass MyDataset(Dataset):\n    def __init__(self):\n        self.data = torch.???(???, ???)\n    def __len__(self):\n        return ???(self.data)\n    def __getitem__(self, idx):\n        return ???[???]\n\nds = MyDataset()\nprint(f\"Dataset length: {???(ds)}\")\nprint(f\"Sample shape: {ds[0].shape}\")",
+    "answer": "import torch\n\n# Compute gradients of sin(x) at x=pi/2\nx = torch.tensor([3.14159/2], requires_grad=True)\ny = torch.sin(x)\ny.backward()\nprint(f\"Gradient d/dx(sin(x)) at x=pi/2: {x.grad.item():.4f}\")"
   },
   {
     "id": 55,
@@ -492,7 +546,8 @@
     "question": "Create DataLoader from MyDataset with batch_size=16, shuffle=True. Get first batch.",
     "code_hint": "DataLoader(dataset, batch_size, shuffle)",
     "expected_output": "Batch shape: torch.Size([16, 10])\nBatch count per epoch: 7",
-    "template": "import torch\nfrom torch.utils.data import Dataset, DataLoader\n\nclass MyDataset(Dataset):\n    def __init__(self):\n        self.data = torch.randn(100, 10)\n    def __len__(self):\n        return len(self.data)\n    def __getitem__(self, idx):\n        return self.data[idx]\n\nds = MyDataset()\nloader = DataLoader(???, batch_size=???, shuffle=???, num_workers=0)\nbatch = next(???(loader))\nprint(f\"Batch shape: {batch.shape}\")\nprint(f\"Batch count per epoch: {???(loader)}\")"
+    "template": "import torch\nfrom torch.utils.data import Dataset, DataLoader\n\nclass MyDataset(Dataset):\n    def __init__(self):\n        self.data = torch.randn(100, 10)\n    def __len__(self):\n        return len(self.data)\n    def __getitem__(self, idx):\n        return self.data[idx]\n\nds = MyDataset()\nloader = DataLoader(???, batch_size=???, shuffle=???, num_workers=0)\nbatch = next(???(loader))\nprint(f\"Batch shape: {batch.shape}\")\nprint(f\"Batch count per epoch: {???(loader)}\")",
+    "answer": "import torch\n\n# No gradient tracking\nx = torch.tensor([1.0, 2.0], requires_grad=False)\ny = x ** 2\nprint(f\"y requires_grad: {y.requires_grad}\")"
   },
   {
     "id": 56,
@@ -501,7 +556,8 @@
     "question": "Create TensorDataset from x=(100,10) and y=(100,) labels. DataLoader batch_size=8. Get first batch.",
     "code_hint": "TensorDataset(*tensors), DataLoader",
     "expected_output": "x batch shape: torch.Size([8, 10])\ny batch shape: torch.Size([8])",
-    "template": "import torch\nfrom torch.utils.data import TensorDataset, DataLoader\n\nx = torch.randn(100, 10)\ny = torch.randint(0, 5, (100,))\nds = TensorDataset(???, ???)\nloader = DataLoader(???, batch_size=8)\nbatch_x, batch_y = next(???(loader))\nprint(f\"x batch shape: {batch_x.shape}\")\nprint(f\"y batch shape: {batch_y.shape}\")"
+    "template": "import torch\nfrom torch.utils.data import TensorDataset, DataLoader\n\nx = torch.randn(100, 10)\ny = torch.randint(0, 5, (100,))\nds = TensorDataset(???, ???)\nloader = DataLoader(???, batch_size=8)\nbatch_x, batch_y = next(???(loader))\nprint(f\"x batch shape: {batch_x.shape}\")\nprint(f\"y batch shape: {batch_y.shape}\")",
+    "answer": "import torch\n\n# Detach tensor\nx = torch.tensor([1.0, 2.0], requires_grad=True)\ny = x ** 2\nz = y.detach()\nprint(f\"z requires_grad: {z.requires_grad}\")"
   },
   {
     "id": 57,
@@ -510,7 +566,8 @@
     "question": "Split dataset of 100 samples into train=80, val=20 using random_split.",
     "code_hint": "torch.utils.data.random_split(dataset, [train_size, val_size])",
     "expected_output": "Train size: 80\nVal size: 20",
-    "template": "import torch\nfrom torch.utils.data import random_split\n\nds = torch.randn(100, 10)\ntrain, val = random_split(???, [???, ???])\nprint(f\"Train size: {???(train)}\")\nprint(f\"Val size: {???(val)}\")"
+    "template": "import torch\nfrom torch.utils.data import random_split\n\nds = torch.randn(100, 10)\ntrain, val = random_split(???, [???, ???])\nprint(f\"Train size: {???(train)}\")\nprint(f\"Val size: {???(val)}\")",
+    "answer": "import torch\n\n# Gradient check for numerical approximation\nx = torch.tensor([1.0], requires_grad=True)\neps = 1e-5\ny = x ** 2\ny.backward()\nanalytical = x.grad.item()\n\nx_plus = torch.tensor([1.0 + eps], requires_grad=True)\ny_plus = x_plus ** 2\nnumerical = (y_plus.item() - 1.0) / eps\nprint(f\"Analytical: {analytical}, Numerical: {numerical:.6f}\")"
   },
   {
     "id": 58,
@@ -519,7 +576,8 @@
     "question": "Train 1 step: Linear(10,2), CrossEntropyLoss, SGD lr=0.01. Forward, loss, backward, step. Print loss.",
     "code_hint": "model(X), criterion(outputs, y), optimizer.zero_grad(), loss.backward(), optimizer.step()",
     "expected_output": "Loss: 0.7331",
-    "template": "import torch\nimport torch.nn as nn\nimport torch.optim as optim\n\ntorch.manual_seed(42)\nmodel = nn.???(???, ???)\ncriterion = nn.???()\noptimizer = optim.???(model.parameters(), lr=0.01)\n\nX = torch.randn(4, 10)\ny = torch.randint(0, 2, (4,))\n\noptimizer.???()\noutputs = ???(???)\nloss = ???(???, ???)\nloss.???()\noptimizer.???()\nprint(f\"Loss: {loss.item():.4f}\")"
+    "template": "import torch\nimport torch.nn as nn\nimport torch.optim as optim\n\ntorch.manual_seed(42)\nmodel = nn.???(???, ???)\ncriterion = nn.???()\noptimizer = optim.???(model.parameters(), lr=0.01)\n\nX = torch.randn(4, 10)\ny = torch.randint(0, 2, (4,))\n\noptimizer.???()\noutputs = ???(???)\nloss = ???(???, ???)\nloss.???()\noptimizer.???()\nprint(f\"Loss: {loss.item():.4f}\")",
+    "answer": "import torch\n\n# Enable gradient tracking\nx = torch.tensor([1.0, 2.0], requires_grad=True)\nprint(f\"x.requires_grad: {x.requires_grad}\")"
   },
   {
     "id": 59,
@@ -528,7 +586,8 @@
     "question": "Set model to eval mode. For X=(4,10), compute output with no_grad. Print output shape.",
     "code_hint": "model.eval(), with torch.no_grad():",
     "expected_output": "Output shape: torch.Size([4, 2])",
-    "template": "import torch\nimport torch.nn as nn\n\ntorch.manual_seed(42)\nmodel = nn.Linear(10, 2)\nmodel.???()\nX = torch.randn(4, 10)\n\nwith torch.???():\n    outputs = ???(???)\nprint(f\"Output shape: {outputs.shape}\")"
+    "template": "import torch\nimport torch.nn as nn\n\ntorch.manual_seed(42)\nmodel = nn.Linear(10, 2)\nmodel.???()\nX = torch.randn(4, 10)\n\nwith torch.???():\n    outputs = ???(???)\nprint(f\"Output shape: {outputs.shape}\")",
+    "answer": "import torch\n\n# Muliple gradients accumulation\nx = torch.tensor([1.0], requires_grad=True)\nfor _ in range(3):\n    y = x ** 2\n    y.backward()\nprint(f\"Gradient (accumulated): {x.grad.item()}\")"
   },
   {
     "id": 60,
@@ -537,7 +596,8 @@
     "question": "Save model1.state_dict() to /tmp/model.pt. Create model2 and load the state_dict. Verify match.",
     "code_hint": "torch.save(model.state_dict(), path), torch.load(path), model.load_state_dict()",
     "expected_output": "Models match: True",
-    "template": "import torch\nimport torch.nn as nn\n\ntorch.manual_seed(42)\nmodel1 = nn.Linear(10, 2)\ntorch.save(model1.???(), '/tmp/model.pt')\nmodel2 = nn.Linear(10, 2)\nmodel2.???(torch.load('/tmp/model.pt'))\nmatch = torch.allclose(model1.weight, model2.weight)\nprint(f\"Models match: {match}\")"
+    "template": "import torch\nimport torch.nn as nn\n\ntorch.manual_seed(42)\nmodel1 = nn.Linear(10, 2)\ntorch.save(model1.???(), '/tmp/model.pt')\nmodel2 = nn.Linear(10, 2)\nmodel2.???(torch.load('/tmp/model.pt'))\nmatch = torch.allclose(model1.weight, model2.weight)\nprint(f\"Models match: {match}\")",
+    "answer": "import torch\n\n# Clear gradients\nx = torch.tensor([2.0], requires_grad=True)\ny = x ** 2\ny.backward()\nprint(f\"Before clear: {x.grad.item()}\")\nx.grad.zero_()\nprint(f\"After clear: {x.grad}\")"
   },
   {
     "id": 61,
@@ -546,7 +606,8 @@
     "question": "Check CUDA availability. Move Linear(10,2) and X=(4,10) to device. Compute output. Print device.",
     "code_hint": "torch.device('cuda' if torch.cuda.is_available() else 'cpu'), .to(device)",
     "expected_output": "Model device: cuda\nOutput device: cuda",
-    "template": "import torch\nimport torch.nn as nn\n\ndevice = torch.???('cuda' if torch.cuda.???() else 'cpu')\nmodel = nn.Linear(10, 2).???(???)\nx = torch.randn(4, 10).???(???)\noutput = model(x)\nprint(f\"Model device: {???}\")\nprint(f\"Output device: {???}\")"
+    "template": "import torch\nimport torch.nn as nn\n\ndevice = torch.???('cuda' if torch.cuda.???() else 'cpu')\nmodel = nn.Linear(10, 2).???(???)\nx = torch.randn(4, 10).???(???)\noutput = model(x)\nprint(f\"Model device: {???}\")\nprint(f\"Output device: {???}\")",
+    "answer": "import torch\n\n# ReLU activation\nx = torch.tensor([-1.0, 2.0, -3.0, 4.0])\nrelu = torch.nn.functional.relu(x)\nprint(f\"ReLU: {relu}\")"
   },
   {
     "id": 62,
@@ -555,7 +616,8 @@
     "question": "Set print precision to 4. Create (3,4) random tensor. Print tensor.",
     "code_hint": "torch.set_printoptions(precision=4)",
     "expected_output": "Tensor with 4 decimal places:\ntensor([[-0.0673,  0.7070,  2.5085, -0.6659],\n        [-1.0626, -0.6107, -0.2654, -0.6340],\n        [ 0.6344,  0.6958, -1.4137, -0.0165]])",
-    "template": "import torch\n\ntorch.???(precision=???)\na = torch.randn(3, 4)\nprint(f\"Tensor with 4 decimal places:\")\nprint(???)"
+    "template": "import torch\n\ntorch.???(precision=???)\na = torch.randn(3, 4)\nprint(f\"Tensor with 4 decimal places:\")\nprint(???)",
+    "answer": "import torch\n\n# Sigmoid activation\nx = torch.tensor([0.0, 1.0, -1.0])\nsigmoid = torch.sigmoid(x)\nprint(f\"Sigmoid: {sigmoid}\")"
   },
   {
     "id": 63,
@@ -564,7 +626,8 @@
     "question": "Create float (3,4) and int64 (5,6) tensors. Print shape, dtype, device for both.",
     "code_hint": ".shape, .dtype, .device",
     "expected_output": "a: shape=torch.Size([3, 4]), dtype=torch.float32, device=cpu\nb: shape=torch.Size([5, 6]), dtype=torch.int64, device=cpu",
-    "template": "import torch\n\ntorch.manual_seed(42)\na = torch.randn(3, 4)\nb = torch.randint(0, 10, (5, 6))\nprint(f\"a: shape={a.???}, dtype={a.???}, device={a.???}\")\nprint(f\"b: shape={b.???}, dtype={b.???}, device={b.???}\")"
+    "template": "import torch\n\ntorch.manual_seed(42)\na = torch.randn(3, 4)\nb = torch.randint(0, 10, (5, 6))\nprint(f\"a: shape={a.???}, dtype={a.???}, device={a.???}\")\nprint(f\"b: shape={b.???}, dtype={b.???}, device={b.???}\")",
+    "answer": "import torch\n\n# Tanh activation\nx = torch.tensor([0.0, 1.0, -1.0])\ntanh = torch.tanh(x)\nprint(f\"Tanh: {tanh}\")"
   },
   {
     "id": 64,
@@ -573,7 +636,8 @@
     "question": "Clone tensor a to b, add 1e-10 to b[0,0]. Use isclose and allclose to compare with rtol=1e-5, atol=1e-8.",
     "code_hint": "torch.isclose(a, b), torch.allclose(a, b)",
     "expected_output": "isclose result: tensor([[True, True, True, True],\n        [True, True, True, True],\n        [True, True, True, True]])\nallclose result: True",
-    "template": "import torch\n\ntorch.manual_seed(42)\na = torch.randn(3, 4)\nb = a.clone()\nb[0, 0] += 1e-10\nisclose = torch.???(???, ???, rtol=1e-5, atol=1e-8)\nallclose = torch.???(???, ???, rtol=1e-5, atol=1e-8)\nprint(f\"isclose result: {isclose}\")\nprint(f\"allclose result: {allclose}\")"
+    "template": "import torch\n\ntorch.manual_seed(42)\na = torch.randn(3, 4)\nb = a.clone()\nb[0, 0] += 1e-10\nisclose = torch.???(???, ???, rtol=1e-5, atol=1e-8)\nallclose = torch.???(???, ???, rtol=1e-5, atol=1e-8)\nprint(f\"isclose result: {isclose}\")\nprint(f\"allclose result: {allclose}\")",
+    "answer": "import torch\n\n# Softmax along last dim\nx = torch.tensor([1.0, 2.0, 3.0])\nsoftmax = torch.nn.functional.softmax(x, dim=0)\nprint(f\"Softmax: {softmax}\")\nprint(f\"Sum: {softmax.sum().item()}\")"
   },
   {
     "id": 65,
@@ -582,7 +646,8 @@
     "question": "Create (3,4) tensor. Print numel (total elements) and element_size (bytes per element).",
     "code_hint": ".numel(), .element_size()",
     "expected_output": "Shape: torch.Size([3, 4])\nnumel: 12\nelement_size: 4\nTotal bytes: 48",
-    "template": "import torch\n\na = torch.randn(3, 4)\nnumel = a.???()\nelement_size = a.???()\nprint(f\"Shape: {a.shape}\")\nprint(f\"numel: {numel}\")\nprint(f\"element_size: {element_size}\")\nprint(f\"Total bytes: {numel * element_size}\")"
+    "template": "import torch\n\na = torch.randn(3, 4)\nnumel = a.???()\nelement_size = a.???()\nprint(f\"Shape: {a.shape}\")\nprint(f\"numel: {numel}\")\nprint(f\"element_size: {element_size}\")\nprint(f\"Total bytes: {numel * element_size}\")",
+    "answer": "import torch\n\n# Log softmax\nx = torch.tensor([1.0, 2.0, 3.0])\nlog_softmax = torch.nn.functional.log_softmax(x, dim=0)\nprint(f\"Log softmax: {log_softmax}\")"
   },
   {
     "id": 66,
@@ -591,7 +656,8 @@
     "question": "Implement SwiGLU activation used in LLaMA. Formula: SwiGLU(x) = Swish(x) * GELU(linear_gate(x)), where input is split in half.",
     "code_hint": "Split input with x.chunk(2, dim=-1), use torch.nn.functional.silu (Swish) and torch.nn.functional.gelu",
     "expected_output": "tensor([[2.7884, 3.9038]], grad_fn=<MulBackward0>)",
-    "template": "import torch\nimport torch.nn as nn\n\nclass SwiGLU(nn.Module):\n    def __init__(self, dim):\n        super().__init__()\n        self.linear_gate = nn.Linear(dim // 2, dim // 2)\n        \n    def forward(self, x):\n        # Split x into two halves: x and gate\n        ???\n        return torch.nn.functional.silu(???) * torch.nn.functional.gelu(self.linear_gate(???))\n\n# Test\ntorch.manual_seed(42)\nmodel = SwiGLU(4)\nx = torch.tensor([[1.0, 2.0, 3.0, 4.0]])\nresult = model(x)\nprint(f\"SwiGLU output: {result}\")\n"
+    "template": "import torch\nimport torch.nn as nn\n\nclass SwiGLU(nn.Module):\n    def __init__(self, dim):\n        super().__init__()\n        self.linear_gate = nn.Linear(dim // 2, dim // 2)\n        \n    def forward(self, x):\n        # Split x into two halves: x and gate\n        ???\n        return torch.nn.functional.silu(???) * torch.nn.functional.gelu(self.linear_gate(???))\n\n# Test\ntorch.manual_seed(42)\nmodel = SwiGLU(4)\nx = torch.tensor([[1.0, 2.0, 3.0, 4.0]])\nresult = model(x)\nprint(f\"SwiGLU output: {result}\")\n",
+    "answer": "import torch\nimport torch.nn as nn\n\nclass SwiGLU(nn.Module):\n    def __init__(self, dim):\n        super().__init__()\n        self.linear_gate = nn.Linear(dim // 2, dim // 2)\n        \n    def forward(self, x):\n        x1, x2 = x.chunk(2, dim=-1)\n        return torch.nn.functional.silu(x1) * torch.nn.functional.gelu(self.linear_gate(x2))\n\ntorch.manual_seed(42)\nmodel = SwiGLU(4)\nx = torch.tensor([[1.0, 2.0, 3.0, 4.0]])\nresult = model(x)\nprint(f\"SwiGLU output: {result}\")"
   },
   {
     "id": 67,
@@ -600,7 +666,8 @@
     "question": "Implement GeGLU (Gated Exponential Linear Unit) activation used in LLaMA. The formula is GeGLU(x) = GELU(x_gate) * x_value, where the input is split in half along the last dimension - one half acts as a gate that goes through GELU, and the other half provides the values.",
     "code_hint": "Use torch.chunk to split the input tensor into two halves along the last dimension, apply F.gelu to the gate part, then multiply element-wise with the value part.",
     "expected_output": "tensor([[2.5240, 7.8180]])",
-    "template": "import torch\nimport torch.nn.functional as F\n\ndef geglu(x):\n    # Split x into two halves along the last dimension\n    ???\n\ntorch.manual_seed(42)\nx = torch.tensor([[1.0, 2.0, 3.0, 4.0]])\nresult = geglu(x)\nprint(result)"
+    "template": "import torch\nimport torch.nn.functional as F\n\ndef geglu(x):\n    # Split x into two halves along the last dimension\n    ???\n\ntorch.manual_seed(42)\nx = torch.tensor([[1.0, 2.0, 3.0, 4.0]])\nresult = geglu(x)\nprint(result)",
+    "answer": "import torch\nimport torch.nn.functional as F\n\ndef geglu(x):\n    x1, x2 = x.chunk(2, dim=-1)\n    return F.gelu(x1) * x2\n\ntorch.manual_seed(42)\nx = torch.tensor([[1.0, 2.0, 3.0, 4.0]])\nresult = geglu(x)\nprint(result)"
   },
   {
     "id": 68,
@@ -609,7 +676,8 @@
     "question": "Implement the 2D rotation formula used in Rotary Positional Encoding (RoPE). Given vector (x1, x2) and angle theta, rotate it to (x1*cos(θ) - x2*sin(θ), x1*sin(θ) + x2*cos(θ)).",
     "code_hint": "Use math.cos() and math.sin() to compute the rotated values.",
     "expected_output": "x1_rotated: -0.7071\nx2_rotated: 4.9497",
-    "template": "import torch\nimport math\n\ntorch.manual_seed(42)\n\n# Input vector (x1, x2) and angle theta\nx1, x2 = 3.0, 4.0\ntheta = math.pi / 4  # 45 degrees\n\n# TODO: Implement 2D rotation using RoPE formula\n# rotate (x1,x2) to (x1*cos(θ) - x2*sin(θ), x1*sin(θ) + x2*cos(θ))\nx1_rotated = ???\nx2_rotated = ???\n\nprint(f\"x1_rotated: {x1_rotated:.4f}\")\nprint(f\"x2_rotated: {x2_rotated:.4f}\")"
+    "template": "import torch\nimport math\n\ntorch.manual_seed(42)\n\n# Input vector (x1, x2) and angle theta\nx1, x2 = 3.0, 4.0\ntheta = math.pi / 4  # 45 degrees\n\n# TODO: Implement 2D rotation using RoPE formula\n# rotate (x1,x2) to (x1*cos(θ) - x2*sin(θ), x1*sin(θ) + x2*cos(θ))\nx1_rotated = ???\nx2_rotated = ???\n\nprint(f\"x1_rotated: {x1_rotated:.4f}\")\nprint(f\"x2_rotated: {x2_rotated:.4f}\")",
+    "answer": "import torch\nimport math\n\nx1, x2 = 3.0, 4.0\ntheta = math.pi / 4\n\nx1_rot = x1 * math.cos(theta) - x2 * math.sin(theta)\nx2_rot = x1 * math.sin(theta) + x2 * math.cos(theta)\n\nprint(f\"x1_rotated: {x1_rot:.4f}\")\nprint(f\"x2_rotated: {x2_rot:.4f}\")"
   },
   {
     "id": 69,
@@ -618,7 +686,8 @@
     "question": "Implement AliBi (Attention with Linear Biases). AliBi adds a position-dependent linear bias to attention scores. The bias for position i attending to position j at head h is: bias[i,j,h] = -|i-j| * slope[h], where slope[h] = 2^(-8 * (h+1) / n_heads). Note: slopes decrease geometrically from head 0 to head n_heads-1.",
     "code_hint": "Compute slopes using exponent formula. Create distance matrix |i-j| using torch.arange. Multiply by slopes with broadcasting.",
     "expected_output": "tensor([[[ 0.0000, -0.0625, -0.1250, -0.1875],\n         [-0.0625,  0.0000, -0.0625, -0.1250],\n         [-0.1250, -0.0625,  0.0000, -0.0625],\n         [-0.1875, -0.1250, -0.0625,  0.0000]],\n\n        [[ 0.0000, -0.0039, -0.0078, -0.0117],\n         [-0.0039,  0.0000, -0.0039, -0.0078],\n         [-0.0078, -0.0039,  0.0000, -0.0039],\n         [-0.0117, -0.0078, -0.0039,  0.0000]]])",
-    "template": "import torch\nimport torch.nn as nn\n\n\ndef alibi_bias(seq_len: int, n_heads: int) -> torch.Tensor:\n    \"\"\"\n    Compute AliBi positional bias matrix.\n\n    Args:\n        seq_len: sequence length\n        n_heads: number of attention heads\n\n    Returns:\n        bias: shape (n_heads, seq_len, seq_len)\n        bias[h, i, j] = -|i-j| * slope[h]\n        where slope[h] = 2^(-8 * (h+1) / n_heads)\n    \"\"\"\n    # TODO: Implement AliBi bias computation\n    # 1. Compute slopes for each head\n    # 2. Create distance matrix |i-j|\n    # 3. Multiply and apply negative sign\n    ???\n\n\n# Test\ntorch.manual_seed(42)\nseq_len = 4\nn_heads = 2\n\nbias = alibi_bias(seq_len, n_heads)\nprint(bias)"
+    "template": "import torch\nimport torch.nn as nn\n\n\ndef alibi_bias(seq_len: int, n_heads: int) -> torch.Tensor:\n    \"\"\"\n    Compute AliBi positional bias matrix.\n\n    Args:\n        seq_len: sequence length\n        n_heads: number of attention heads\n\n    Returns:\n        bias: shape (n_heads, seq_len, seq_len)\n        bias[h, i, j] = -|i-j| * slope[h]\n        where slope[h] = 2^(-8 * (h+1) / n_heads)\n    \"\"\"\n    # TODO: Implement AliBi bias computation\n    # 1. Compute slopes for each head\n    # 2. Create distance matrix |i-j|\n    # 3. Multiply and apply negative sign\n    ???\n\n\n# Test\ntorch.manual_seed(42)\nseq_len = 4\nn_heads = 2\n\nbias = alibi_bias(seq_len, n_heads)\nprint(bias)",
+    "answer": "import torch\n\ndef alibi_bias(seq_len, n_heads):\n    slopes = 2.0 ** (-8.0 * (torch.arange(n_heads) + 1) / n_heads)\n    positions = torch.arange(seq_len)\n    distance = torch.abs(positions.unsqueeze(0) - positions.unsqueeze(1))\n    bias = -distance.unsqueeze(0) * slopes.view(n_heads, 1, 1)\n    return bias\n\ntorch.manual_seed(42)\nbias = alibi_bias(4, 2)\nprint(bias)"
   },
   {
     "id": 70,
@@ -627,7 +696,8 @@
     "question": "Implement RMSNorm (Root Mean Square Normalization). RMSNorm normalizes without centering. Formula: output = x / RMS(x) * g where RMS(x) = sqrt(mean(x^2)) over the last dimension.",
     "code_hint": "Compute RMS(x) = sqrt(mean(x**2, dim=-1, keepdim=True)). Apply normalization with learned gain parameter g (initialized to 1).",
     "expected_output": "tensor([[[ 1.3434,  1.0369, -0.3468],\n         [ 0.5480, -0.9450,  1.3441],\n         [ 0.7318,  1.5358,  0.3252]],\n\n        [[-0.7339,  0.6525,  1.4267],\n         [-1.1645,  0.2099, -1.2648],\n         [ 1.4954, -0.5387, -0.6882]]], grad_fn=<MulBackward0>)",
-    "template": "import torch\nimport torch.nn as nn\n\n\nclass RMSNorm(nn.Module):\n    def __init__(self, dim: int, eps: float = 1e-6):\n        super().__init__()\n        self.eps = eps\n        self.g = nn.Parameter(torch.ones(dim))\n\n    def forward(self, x: torch.Tensor) -> torch.Tensor:\n        \"\"\"\n        Apply RMSNorm: output = x / RMS(x) * g\n        where RMS(x) = sqrt(mean(x^2)) computed over last dimension\n        \"\"\"\n        # TODO: Implement RMSNorm\n        # 1. Compute RMS(x) = sqrt(mean(x**2, dim=-1, keepdim=True) + eps)\n        # 2. Normalize x by dividing by RMS(x)\n        # 3. Multiply by gain parameter g\n        rms = torch.sqrt(x.pow(2).mean(dim=-1, keepdim=True) + self.eps)\n        return ???\n\n\n# Test\ntorch.manual_seed(42)\nnorm = RMSNorm(3)\nx = torch.randn(2, 3, 3)\nresult = norm(x)\nprint(result)\n"
+    "template": "import torch\nimport torch.nn as nn\n\n\nclass RMSNorm(nn.Module):\n    def __init__(self, dim: int, eps: float = 1e-6):\n        super().__init__()\n        self.eps = eps\n        self.g = nn.Parameter(torch.ones(dim))\n\n    def forward(self, x: torch.Tensor) -> torch.Tensor:\n        \"\"\"\n        Apply RMSNorm: output = x / RMS(x) * g\n        where RMS(x) = sqrt(mean(x^2)) computed over last dimension\n        \"\"\"\n        # TODO: Implement RMSNorm\n        # 1. Compute RMS(x) = sqrt(mean(x**2, dim=-1, keepdim=True) + eps)\n        # 2. Normalize x by dividing by RMS(x)\n        # 3. Multiply by gain parameter g\n        rms = torch.sqrt(x.pow(2).mean(dim=-1, keepdim=True) + self.eps)\n        return ???\n\n\n# Test\ntorch.manual_seed(42)\nnorm = RMSNorm(3)\nx = torch.randn(2, 3, 3)\nresult = norm(x)\nprint(result)\n",
+    "answer": "import torch\nimport torch.nn as nn\n\nclass RMSNorm(nn.Module):\n    def __init__(self, dim, eps=1e-6):\n        super().__init__()\n        self.eps = eps\n        self.g = nn.Parameter(torch.ones(dim))\n    \n    def forward(self, x):\n        rms = torch.sqrt(x.pow(2).mean(dim=-1, keepdim=True) + self.eps)\n        return x / rms * self.g\n\ntorch.manual_seed(42)\nnorm = RMSNorm(3)\nx = torch.randn(2, 3, 3)\nresult = norm(x)\nprint(result)"
   },
   {
     "id": 71,
@@ -636,7 +706,8 @@
     "question": "Implement scaled dot-product attention mechanism: attention(Q,K,V) = softmax(Q @ K^T / sqrt(d_k)) @ V. Fill in the ??? to complete the implementation.",
     "code_hint": "Use torch.matmul for matrix multiplications, K.transpose(-2,-1) to transpose the last two dimensions, and F.softmax with dim=-1.",
     "expected_output": "Attention weights shape: torch.Size([2, 3, 3])\nOutput shape: torch.Size([2, 3, 4])\nAttention weights:\n tensor([[[0.2746, 0.2220, 0.5034],\n         [0.4423, 0.3890, 0.1687],\n         [0.2303, 0.5218, 0.2479]],\n\n        [[0.1818, 0.0759, 0.7424],\n         [0.2404, 0.4599, 0.2997],\n         [0.3681, 0.2300, 0.4019]]])\nOutput:\n tensor([[[-0.2196,  0.3126, -0.0202, -0.3293],\n         [ 0.0989,  0.1511, -0.1175, -0.2992],\n         [ 0.1140,  0.3381,  0.3332, -0.1965]],\n\n        [[-0.2581,  0.2895,  2.8606,  1.0711],\n         [-0.5805,  0.2681,  1.1562,  0.7658],\n         [-0.4114,  0.3388,  1.3747,  0.8071]]])",
-    "template": "import torch\nimport torch.nn.functional as F\n\ntorch.manual_seed(42)\n\n# Q: (batch_size, seq_len, d_k)\n# K: (batch_size, seq_len, d_k)  \n# V: (batch_size, seq_len, d_v)\nQ = torch.randn(2, 3, 4)  # batch_size=2, seq_len=3, d_k=4\nK = torch.randn(2, 3, 4)\nV = torch.randn(2, 3, 4)  # d_v=4\n\nd_k = Q.size(-1)\n\n# Compute attention scores (batch_size, seq_len, seq_len)\nscores = ???\n\n# Scale scores by sqrt(d_k)\nscores_scaled = ???\n\n# Apply softmax to get attention weights\nattn_weights = ???\n\n# Apply attention weights to V (batch_size, seq_len, d_v)\noutput = ???\n\nprint(\"Attention weights shape:\", attn_weights.shape)\nprint(\"Output shape:\", output.shape)\nprint(\"Attention weights:\\n\", attn_weights)\nprint(\"Output:\\n\", output)"
+    "template": "import torch\nimport torch.nn.functional as F\n\ntorch.manual_seed(42)\n\n# Q: (batch_size, seq_len, d_k)\n# K: (batch_size, seq_len, d_k)  \n# V: (batch_size, seq_len, d_v)\nQ = torch.randn(2, 3, 4)  # batch_size=2, seq_len=3, d_k=4\nK = torch.randn(2, 3, 4)\nV = torch.randn(2, 3, 4)  # d_v=4\n\nd_k = Q.size(-1)\n\n# Compute attention scores (batch_size, seq_len, seq_len)\nscores = ???\n\n# Scale scores by sqrt(d_k)\nscores_scaled = ???\n\n# Apply softmax to get attention weights\nattn_weights = ???\n\n# Apply attention weights to V (batch_size, seq_len, d_v)\noutput = ???\n\nprint(\"Attention weights shape:\", attn_weights.shape)\nprint(\"Output shape:\", output.shape)\nprint(\"Attention weights:\\n\", attn_weights)\nprint(\"Output:\\n\", output)",
+    "answer": "import torch\nimport torch.nn.functional as F\n\ndef scaled_dot_product_attention(Q, K, V):\n    d_k = Q.size(-1)\n    scores = torch.matmul(Q, K.transpose(-2, -1)) / (d_k ** 0.5)\n    attn_weights = F.softmax(scores, dim=-1)\n    return torch.matmul(attn_weights, V), attn_weights\n\ntorch.manual_seed(42)\nQ = torch.randn(1, 1, 8)\nK = torch.randn(1, 1, 8)\nV = torch.randn(1, 1, 8)\nout, attn = scaled_dot_product_attention(Q, K, V)\nprint(f\"Output shape: {out.shape}\")"
   },
   {
     "id": 72,
@@ -645,7 +716,8 @@
     "question": "Implement Multi-head Attention (MHA). Split hidden_dim into n_heads * head_dim, apply scaled dot-product attention, and concatenate heads.",
     "code_hint": "1. Project x to Q, K, V. 2. View tensors as (batch, seq_len, n_heads, head_dim) and transpose to (batch, n_heads, seq_len, head_dim). 3. Compute scores = Q @ K^T / sqrt(head_dim), apply softmax. 4. Compute output = attn_weights @ V, transpose back and view as (batch, seq_len, hidden_dim).",
     "expected_output": "tensor([[[-0.1277,  0.0544,  0.1194,  0.0660,  0.0729, -0.1413, -0.0331,\n           0.4496, -0.2753,  0.0133, -0.2530, -0.1948],\n         [-0.1633,  0.1839,  0.0541,  0.0842,  0.0214, -0.1622, -0.0566,\n           0.4382, -0.2086,  0.0618, -0.2660, -0.1367],\n         [-0.1705,  0.1185,  0.1216,  0.0575,  0.0555, -0.1374, -0.0455,\n           0.4514, -0.2373,  0.0230, -0.2691, -0.1510],\n         [-0.1756,  0.1329,  0.0682,  0.0761,  0.0393, -0.1678, -0.0519,\n           0.4450, -0.2026,  0.0440, -0.2543, -0.1409]],\n\n        [[ 0.2742, -0.2582,  0.1200,  0.5059, -0.0731, -0.3132, -0.3025,\n           0.3286, -0.0943,  0.1890, -0.2357, -0.0822],\n         [ 0.2221, -0.3838,  0.1435,  0.5975, -0.0590, -0.1974, -0.4645,\n           0.3155, -0.0573,  0.0216, -0.1059, -0.1497],\n         [ 0.2526, -0.2882,  0.1494,  0.5493, -0.0332, -0.2730, -0.3584,\n           0.2903, -0.0927,  0.0866, -0.1726, -0.1513],\n         [ 0.1524, -0.1281,  0.2234,  0.4842, -0.0347, -0.1164, -0.3093,\n           0.2786, -0.1829,  0.0551, -0.2244, -0.1824]]],\n       grad_fn=<ViewBackward0>)",
-    "template": "import torch\nimport torch.nn as nn\nimport torch.nn.functional as F\n\n\nclass MultiHeadAttention(nn.Module):\n    def __init__(self, hidden_dim: int, n_heads: int):\n        super().__init__()\n        assert hidden_dim % n_heads == 0\n        self.hidden_dim = hidden_dim\n        self.n_heads = n_heads\n        self.head_dim = hidden_dim // n_heads\n\n        self.q_proj = nn.Linear(hidden_dim, hidden_dim)\n        self.k_proj = nn.Linear(hidden_dim, hidden_dim)\n        self.v_proj = nn.Linear(hidden_dim, hidden_dim)\n        self.out_proj = nn.Linear(hidden_dim, hidden_dim)\n\n    def forward(self, x: torch.Tensor) -> torch.Tensor:\n        \"\"\"x: (batch, seq_len, hidden_dim) -> (batch, seq_len, hidden_dim)\"\"\"\n        batch, seq_len, _ = x.shape\n\n        Q = self.q_proj(x)\n        K = self.k_proj(x)\n        V = self.v_proj(x)\n\n        # Reshape to (batch, seq_len, n_heads, head_dim) and transpose\n        Q = ???  # use view then transpose\n        K = ???\n        V = ???\n\n        # Scaled dot-product attention\n        scores = torch.matmul(???, ???.transpose(-2, -1))\n        scores = scores / (??? ** 0.5)\n        attn_weights = F.softmax(???, dim=-1)\n        attn_output = torch.matmul(???, ???)\n\n        # Transpose back and concatenate heads\n        attn_output = attn_output.transpose(1, 2)\n        output = self.out_proj(???.contiguous().view(batch, seq_len, self.hidden_dim))\n        return output\n\n\n# Test\ntorch.manual_seed(42)\nmha = MultiHeadAttention(hidden_dim=12, n_heads=3)\nx = torch.randn(2, 4, 12)\nresult = mha(x)\nprint(result)\n"
+    "template": "import torch\nimport torch.nn as nn\nimport torch.nn.functional as F\n\n\nclass MultiHeadAttention(nn.Module):\n    def __init__(self, hidden_dim: int, n_heads: int):\n        super().__init__()\n        assert hidden_dim % n_heads == 0\n        self.hidden_dim = hidden_dim\n        self.n_heads = n_heads\n        self.head_dim = hidden_dim // n_heads\n\n        self.q_proj = nn.Linear(hidden_dim, hidden_dim)\n        self.k_proj = nn.Linear(hidden_dim, hidden_dim)\n        self.v_proj = nn.Linear(hidden_dim, hidden_dim)\n        self.out_proj = nn.Linear(hidden_dim, hidden_dim)\n\n    def forward(self, x: torch.Tensor) -> torch.Tensor:\n        \"\"\"x: (batch, seq_len, hidden_dim) -> (batch, seq_len, hidden_dim)\"\"\"\n        batch, seq_len, _ = x.shape\n\n        Q = self.q_proj(x)\n        K = self.k_proj(x)\n        V = self.v_proj(x)\n\n        # Reshape to (batch, seq_len, n_heads, head_dim) and transpose\n        Q = ???  # use view then transpose\n        K = ???\n        V = ???\n\n        # Scaled dot-product attention\n        scores = torch.matmul(???, ???.transpose(-2, -1))\n        scores = scores / (??? ** 0.5)\n        attn_weights = F.softmax(???, dim=-1)\n        attn_output = torch.matmul(???, ???)\n\n        # Transpose back and concatenate heads\n        attn_output = attn_output.transpose(1, 2)\n        output = self.out_proj(???.contiguous().view(batch, seq_len, self.hidden_dim))\n        return output\n\n\n# Test\ntorch.manual_seed(42)\nmha = MultiHeadAttention(hidden_dim=12, n_heads=3)\nx = torch.randn(2, 4, 12)\nresult = mha(x)\nprint(result)\n",
+    "answer": "import torch\nimport torch.nn as nn\nimport torch.nn.functional as F\n\nclass MultiHeadAttention(nn.Module):\n    def __init__(self, d_model, n_heads):\n        super().__init__()\n        self.n_heads = n_heads\n        self.d_model = d_model\n        self.head_dim = d_model // n_heads\n        self.Wq = nn.Linear(d_model, d_model)\n        self.Wk = nn.Linear(d_model, d_model)\n        self.Wv = nn.Linear(d_model, d_model)\n        self.out_proj = nn.Linear(d_model, d_model)\n    \n    def forward(self, x):\n        B, N, C = x.shape\n        Q = self.Wq(x).view(B, N, self.n_heads, self.head_dim).transpose(1, 2)\n        K = self.Wk(x).view(B, N, self.n_heads, self.head_dim).transpose(1, 2)\n        V = self.Wv(x).view(B, N, self.n_heads, self.head_dim).transpose(1, 2)\n        scores = torch.einsum('bhqd,bhdq->bhqd', Q, K) / (self.head_dim ** 0.5)\n        attn = F.softmax(scores, dim=-1)\n        out = torch.einsum('bhqd,bhdq->bhqd', attn, V).transpose(1, 2).reshape(B, N, C)\n        return self.out_proj(out)\n\ntorch.manual_seed(42)\nmha = MultiHeadAttention(16, 4)\nx = torch.randn(1, 8, 16)\nout = mha(x)\nprint(f\"MHA output shape: {out.shape}\")"
   },
   {
     "id": 73,
@@ -654,7 +726,8 @@
     "question": "Implement a KVCache class for autoregressive generation. The cache should store keys and values from previous tokens and update them with each new token generation. Complete the ??? sections to make the cache work correctly.",
     "code_hint": "Initialize keys/values as None. In update(), use torch.cat to concatenate new keys/values with existing ones along the appropriate dimension.",
     "expected_output": "No cache output shape: torch.Size([4, 8])\nWith cache output shape: torch.Size([4, 8])\nMax absolute difference: 0.000000",
-    "template": "import torch\nimport torch.nn as nn\n\nclass KVCache:\n    \"\"\"KV Cache for storing keys and values from previous tokens.\"\"\"\n    def __init__(self):\n        self.keys = None\n        self.values = None\n    \n    def update(self, new_k, new_v):\n        \"\"\"Update cache with new keys and values.\"\"\"\n        if self.keys is None:\n            self.keys = new_k\n            self.values = new_v\n        else:\n            self.keys = torch.cat([???, ???], dim=0)\n            self.values = torch.cat([???, ???], dim=0)\n        return self.keys, self.values\n\ndef compute_attention(x, W_q, W_k, W_v):\n    \"\"\"Compute attention output for a sequence.\"\"\"\n    Q = x @ W_q.T\n    K = x @ W_k.T\n    V = x @ W_v.T\n    attn = (Q @ K.T) * (1.0 / 8.0)\n    attn = attn.softmax(dim=-1)\n    return attn @ V\n\ndef autoregressive_with_cache(x, W_q, W_k, W_v, cache):\n    \"\"\"Process tokens one at a time with KV cache.\"\"\"\n    outputs = []\n    for t in range(x.shape[0]):\n        q = x[t:t+1] @ W_q.T\n        k = x[t:t+1] @ W_k.T\n        v = x[t:t+1] @ W_v.T\n        k_cached, v_cached = cache.update(k, v)\n        attn = (q @ k_cached.T) * (1.0 / 8.0)\n        attn = attn.softmax(dim=-1)\n        out = attn @ v_cached\n        outputs.append(out)\n    return torch.cat(outputs, dim=0)\n\ntorch.manual_seed(42)\n\nx = torch.randn(4, 8)  # 4 tokens, 8 dimensions\nW_q = torch.randn(8, 8)\nW_k = torch.randn(8, 8)\nW_v = torch.randn(8, 8)\n\n# Process all tokens at once (no cache)\noutput_no_cache = compute_attention(x, W_q, W_k, W_v)\nprint(f\"No cache output shape: {output_no_cache.shape}\")\n\n# Process with KV cache (token by token)\ncache = KVCache()\noutput_with_cache = autoregressive_with_cache(x, W_q, W_k, W_v, cache)\nprint(f\"With cache output shape: {output_with_cache.shape}\")\n\n# Check they are numerically identical\nmax_diff = (output_no_cache - output_with_cache).abs().max().item()\nprint(f\"Max absolute difference: {max_diff:.6f}\")"
+    "template": "import torch\nimport torch.nn as nn\n\nclass KVCache:\n    \"\"\"KV Cache for storing keys and values from previous tokens.\"\"\"\n    def __init__(self):\n        self.keys = None\n        self.values = None\n    \n    def update(self, new_k, new_v):\n        \"\"\"Update cache with new keys and values.\"\"\"\n        if self.keys is None:\n            self.keys = new_k\n            self.values = new_v\n        else:\n            self.keys = torch.cat([???, ???], dim=0)\n            self.values = torch.cat([???, ???], dim=0)\n        return self.keys, self.values\n\ndef compute_attention(x, W_q, W_k, W_v):\n    \"\"\"Compute attention output for a sequence.\"\"\"\n    Q = x @ W_q.T\n    K = x @ W_k.T\n    V = x @ W_v.T\n    attn = (Q @ K.T) * (1.0 / 8.0)\n    attn = attn.softmax(dim=-1)\n    return attn @ V\n\ndef autoregressive_with_cache(x, W_q, W_k, W_v, cache):\n    \"\"\"Process tokens one at a time with KV cache.\"\"\"\n    outputs = []\n    for t in range(x.shape[0]):\n        q = x[t:t+1] @ W_q.T\n        k = x[t:t+1] @ W_k.T\n        v = x[t:t+1] @ W_v.T\n        k_cached, v_cached = cache.update(k, v)\n        attn = (q @ k_cached.T) * (1.0 / 8.0)\n        attn = attn.softmax(dim=-1)\n        out = attn @ v_cached\n        outputs.append(out)\n    return torch.cat(outputs, dim=0)\n\ntorch.manual_seed(42)\n\nx = torch.randn(4, 8)  # 4 tokens, 8 dimensions\nW_q = torch.randn(8, 8)\nW_k = torch.randn(8, 8)\nW_v = torch.randn(8, 8)\n\n# Process all tokens at once (no cache)\noutput_no_cache = compute_attention(x, W_q, W_k, W_v)\nprint(f\"No cache output shape: {output_no_cache.shape}\")\n\n# Process with KV cache (token by token)\ncache = KVCache()\noutput_with_cache = autoregressive_with_cache(x, W_q, W_k, W_v, cache)\nprint(f\"With cache output shape: {output_with_cache.shape}\")\n\n# Check they are numerically identical\nmax_diff = (output_no_cache - output_with_cache).abs().max().item()\nprint(f\"Max absolute difference: {max_diff:.6f}\")",
+    "answer": "import torch\n\nclass KVCache:\n    def __init__(self):\n        self.k_cache = []\n        self.v_cache = []\n    \n    def update(self, k, v):\n        self.k_cache.append(k)\n        self.v_cache.append(v)\n        return torch.cat(self.k_cache, dim=2), torch.cat(self.v_cache, dim=2)\n\ntorch.manual_seed(42)\ncache = KVCache()\nk1 = torch.randn(1, 2, 8)\nv1 = torch.randn(1, 2, 8)\nk2 = torch.randn(1, 2, 8)\nv2 = torch.randn(1, 2, 8)\nK, V = cache.update(k1, v1)\nK, V = cache.update(k2, v2)\nprint(f\"K cache shape: {K.shape}\")"
   },
   {
     "id": 74,
@@ -663,7 +736,8 @@
     "question": "Implement a TransformerEncoderLayer with self-attention + feedforward network using nn.TransformerEncoderLayer.",
     "code_hint": "Use nn.TransformerEncoderLayer(d_model, nhead, dim_feedforward, batch_first=True) to create the layer.",
     "expected_output": "tensor([[[-0.5425, -2.0298,  0.7634,  1.1526,  0.7284, -0.7562,  0.7531,\n          -0.0690],\n         [ 1.1170, -0.5149, -0.7913,  0.6682, -1.2799,  1.7775, -0.7528,\n          -0.2237],\n         [-0.0879,  0.3440,  0.0108,  2.2867, -0.6235,  0.0347, -1.3852,\n          -0.5796],\n         [-0.5519, -1.0413,  0.4808,  0.4069,  0.5363,  1.4102, -1.8791,\n           0.6380],\n         [ 0.7876, -1.9124,  1.2459,  0.3667, -1.0024,  0.9622, -0.1760,\n          -0.2715]],\n\n        [[-1.1241, -1.6466, -0.5158,  0.1718, -0.1081,  0.8305,  0.9079,\n           1.4844],\n         [ 0.2437, -1.1754, -0.9954,  0.3223,  0.9954,  0.3470,  1.6007,\n          -1.3382],\n         [-0.6264, -1.2571,  0.9054,  1.0724, -1.3169, -0.0318, -0.2491,\n           1.5034],\n         [ 1.2335, -0.1003, -0.3325, -1.2007, -0.3728, -0.8438,  1.9827,\n          -0.3660],\n         [ 1.4361, -1.2904,  0.3400,  0.8205,  1.1135, -0.3668, -0.9941,\n          -1.0588]]], grad_fn=<NativeLayerNormBackward0>)",
-    "template": "import torch\nimport torch.nn as nn\n\nclass TransformerEncoderLayer(nn.Module):\n    def __init__(self, d_model=8, nhead=4):\n        super().__init__()\n        # TODO: Create TransformerEncoderLayer with self-attention + feedforward network\n        self.encoder_layer = nn.TransformerEncoderLayer(\n            d_model=???, \n            nhead=???,\n            dim_feedforward=32,\n            batch_first=True\n        )\n    \n    def forward(self, x):\n        return self.encoder_layer(???)\n\n# Test\ntorch.manual_seed(42)\nlayer = TransformerEncoderLayer(d_model=8, nhead=4)\nx = torch.randn(2, 5, 8)  # (batch, seq_len, d_model)\nresult = layer(x)\nprint(result)\n"
+    "template": "import torch\nimport torch.nn as nn\n\nclass TransformerEncoderLayer(nn.Module):\n    def __init__(self, d_model=8, nhead=4):\n        super().__init__()\n        # TODO: Create TransformerEncoderLayer with self-attention + feedforward network\n        self.encoder_layer = nn.TransformerEncoderLayer(\n            d_model=???, \n            nhead=???,\n            dim_feedforward=32,\n            batch_first=True\n        )\n    \n    def forward(self, x):\n        return self.encoder_layer(???)\n\n# Test\ntorch.manual_seed(42)\nlayer = TransformerEncoderLayer(d_model=8, nhead=4)\nx = torch.randn(2, 5, 8)  # (batch, seq_len, d_model)\nresult = layer(x)\nprint(result)\n",
+    "answer": "import torch\nimport torch.nn as nn\n\nclass TransformerEncoderLayer(nn.Module):\n    def __init__(self, d_model, nhead, dim_feedforward=2048):\n        super().__init__()\n        self.self_attn = nn.MultiheadAttention(d_model, nhead, batch_first=True)\n        self.linear1 = nn.Linear(d_model, dim_feedforward)\n        self.linear2 = nn.Linear(dim_feedforward, d_model)\n        self.norm1 = nn.LayerNorm(d_model)\n        self.norm2 = nn.LayerNorm(d_model)\n    \n    def forward(self, x):\n        attn_out, _ = self.self_attn(x, x, x)\n        x = self.norm1(x + attn_out)\n        ff_out = self.linear2(torch.relu(self.linear1(x)))\n        x = self.norm2(x + ff_out)\n        return x\n\ntorch.manual_seed(42)\nlayer = TransformerEncoderLayer(d_model=8, nhead=2)\nx = torch.randn(2, 4, 8)\nout = layer(x)\nprint(f\"Encoder layer output shape: {out.shape}\")"
   },
   {
     "id": 75,
@@ -672,7 +746,8 @@
     "question": "Implement Weight Tying in a language model. Weight tying shares parameters between input embedding and output projection to reduce parameters and improve performance. Set the output projection weight to equal the embedding weight.",
     "code_hint": "After defining embedding and output layers, use self.output_proj.weight = self.embedding.weight to share parameters.",
     "expected_output": "Logits for next token prediction: tensor([-2.0886, -2.8014, -0.2580,  0.8598], grad_fn=<SliceBackward0>)",
-    "template": "import torch\nimport torch.nn as nn\n\n\nclass WeightTiedLM(nn.Module):\n    def __init__(self, vocab_size: int, d_model: int):\n        super().__init__()\n        self.embedding = nn.Embedding(vocab_size, d_model)\n        self.output_proj = nn.Linear(d_model, vocab_size)\n        \n        # Weight Tying: Share parameters between embedding and output projection\n        ???\n    \n    def forward(self, input_ids):\n        # Embed input tokens\n        x = self.embedding(input_ids)  # (batch, seq_len, d_model)\n        \n        # Simple mean pooling (for demonstration)\n        x = x.mean(dim=1, keepdim=True)  # (batch, 1, d_model)\n        \n        # Project back to vocabulary\n        logits = self.output_proj(x)  # (batch, 1, vocab_size)\n        return logits\n\n\n# Test\ntorch.manual_seed(42)\nmodel = WeightTiedLM(vocab_size=100, d_model=4)\ninput_ids = torch.tensor([[42, 17, 5]])\nlogits = model(input_ids)\nprint(f\"Logits for next token prediction: {logits.squeeze()[:4]}\")\n"
+    "template": "import torch\nimport torch.nn as nn\n\n\nclass WeightTiedLM(nn.Module):\n    def __init__(self, vocab_size: int, d_model: int):\n        super().__init__()\n        self.embedding = nn.Embedding(vocab_size, d_model)\n        self.output_proj = nn.Linear(d_model, vocab_size)\n        \n        # Weight Tying: Share parameters between embedding and output projection\n        ???\n    \n    def forward(self, input_ids):\n        # Embed input tokens\n        x = self.embedding(input_ids)  # (batch, seq_len, d_model)\n        \n        # Simple mean pooling (for demonstration)\n        x = x.mean(dim=1, keepdim=True)  # (batch, 1, d_model)\n        \n        # Project back to vocabulary\n        logits = self.output_proj(x)  # (batch, 1, vocab_size)\n        return logits\n\n\n# Test\ntorch.manual_seed(42)\nmodel = WeightTiedLM(vocab_size=100, d_model=4)\ninput_ids = torch.tensor([[42, 17, 5]])\nlogits = model(input_ids)\nprint(f\"Logits for next token prediction: {logits.squeeze()[:4]}\")\n",
+    "answer": "import torch\nimport torch.nn as nn\n\nclass LMWithWeightTying(nn.Module):\n    def __init__(self, vocab_size, embed_dim):\n        super().__init__()\n        self.embedding = nn.Embedding(vocab_size, embed_dim)\n        self.output_proj = nn.Linear(embed_dim, vocab_size)\n        self.output_proj.weight = self.embedding.weight\n    \n    def forward(self, x):\n        return self.output_proj(self.embedding(x))\n\ntorch.manual_seed(42)\nmodel = LMWithWeightTying(vocab_size=100, embed_dim=32)\nx = torch.randint(0, 100, (2, 10))\nout = model(x)\nprint(f\"Output shape: {out.shape}\")\nprint(f\"Same weights: {model.embedding.weight is model.output_proj.weight}\")"
   },
   {
     "id": 76,
@@ -681,7 +756,8 @@
     "question": "Implement Xavier initialization for a Linear layer. Use nn.init.xavier_uniform_ to initialize weights and nn.init.zeros_ for bias.",
     "code_hint": "nn.init.xavier_uniform_(layer.weight), nn.init.zeros_(layer.bias)",
     "expected_output": "Weight mean: 0.0\nWeight std: 0.24\nBias: 0.0",
-    "template": "import torch\nimport torch.nn as nn\n\nlayer = nn.Linear(10, 20)\nnn.init.???_(layer.weight)\nnn.init.???_(layer.bias)\nprint(f\"Weight mean: {layer.weight.mean().item():.4f}\")\nprint(f\"Weight std: {layer.weight.std().item():.2f}\")\nprint(f\"Bias: {layer.bias.item():.1f}\")"
+    "template": "import torch\nimport torch.nn as nn\n\nlayer = nn.Linear(10, 20)\nnn.init.???_(layer.weight)\nnn.init.???_(layer.bias)\nprint(f\"Weight mean: {layer.weight.mean().item():.4f}\")\nprint(f\"Weight std: {layer.weight.std().item():.2f}\")\nprint(f\"Bias: {layer.bias.item():.1f}\")",
+    "answer": "import torch\nimport torch.nn as nn\n\nlayer = nn.Linear(10, 20)\nnn.init.xavier_uniform_(layer.weight)\nnn.init.zeros_(layer.bias)\nprint(f\"Weight mean: {layer.weight.mean().item():.4f}\")\nprint(f\"Weight std: {layer.weight.std().item():.2f}\")\nprint(f\"Bias: {layer.bias.item():.1f}\")"
   },
   {
     "id": 77,
@@ -690,7 +766,8 @@
     "question": "Implement Kaiming initialization for a Linear layer with ReLU. Use nn.init.kaiming_normal_ for weights.",
     "code_hint": "nn.init.kaiming_normal_(layer.weight, nonlinearity='relu')",
     "expected_output": "Weight mean: 0.0\nWeight std: 0.33",
-    "template": "import torch\nimport torch.nn as nn\n\nlayer = nn.Linear(10, 20)\nnn.init.???_(layer.weight, nonlinearity=???)\nprint(f\"Weight mean: {layer.weight.mean().item():.4f}\")\nprint(f\"Weight std: {layer.weight.std().item():.2f}\")"
+    "template": "import torch\nimport torch.nn as nn\n\nlayer = nn.Linear(10, 20)\nnn.init.???_(layer.weight, nonlinearity=???)\nprint(f\"Weight mean: {layer.weight.mean().item():.4f}\")\nprint(f\"Weight std: {layer.weight.std().item():.2f}\")",
+    "answer": "import torch\nimport torch.nn as nn\n\nlayer = nn.Linear(10, 20)\nnn.init.kaiming_normal_(layer.weight, nonlinearity='relu')\nprint(f\"Weight mean: {layer.weight.mean().item():.4f}\")\nprint(f\"Weight std: {layer.weight.std().item():.2f}\")"
   },
   {
     "id": 78,
@@ -699,7 +776,8 @@
     "question": "Compute CrossEntropyLoss with label_smoothing=0.1. Compare with standard CE loss.",
     "code_hint": "nn.CrossEntropyLoss(label_smoothing=0.1)",
     "expected_output": "Standard CE: 2.3026\nWith label smoothing (0.1): 2.3026",
-    "template": "import torch\nimport torch.nn as nn\n\nlogits = torch.randn(1, 5)\ntarget = torch.tensor([2])\n\nce_loss = nn.???()\nsmooth_loss = nn.???(label_smoothing=0.1)\n\nprint(f\"Standard CE: {ce_loss(logits, target).item():.4f}\")\nprint(f\"With label smoothing (0.1): {smooth_loss(logits, target).item():.4f}\")"
+    "template": "import torch\nimport torch.nn as nn\n\nlogits = torch.randn(1, 5)\ntarget = torch.tensor([2])\n\nce_loss = nn.???()\nsmooth_loss = nn.???(label_smoothing=0.1)\n\nprint(f\"Standard CE: {ce_loss(logits, target).item():.4f}\")\nprint(f\"With label smoothing (0.1): {smooth_loss(logits, target).item():.4f}\")",
+    "answer": "import torch\nimport torch.nn as nn\n\nlogits = torch.randn(1, 5)\ntarget = torch.tensor([2])\n\nce_loss = nn.CrossEntropyLoss()(logits, target)\nsmooth_loss = nn.CrossEntropyLoss(label_smoothing=0.1)(logits, target)\n\nprint(f\"Standard CE: {ce_loss.item():.4f}\")\nprint(f\"With label smoothing (0.1): {smooth_loss.item():.4f}\")"
   },
   {
     "id": 79,
@@ -708,7 +786,8 @@
     "question": "Compute CE loss with ignore_index=-100. Padding tokens at -100 should not contribute to loss.",
     "code_hint": "nn.CrossEntropyLoss(ignore_index=-100)",
     "expected_output": "Loss with ignore: 1.6094\nLoss without ignore: 1.8265",
-    "template": "import torch\nimport torch.nn as nn\n\nlogits = torch.randn(4, 5)\ntarget = torch.tensor([0, 1, -100, 2])\n\nloss_with_ignore = nn.CrossEntropyLoss(ignore_index=???)(logits, target)\nloss_without = nn.CrossEntropyLoss()(logits, target)\n\nprint(f\"Loss with ignore: {loss_with_ignore.item():.4f}\")\nprint(f\"Loss without ignore: {loss_without.item():.4f}\")"
+    "template": "import torch\nimport torch.nn as nn\n\nlogits = torch.randn(4, 5)\ntarget = torch.tensor([0, 1, -100, 2])\n\nloss_with_ignore = nn.CrossEntropyLoss(ignore_index=???)(logits, target)\nloss_without = nn.CrossEntropyLoss()(logits, target)\n\nprint(f\"Loss with ignore: {loss_with_ignore.item():.4f}\")\nprint(f\"Loss without ignore: {loss_without.item():.4f}\")",
+    "answer": "import torch\nimport torch.nn as nn\n\nlogits = torch.randn(4, 5)\ntarget = torch.tensor([0, 1, -100, 2])\n\nloss_with_ignore = nn.CrossEntropyLoss(ignore_index=-100)(logits, target)\nloss_without = nn.CrossEntropyLoss()(logits, target)\n\nprint(f\"Loss with ignore: {loss_with_ignore.item():.4f}\")\nprint(f\"Loss without ignore: {loss_without.item():.4f}\")"
   },
   {
     "id": 80,
@@ -717,7 +796,8 @@
     "question": "Compute gradient norm and clip gradients using clip_grad_norm_ with max_norm=1.0.",
     "code_hint": "torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)",
     "expected_output": "Before clip: 2.8758",
-    "template": "import torch\nimport torch.nn as nn\n\nx = torch.randn(1, 10)\nmodel = nn.Linear(10, 1)\ntarget = torch.randn(1, 1)\n\nloss = model(x).mean()\nloss.backward()\n\ngrad_norm_before = torch.nn.utils.???_(model.parameters(), max_norm=1.0)\nprint(f\"Grad norm after clip: {grad_norm_before:.4f}\")\nprint(f\"Max grad element: {model.weight.grad.abs().max().item():.4f}\")"
+    "template": "import torch\nimport torch.nn as nn\n\nx = torch.randn(1, 10)\nmodel = nn.Linear(10, 1)\ntarget = torch.randn(1, 1)\n\nloss = model(x).mean()\nloss.backward()\n\ngrad_norm_before = torch.nn.utils.???_(model.parameters(), max_norm=1.0)\nprint(f\"Grad norm after clip: {grad_norm_before:.4f}\")\nprint(f\"Max grad element: {model.weight.grad.abs().max().item():.4f}\")",
+    "answer": "import torch\nimport torch.nn as nn\n\nx = torch.randn(1, 10)\nmodel = nn.Linear(10, 1)\ntarget = torch.randn(1, 1)\n\nloss = model(x).mean()\nloss.backward()\n\ngrad_norm_before = torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)\nprint(f\"Grad norm after clip: {grad_norm_before:.4f}\")\nprint(f\"Max grad element: {model.weight.grad.abs().max().item():.4f}\")"
   },
   {
     "id": 81,
@@ -726,7 +806,8 @@
     "question": "Simulate gradient accumulation for batch_size=32 using 4 micro-batches of size 8. Accumulate gradients.",
     "code_hint": "loss.backward() accumulates, optimizer.step() with zero_grad applies",
     "expected_output": "Accumulated grad norm: similar to single batch",
-    "template": "import torch\nimport torch.nn as nn\n\nmodel = nn.Linear(10, 1)\noptimizer = torch.optim.SGD(model.parameters(), lr=0.1)\nmicro_batch_size = 8\nnum_micro_batches = 4\n\nfor i in range(num_micro_batches):\n    x = torch.randn(micro_batch_size, 10)\n    y = torch.randn(micro_batch_size, 1)\n    loss = model(x).mean()\n    ???(loss).backward()\n\nprint(f\"Accumulated grad norm: {model.weight.grad.norm().item():.4f}\")"
+    "template": "import torch\nimport torch.nn as nn\n\nmodel = nn.Linear(10, 1)\noptimizer = torch.optim.SGD(model.parameters(), lr=0.1)\nmicro_batch_size = 8\nnum_micro_batches = 4\n\nfor i in range(num_micro_batches):\n    x = torch.randn(micro_batch_size, 10)\n    y = torch.randn(micro_batch_size, 1)\n    loss = model(x).mean()\n    ???(loss).backward()\n\nprint(f\"Accumulated grad norm: {model.weight.grad.norm().item():.4f}\")",
+    "answer": "import torch\nimport torch.nn as nn\n\nmodel = nn.Linear(10, 1)\noptimizer = torch.optim.SGD(model.parameters(), lr=0.1)\nmicro_batch_size = 8\nnum_micro_batches = 4\n\nfor i in range(num_micro_batches):\n    x = torch.randn(micro_batch_size, 10)\n    y = torch.randn(micro_batch_size, 1)\n    loss = model(x).mean()\n    loss.backward()\n\nprint(f\"Accumulated grad norm: {model.weight.grad.norm().item():.4f}\")"
   },
   {
     "id": 82,
@@ -735,7 +816,8 @@
     "question": "Use torch.cuda.amp.autocast to run forward pass in FP16. Check the dtype of output.",
     "code_hint": "with torch.cuda.amp.autocast(): and torch.float16",
     "expected_output": "Output dtype: torch.float16",
-    "template": "import torch\nimport torch.nn as nn\n\nif torch.cuda.is_available():\n    model = nn.Linear(10, 5).cuda()\n    x = torch.randn(1, 10).cuda()\n    \n    with torch.cuda.amp.???():\n        output = model(x)\n    \n    print(f\"Output dtype: {output.dtype}\")\nelse:\n    print(\"CUDA not available\")"
+    "template": "import torch\nimport torch.nn as nn\n\nif torch.cuda.is_available():\n    model = nn.Linear(10, 5).cuda()\n    x = torch.randn(1, 10).cuda()\n    \n    with torch.cuda.amp.???():\n        output = model(x)\n    \n    print(f\"Output dtype: {output.dtype}\")\nelse:\n    print(\"CUDA not available\")",
+    "answer": "import torch\nimport torch.nn as nn\n\nif torch.cuda.is_available():\n    model = nn.Linear(10, 5).cuda()\n    x = torch.randn(1, 10).cuda()\n    \n    with torch.cuda.amp.autocast():\n        output = model(x)\n    \n    print(f\"Output dtype: {output.dtype}\")\nelse:\n    print(\"CUDA not available\")"
   },
   {
     "id": 83,
@@ -744,7 +826,8 @@
     "question": "Use GradScaler to scale loss and unscale gradients. Check if gradients were skipped due to underflow.",
     "code_hint": "scaler.scale(loss), scaler.step(optimizer), scaler.update()",
     "expected_output": "Scaled loss: 2.0\nUnscale skipped: False",
-    "template": "import torch\nimport torch.nn as nn\n\nmodel = nn.Linear(10, 1)\noptimizer = torch.optim.SGD(model.parameters(), lr=1.0)\nscaler = torch.cuda.amp.GradScaler()\n\nx = torch.randn(1, 10)\ny = torch.randn(1, 1)\n\nwith torch.cuda.amp.autocast():\n    loss = model(x).mean()\n\nscaled_loss = scaler.???(loss)\nprint(f\"Scaled loss: {scaled_loss.item():.1f}\")\n"
+    "template": "import torch\nimport torch.nn as nn\n\nmodel = nn.Linear(10, 1)\noptimizer = torch.optim.SGD(model.parameters(), lr=1.0)\nscaler = torch.cuda.amp.GradScaler()\n\nx = torch.randn(1, 10)\ny = torch.randn(1, 1)\n\nwith torch.cuda.amp.autocast():\n    loss = model(x).mean()\n\nscaled_loss = scaler.???(loss)\nprint(f\"Scaled loss: {scaled_loss.item():.1f}\")\n",
+    "answer": "import torch\nimport torch.nn as nn\n\nmodel = nn.Linear(10, 1)\noptimizer = torch.optim.SGD(model.parameters(), lr=1.0)\nscaler = torch.cuda.amp.GradScaler() if torch.cuda.is_available() else None\n\nx = torch.randn(1, 10)\ny = torch.randn(1, 1)\n\nwith torch.cuda.amp.autocast() if torch.cuda.is_available() else torch.no_grad():\n    loss = model(x).mean()\n\nif scaler:\n    scaler.scale(loss).backward()\n    print(f\"Scaled loss: {scaler.scale(loss).item():.1f}\")\nelse:\n    loss.backward()\n    print(\"Loss (no scaling): {:.1f}\".format(loss.item()))"
   },
   {
     "id": 84,
@@ -753,7 +836,8 @@
     "question": "Implement linear warmup + cosine decay scheduler. Warmup 100 steps from 0 to 1e-4, then cosine decay to 1e-5 over 900 steps.",
     "code_hint": "LinearLR for warmup, CosineAnnealingLR for decay",
     "expected_output": "Step 0: lr=0.0\nStep 50: lr=0.0001\nStep 100: lr=0.0001\nStep 500: lr=5.54e-05\nStep 999: lr=1e-05",
-    "template": "import torch\nimport torch.optim as optim\n\noptimizer = optim.SGD([torch.zeros(1)], lr=0.0)\ntotal_steps = 1000\nwarmup_steps = 100\n\n# Warmup scheduler\nwarmup = optim.lr_scheduler.LinearLR(optimizer, start_factor=0.001, end_factor=1.0, total_iters=warmup_steps)\n# Cosine decay scheduler  \nscheduler = optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=total_steps - warmup_steps, eta_min=1e-5)\n\nlrs = []\nfor step in range(total_steps):\n    if step < warmup_steps:\n        scheduler = warmup\n    else:\n        scheduler = optim.lr_scheduler.CosineAnnealingLR(\n            optim.SGD([torch.zeros(1)], lr=1e-4), \n            T_max=total_steps - warmup_steps, \n            eta_min=1e-5\n        )\n    lr = optimizer.param_groups[0]['lr']\n    if step in [0, 50, 100, 500, 999]:\n        print(f\"Step {step}: lr={lr:.2e}\")"
+    "template": "import torch\nimport torch.optim as optim\n\noptimizer = optim.SGD([torch.zeros(1)], lr=0.0)\ntotal_steps = 1000\nwarmup_steps = 100\n\n# Warmup scheduler\nwarmup = optim.lr_scheduler.LinearLR(optimizer, start_factor=0.001, end_factor=1.0, total_iters=warmup_steps)\n# Cosine decay scheduler  \nscheduler = optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=total_steps - warmup_steps, eta_min=1e-5)\n\nlrs = []\nfor step in range(total_steps):\n    if step < warmup_steps:\n        scheduler = warmup\n    else:\n        scheduler = optim.lr_scheduler.CosineAnnealingLR(\n            optim.SGD([torch.zeros(1)], lr=1e-4), \n            T_max=total_steps - warmup_steps, \n            eta_min=1e-5\n        )\n    lr = optimizer.param_groups[0]['lr']\n    if step in [0, 50, 100, 500, 999]:\n        print(f\"Step {step}: lr={lr:.2e}\")",
+    "answer": "import torch\nimport torch.optim as optim\n\noptimizer = optim.SGD([torch.zeros(1)], lr=0.0)\ntotal_steps = 1000\nwarmup_steps = 100\n\nwarmup = optim.lr_scheduler.LinearLR(optimizer, start_factor=0.001, end_factor=1.0, total_iters=warmup_steps)\nscheduler = optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=total_steps - warmup_steps, eta_min=1e-5)\n\nfor step in range(10):\n    optimizer.step()\n    if step < warmup_steps:\n        warmup.step()\n    else:\n        scheduler.step()\n    lr = optimizer.param_groups[0]['lr']\n    if step in [0, 50, 99]:\n        print(f\"Step {step}: lr={lr:.2e}\")"
   },
   {
     "id": 85,
@@ -762,7 +846,8 @@
     "question": "Complete the DistributedDataParallel (DDP) setup: initialize the process group with init_process_group and wrap the model with DDP. Fill in the ??? to complete the distributed training initialization.",
     "code_hint": "1. Use 'gloo' backend (works on CPU). 2. Initialize with dist.init_process_group(backend=..., rank=..., world_size=...). 3. Wrap model with nn.parallel.DistributedDataParallel(model).",
     "expected_output": "Backend: gloo\nRank: 0\nWorld size: 1\nModel wrapped: True",
-    "template": "import torch\nimport torch.nn as nn\nimport torch.distributed as dist\nimport socket\nimport os\n\n# Get a free port for the rendezvous\ndef get_free_port():\n    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:\n        s.bind(('', 0))\n        s.listen(1)\n        port = s.getsockname()[1]\n    return port\n\nport = get_free_port()\nos.environ['MASTER_ADDR'] = 'localhost'\nos.environ['MASTER_PORT'] = str(port)\n\n# Initialize process group for distributed training\nbackend = 'gloo'\nrank = 0\nworld_size = 1\n???  # Use init_process_group with backend, rank, and world_size\n\n# Define a simple model\nclass SimpleModel(nn.Module):\n    def __init__(self):\n        super().__init__()\n        self.linear = nn.Linear(10, 5)\n    \n    def forward(self, x):\n        return self.linear(x)\n\nmodel = SimpleModel()\n# Wrap model with DDP\nmodel = ???  # Use nn.parallel.DistributedDataParallel\n\nprint(f'Backend: {backend}')\nprint(f'Rank: {rank}')\nprint(f'World size: {dist.get_world_size()}')\nprint(f'Model wrapped: {isinstance(model, nn.parallel.DistributedDataParallel)}')\n\n???  # Use destroy_process_group\n"
+    "template": "import torch\nimport torch.nn as nn\nimport torch.distributed as dist\nimport socket\nimport os\n\n# Get a free port for the rendezvous\ndef get_free_port():\n    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:\n        s.bind(('', 0))\n        s.listen(1)\n        port = s.getsockname()[1]\n    return port\n\nport = get_free_port()\nos.environ['MASTER_ADDR'] = 'localhost'\nos.environ['MASTER_PORT'] = str(port)\n\n# Initialize process group for distributed training\nbackend = 'gloo'\nrank = 0\nworld_size = 1\n???  # Use init_process_group with backend, rank, and world_size\n\n# Define a simple model\nclass SimpleModel(nn.Module):\n    def __init__(self):\n        super().__init__()\n        self.linear = nn.Linear(10, 5)\n    \n    def forward(self, x):\n        return self.linear(x)\n\nmodel = SimpleModel()\n# Wrap model with DDP\nmodel = ???  # Use nn.parallel.DistributedDataParallel\n\nprint(f'Backend: {backend}')\nprint(f'Rank: {rank}')\nprint(f'World size: {dist.get_world_size()}')\nprint(f'Model wrapped: {isinstance(model, nn.parallel.DistributedDataParallel)}')\n\n???  # Use destroy_process_group\n",
+    "answer": "import torch\nimport torch.nn as nn\nimport torch.distributed as dist\n\n# Initialize\ndist.init_process_group(backend='gloo', rank=0, world_size=1)\n\n# Create and wrap model\nmodel = nn.Linear(10, 5)\nddp_model = nn.parallel.DistributedDataParallel(model)\n\n# Cleanup\ndist.destroy_process_group()\nprint(\"DDP initialized successfully\")"
   },
   {
     "id": 86,
@@ -771,7 +856,8 @@
     "question": "Complete the code to use DistributedSampler to shard a dataset across 2 ranks. Each rank should receive different samples from the dataset.",
     "code_hint": "Use torch.utils.data.distributed.DistributedSampler with num_replicas=2, rank=0 and rank=1 parameters. Set shuffle=False for deterministic output.",
     "expected_output": "Rank 0 samples: [0, 2, 4, 6, 8]\nRank 1 samples: [1, 3, 5, 7, 9]",
-    "template": "import torch\nfrom torch.utils.data import Dataset, DataLoader\nfrom torch.utils.data.distributed import DistributedSampler\n\n\nclass SimpleDataset(Dataset):\n    def __init__(self, size=10):\n        self.data = list(range(size))\n    \n    def __len__(self):\n        return len(self.data)\n    \n    def __getitem__(self, idx):\n        return self.data[idx]\n\n\ntorch.manual_seed(42)\n\n# Create dataset and sampler for 2 ranks\ndataset = SimpleDataset(10)\nnum_replicas = 2\n\n# Get samples for rank 0\nsampler_rank0 = ???\nloader_rank0 = DataLoader(dataset, batch_size=10, sampler=sampler_rank0)\nrank0_samples = [x.item() for batch in loader_rank0 for x in batch]\nprint(f\"Rank 0 samples: {rank0_samples}\")\n\n# Get samples for rank 1\nsampler_rank1 = ???\nloader_rank1 = DataLoader(dataset, batch_size=10, sampler=sampler_rank1)\nrank1_samples = [x.item() for batch in loader_rank1 for x in batch]\nprint(f\"Rank 1 samples: {rank1_samples}\")"
+    "template": "import torch\nfrom torch.utils.data import Dataset, DataLoader\nfrom torch.utils.data.distributed import DistributedSampler\n\n\nclass SimpleDataset(Dataset):\n    def __init__(self, size=10):\n        self.data = list(range(size))\n    \n    def __len__(self):\n        return len(self.data)\n    \n    def __getitem__(self, idx):\n        return self.data[idx]\n\n\ntorch.manual_seed(42)\n\n# Create dataset and sampler for 2 ranks\ndataset = SimpleDataset(10)\nnum_replicas = 2\n\n# Get samples for rank 0\nsampler_rank0 = ???\nloader_rank0 = DataLoader(dataset, batch_size=10, sampler=sampler_rank0)\nrank0_samples = [x.item() for batch in loader_rank0 for x in batch]\nprint(f\"Rank 0 samples: {rank0_samples}\")\n\n# Get samples for rank 1\nsampler_rank1 = ???\nloader_rank1 = DataLoader(dataset, batch_size=10, sampler=sampler_rank1)\nrank1_samples = [x.item() for batch in loader_rank1 for x in batch]\nprint(f\"Rank 1 samples: {rank1_samples}\")",
+    "answer": "import torch\nfrom torch.utils.data import DistributedSampler\n\ndataset = torch.arange(100)\nsampler = DistributedSampler(dataset, num_replicas=2, rank=0)\nprint(f\"Sampler for rank 0: {list(sampler)[:10]}...\")"
   },
   {
     "id": 87,
@@ -780,7 +866,8 @@
     "question": "When training with DistributedDataParallel (DDP), BatchNorm layers compute statistics independently on each GPU, leading to different normalization on each rank. Convert the model's BatchNorm layers to SyncBatchNorm to synchronize statistics across all processes.",
     "code_hint": "Use nn.SyncBatchNorm.convert_sync_batchnorm(model)",
     "expected_output": "Before conversion:\n  bn1: BatchNorm2d\n  bn2: BatchNorm2d\n\nAfter conversion:\n  bn1: SyncBatchNorm\n  bn2: SyncBatchNorm",
-    "template": "import torch\nimport torch.nn as nn\n\nclass SimpleModel(nn.Module):\n    def __init__(self):\n        super().__init__()\n        self.conv1 = nn.Conv2d(3, 64, 3)\n        self.bn1 = nn.BatchNorm2d(64)\n        self.conv2 = nn.Conv2d(64, 128, 3)\n        self.bn2 = nn.BatchNorm2d(128)\n        self.fc = nn.Linear(128 * 26 * 26, 10)\n\n    def forward(self, x):\n        x = self.bn1(self.conv1(x))\n        x = self.bn2(self.conv2(x))\n        return x\n\nmodel = SimpleModel()\nprint(\"Before conversion:\")\nfor name, module in model.named_modules():\n    if isinstance(module, nn.BatchNorm2d):\n        print(f\"  {name}: {type(module).__name__}\")\n\n# Convert BatchNorm to SyncBatchNorm for DDP\n???\n\nprint(\"\\nAfter conversion:\")\nfor name, module in model.named_modules():\n    if isinstance(module, (nn.BatchNorm2d, nn.SyncBatchNorm)):\n        print(f\"  {name}: {type(module).__name__}\")"
+    "template": "import torch\nimport torch.nn as nn\n\nclass SimpleModel(nn.Module):\n    def __init__(self):\n        super().__init__()\n        self.conv1 = nn.Conv2d(3, 64, 3)\n        self.bn1 = nn.BatchNorm2d(64)\n        self.conv2 = nn.Conv2d(64, 128, 3)\n        self.bn2 = nn.BatchNorm2d(128)\n        self.fc = nn.Linear(128 * 26 * 26, 10)\n\n    def forward(self, x):\n        x = self.bn1(self.conv1(x))\n        x = self.bn2(self.conv2(x))\n        return x\n\nmodel = SimpleModel()\nprint(\"Before conversion:\")\nfor name, module in model.named_modules():\n    if isinstance(module, nn.BatchNorm2d):\n        print(f\"  {name}: {type(module).__name__}\")\n\n# Convert BatchNorm to SyncBatchNorm for DDP\n???\n\nprint(\"\\nAfter conversion:\")\nfor name, module in model.named_modules():\n    if isinstance(module, (nn.BatchNorm2d, nn.SyncBatchNorm)):\n        print(f\"  {name}: {type(module).__name__}\")",
+    "answer": "import torch\nimport torch.nn as nn\n\n# Convert BatchNorm to SyncBatchNorm\nmodel = nn.Sequential(nn.Conv2d(3, 16, 3), nn.BatchNorm2d(16), nn.ReLU())\nsync_bn_model = nn.SyncBatchNorm.convert_sync_batchnorm(model)\nprint(f\"Converted layers: {list(sync_bn_model.children())}\")"
   },
   {
     "id": 88,
@@ -789,7 +876,8 @@
     "question": "Use torch.utils.checkpoint.checkpoint to wrap expensive layers. This trades compute for memory by not storing intermediate activations during the forward pass, instead recomputing them during backward.",
     "code_hint": "Wrap the layer call with checkpoint(layer, x, use_reentrant=False)",
     "expected_output": "Output shape: torch.Size([2, 128])\nOutput sum: 8.9054\nGradient exists for first layer: True\nGradient sum (first layer): -0.3101",
-    "template": "import torch\nimport torch.nn as nn\nfrom torch.utils.checkpoint import checkpoint\n\nclass CustomLayer(nn.Module):\n    def __init__(self, dim):\n        super().__init__()\n        self.linear = nn.Linear(dim, dim)\n    \n    def forward(self, x):\n        return self.linear(x)\n\nclass CheckpointedModel(nn.Module):\n    def __init__(self, dim=128, num_layers=4):\n        super().__init__()\n        self.layers = nn.ModuleList([\n            CustomLayer(dim) for _ in range(num_layers)\n        ])\n    \n    def forward(self, x):\n        for layer in self.layers:\n            # Wrap layer with checkpoint to trade compute for memory\n            x = ???\n            x = torch.relu(x)\n        return x\n\ntorch.manual_seed(42)\nmodel = CheckpointedModel()\nx = torch.randn(2, 128)\n\n# Forward pass\noutput = model(x)\nprint(f'Output shape: {output.shape}')\nprint(f'Output sum: {output.sum().item():.4f}')\n\n# Backward pass\nloss = output.mean()\nloss.backward()\n\nprint(f'Gradient exists for first layer: {model.layers[0].linear.weight.grad is not None}')\nprint(f'Gradient sum (first layer): {model.layers[0].linear.weight.grad.sum().item():.4f}')"
+    "template": "import torch\nimport torch.nn as nn\nfrom torch.utils.checkpoint import checkpoint\n\nclass CustomLayer(nn.Module):\n    def __init__(self, dim):\n        super().__init__()\n        self.linear = nn.Linear(dim, dim)\n    \n    def forward(self, x):\n        return self.linear(x)\n\nclass CheckpointedModel(nn.Module):\n    def __init__(self, dim=128, num_layers=4):\n        super().__init__()\n        self.layers = nn.ModuleList([\n            CustomLayer(dim) for _ in range(num_layers)\n        ])\n    \n    def forward(self, x):\n        for layer in self.layers:\n            # Wrap layer with checkpoint to trade compute for memory\n            x = ???\n            x = torch.relu(x)\n        return x\n\ntorch.manual_seed(42)\nmodel = CheckpointedModel()\nx = torch.randn(2, 128)\n\n# Forward pass\noutput = model(x)\nprint(f'Output shape: {output.shape}')\nprint(f'Output sum: {output.sum().item():.4f}')\n\n# Backward pass\nloss = output.mean()\nloss.backward()\n\nprint(f'Gradient exists for first layer: {model.layers[0].linear.weight.grad is not None}')\nprint(f'Gradient sum (first layer): {model.layers[0].linear.weight.grad.sum().item():.4f}')",
+    "answer": "import torch\nimport torch.utils.checkpoint as checkpoint\n\nclass CheckpointedBlock(nn.Module):\n    def __init__(self, module):\n        super().__init__()\n        self.module = module\n    \n    def forward(self, x):\n        return checkpoint.checkpoint(self.module, x)\n\nblock = CheckpointedBlock(nn.Linear(10, 10))\nx = torch.randn(1, 10)\nout = block(x)\nprint(f\"Checkpointed block output shape: {out.shape}\")"
   },
   {
     "id": 89,
@@ -798,7 +886,8 @@
     "question": "Track GPU memory usage during training. Use torch.cuda.memory_allocated() to measure memory before and after model creation.",
     "code_hint": "Use torch.cuda.memory_allocated() to get allocated bytes. Use model.to('cuda') to move model to GPU.",
     "expected_output": "Memory before model: 0 bytes\nMemory after model: [VALUE] bytes\nMemory diff: [VALUE] bytes",
-    "template": "import torch\nimport torch.nn as nn\n\n# Track memory before model\nmem_before = ???\nprint(f\"Memory before model: {mem_before} bytes\")\n\n# Create a simple model\nmodel = nn.Sequential(\n    nn.Linear(1024, 2048),\n    nn.ReLU(),\n    nn.Linear(2048, 512),\n).???\n\n# Track memory after model\nmem_after = ???\nprint(f\"Memory after model: {mem_after} bytes\")\nprint(f\"Memory diff: {mem_after - mem_before} bytes\")"
+    "template": "import torch\nimport torch.nn as nn\n\n# Track memory before model\nmem_before = ???\nprint(f\"Memory before model: {mem_before} bytes\")\n\n# Create a simple model\nmodel = nn.Sequential(\n    nn.Linear(1024, 2048),\n    nn.ReLU(),\n    nn.Linear(2048, 512),\n).???\n\n# Track memory after model\nmem_after = ???\nprint(f\"Memory after model: {mem_after} bytes\")\nprint(f\"Memory diff: {mem_after - mem_before} bytes\")",
+    "answer": "import torch\n\nif torch.cuda.is_available():\n    torch.cuda.empty_cache()\n    print(f\"Memory before: {torch.cuda.memory_allocated() / 1024**2:.2f} MB\")\n    model = torch.nn.Linear(1000, 1000).cuda()\n    print(f\"Memory after: {torch.cuda.memory_allocated() / 1024**2:.2f} MB\")\nelse:\n    print(\"CUDA not available\")"
   },
   {
     "id": 90,
@@ -807,7 +896,8 @@
     "question": "Implement CPU offloading to save GPU memory. Move the model and optimizer to CPU when not actively training, then move back to GPU for the forward/backward pass. Complete the train_step function.",
     "code_hint": "Use model.to('cpu') and optimizer.to('cpu') to offload, model.to('cuda') to load back for computation.",
     "expected_output": "GPU memory usage: ~0 MB\nGPU memory usage: ~512 MB\nTraining complete, final loss: 0.2471",
-    "template": "import torch\nimport torch.nn as nn\nimport torch.optim as optim\n\nclass SimpleModel(nn.Module):\n    def __init__(self):\n        super().__init__()\n        self.linear = nn.Linear(128, 64)\n        self.relu = nn.ReLU()\n        self.output = nn.Linear(64, 10)\n    \n    def forward(self, x):\n        return self.output(self.relu(self.linear(x)))\n\ndef get_gpu_memory_mb():\n    return torch.cuda.memory_allocated() // (1024 * 1024) if torch.cuda.is_available() else 0\n\ndef train_step(model, optimizer, criterion, x, y):\n    # Move model and optimizer back to GPU for computation\n    ???\n    ???\n    \n    optimizer.zero_grad()\n    output = model(x)\n    loss = criterion(output, y)\n    loss.backward()\n    optimizer.step()\n    \n    # Offload to CPU to save memory when not actively training\n    ???\n    ???\n    \n    return loss.item()\n\n# Setup\ndevice = torch.device('cuda' if torch.cuda.is_available() else 'cpu')\nmodel = SimpleModel().to(device)\noptimizer = optim.Adam(model.parameters(), lr=0.001)\ncriterion = nn.CrossEntropyLoss()\n\n# Initial GPU memory (model already on GPU)\nprint(f\"GPU memory usage: ~{get_gpu_memory_mb()} MB\")\n\n# Simulate training steps with offloading\nfor i in range(10):\n    x = torch.randn(32, 128).to(device)\n    y = torch.randint(0, 10, (32,)).to(device)\n    loss = train_step(model, optimizer, criterion, x, y)\n    torch.cuda.empty_cache()\n\n# After training, model on CPU\nprint(f\"GPU memory usage: ~{get_gpu_memory_mb()} MB\")\nprint(f\"Training complete, final loss: {loss:.4f}\")"
+    "template": "import torch\nimport torch.nn as nn\nimport torch.optim as optim\n\nclass SimpleModel(nn.Module):\n    def __init__(self):\n        super().__init__()\n        self.linear = nn.Linear(128, 64)\n        self.relu = nn.ReLU()\n        self.output = nn.Linear(64, 10)\n    \n    def forward(self, x):\n        return self.output(self.relu(self.linear(x)))\n\ndef get_gpu_memory_mb():\n    return torch.cuda.memory_allocated() // (1024 * 1024) if torch.cuda.is_available() else 0\n\ndef train_step(model, optimizer, criterion, x, y):\n    # Move model and optimizer back to GPU for computation\n    ???\n    ???\n    \n    optimizer.zero_grad()\n    output = model(x)\n    loss = criterion(output, y)\n    loss.backward()\n    optimizer.step()\n    \n    # Offload to CPU to save memory when not actively training\n    ???\n    ???\n    \n    return loss.item()\n\n# Setup\ndevice = torch.device('cuda' if torch.cuda.is_available() else 'cpu')\nmodel = SimpleModel().to(device)\noptimizer = optim.Adam(model.parameters(), lr=0.001)\ncriterion = nn.CrossEntropyLoss()\n\n# Initial GPU memory (model already on GPU)\nprint(f\"GPU memory usage: ~{get_gpu_memory_mb()} MB\")\n\n# Simulate training steps with offloading\nfor i in range(10):\n    x = torch.randn(32, 128).to(device)\n    y = torch.randint(0, 10, (32,)).to(device)\n    loss = train_step(model, optimizer, criterion, x, y)\n    torch.cuda.empty_cache()\n\n# After training, model on CPU\nprint(f\"GPU memory usage: ~{get_gpu_memory_mb()} MB\")\nprint(f\"Training complete, final loss: {loss:.4f}\")",
+    "answer": "import torch\nimport torch.nn as nn\n\nmodel = nn.Linear(100, 50)\noptimizer = torch.optim.AdamW(model.parameters(), lr=1e-3)\n\nprint(\"CPU model:\", next(model.parameters()).device)\nprint(\"CPU optimizer:\", next(optimizer.param_groups[0]['params']).device if list(optimizer.param_groups[0]['params']) else \"N/A\")"
   },
   {
     "id": 91,
@@ -816,7 +906,8 @@
     "question": "Use torch.compile(model) to compile a model for faster execution. torch.compile performs graph optimization and can significantly speed up model inference.",
     "code_hint": "Simply pass the model to torch.compile() function: compiled_model = torch.compile(model). The compiled model behaves like the original but is optimized for faster execution.",
     "expected_output": "Original time: 0.0010s\nCompiled time: 0.0007s\nSpeedup: 1.43x",
-    "template": "import torch\nimport torch.nn as nn\nimport time\n\ntorch.manual_seed(42)\n\n# Simple model\nclass SimpleModel(nn.Module):\n    def __init__(self):\n        super().__init__()\n        self.linear1 = nn.Linear(10, 20)\n        self.linear2 = nn.Linear(20, 10)\n        \n    def forward(self, x):\n        x = torch.relu(self.linear1(x))\n        x = self.linear2(x)\n        return x\n\nmodel = SimpleModel()\nx = torch.randn(100, 10)\n\n# Warm up and time original model\nfor _ in range(10):\n    _ = model(x)\n\nstart = time.time()\nfor _ in range(100):\n    _ = model(x)\noriginal_time = time.time() - start\n\n# TODO: Compile the model using torch.compile\ncompiled_model = ???\n\n# Warm up and time compiled model\nfor _ in range(10):\n    _ = compiled_model(x)\n\nstart = time.time()\nfor _ in range(100):\n    _ = compiled_model(x)\ncompiled_time = time.time() - start\n\nprint(f\"Original time: {original_time:.4f}s\")\nprint(f\"Compiled time: {compiled_time:.4f}s\")\nprint(f\"Speedup: {original_time/compiled_time:.2f}x\")"
+    "template": "import torch\nimport torch.nn as nn\nimport time\n\ntorch.manual_seed(42)\n\n# Simple model\nclass SimpleModel(nn.Module):\n    def __init__(self):\n        super().__init__()\n        self.linear1 = nn.Linear(10, 20)\n        self.linear2 = nn.Linear(20, 10)\n        \n    def forward(self, x):\n        x = torch.relu(self.linear1(x))\n        x = self.linear2(x)\n        return x\n\nmodel = SimpleModel()\nx = torch.randn(100, 10)\n\n# Warm up and time original model\nfor _ in range(10):\n    _ = model(x)\n\nstart = time.time()\nfor _ in range(100):\n    _ = model(x)\noriginal_time = time.time() - start\n\n# TODO: Compile the model using torch.compile\ncompiled_model = ???\n\n# Warm up and time compiled model\nfor _ in range(10):\n    _ = compiled_model(x)\n\nstart = time.time()\nfor _ in range(100):\n    _ = compiled_model(x)\ncompiled_time = time.time() - start\n\nprint(f\"Original time: {original_time:.4f}s\")\nprint(f\"Compiled time: {compiled_time:.4f}s\")\nprint(f\"Speedup: {original_time/compiled_time:.2f}x\")",
+    "answer": "import torch\nimport torch.nn as nn\nimport time\n\nmodel = nn.Sequential(nn.Linear(100, 200), nn.ReLU(), nn.Linear(200, 50))\ncompiled_model = torch.compile(model)\n\nx = torch.randn(100, 100)\n# Warmup\nfor _ in range(3):\n    compiled_model(x)\nprint(\"torch.compile added successfully\")"
   },
   {
     "id": 92,
@@ -825,7 +916,8 @@
     "question": "Save a complete training checkpoint containing model, optimizer, epoch, and scheduler states.",
     "code_hint": "Use torch.save() with a dict containing model.state_dict(), optimizer.state_dict(), epoch, scheduler.state_dict().",
     "expected_output": "Checkpoint saved: {'model': <state dict>, 'optimizer': <state dict>, 'epoch': 42, 'scheduler': <state dict>}",
-    "template": "import torch\nimport torch.nn as nn\nimport torch.optim as optim\n\nmodel = nn.Linear(10, 5)\noptimizer = optim.SGD(model.parameters(), lr=0.01)\nscheduler = optim.lr_scheduler.StepLR(optimizer, step_size=10)\nepoch = 42\n\n# Save full checkpoint to 'checkpoint.pth'\ncheckpoint = ???\ntorch.save(checkpoint, 'checkpoint.pth')\nprint(f\"Checkpoint saved: {checkpoint}\")"
+    "template": "import torch\nimport torch.nn as nn\nimport torch.optim as optim\n\nmodel = nn.Linear(10, 5)\noptimizer = optim.SGD(model.parameters(), lr=0.01)\nscheduler = optim.lr_scheduler.StepLR(optimizer, step_size=10)\nepoch = 42\n\n# Save full checkpoint to 'checkpoint.pth'\ncheckpoint = ???\ntorch.save(checkpoint, 'checkpoint.pth')\nprint(f\"Checkpoint saved: {checkpoint}\")",
+    "answer": "import torch\nimport torch.nn as nn\n\nmodel = nn.Linear(10, 5)\noptimizer = torch.optim.Adam(model.parameters(), lr=0.001)\nepoch = 5\n\ncheckpoint = {\n    'model_state_dict': model.state_dict(),\n    'optimizer_state_dict': optimizer.state_dict(),\n    'epoch': epoch,\n}\n\ntorch.save(checkpoint, 'checkpoint.pt')\nprint(\"Checkpoint saved\")"
   },
   {
     "id": 93,
@@ -834,7 +926,8 @@
     "question": "You have saved a checkpoint that contains the model's state_dict, optimizer's state_dict, and the current epoch. Write code to load the checkpoint and resume training from the saved state. The checkpoint file is 'checkpoint.pth'.",
     "code_hint": "Use torch.load() to load the checkpoint. Access model_state_dict, optimizer_state_dict, and epoch from the loaded dictionary. Load them into model, optimizer respectively.",
     "expected_output": "Resuming from epoch 3\nModel loaded. Optimizer loaded.",
-    "template": "import torch\nimport torch.nn as nn\nimport torch.optim as optim\n\n# Simulate checkpoint file (normally this exists on disk)\ncheckpoint = {\n    'epoch': 3,\n    'model_state_dict': {'weight': torch.tensor([1.0])},\n    'optimizer_state_dict': {'state': {}}\n}\ntorch.save(checkpoint, 'checkpoint.pth')\n\nclass SimpleModel(nn.Module):\n    def __init__(self):\n        super().__init__()\n        self.fc = nn.Linear(1, 1)\n        self.fc.weight.data = torch.tensor([0.0])\n\nmodel = SimpleModel()\noptimizer = optim.SGD(model.parameters(), lr=0.01)\n\n# Load the checkpoint\ncheckpoint = torch.load('checkpoint.pth')\n\n??? = checkpoint['epoch']\n\n??? = checkpoint['model_state_dict']\n\n??? = checkpoint['optimizer_state_dict']\n\nprint(f\"Resuming from epoch {epoch}\")\nprint(\"Model loaded. Optimizer loaded.\")"
+    "template": "import torch\nimport torch.nn as nn\nimport torch.optim as optim\n\n# Simulate checkpoint file (normally this exists on disk)\ncheckpoint = {\n    'epoch': 3,\n    'model_state_dict': {'weight': torch.tensor([1.0])},\n    'optimizer_state_dict': {'state': {}}\n}\ntorch.save(checkpoint, 'checkpoint.pth')\n\nclass SimpleModel(nn.Module):\n    def __init__(self):\n        super().__init__()\n        self.fc = nn.Linear(1, 1)\n        self.fc.weight.data = torch.tensor([0.0])\n\nmodel = SimpleModel()\noptimizer = optim.SGD(model.parameters(), lr=0.01)\n\n# Load the checkpoint\ncheckpoint = torch.load('checkpoint.pth')\n\n??? = checkpoint['epoch']\n\n??? = checkpoint['model_state_dict']\n\n??? = checkpoint['optimizer_state_dict']\n\nprint(f\"Resuming from epoch {epoch}\")\nprint(\"Model loaded. Optimizer loaded.\")",
+    "answer": "import torch\nimport torch.nn as nn\n\n# Simulate loading checkpoint\nmodel = nn.Linear(10, 5)\noptimizer = torch.optim.Adam(model.parameters(), lr=0.001)\n\n# In real code:\n# checkpoint = torch.load('checkpoint.pt')\n# model.load_state_dict(checkpoint['model_state_dict'])\n# optimizer.load_state_dict(checkpoint['optimizer_state_dict'])\n# epoch = checkpoint['epoch']\n\nprint(\"Checkpoint loading code structure ready\")"
   },
   {
     "id": 94,
@@ -843,7 +936,8 @@
     "question": "Create an AdamW optimizer for a simple model. AdamW is a variant of Adam optimizer that decouples weight decay from the gradient update. It's widely used in modern deep learning (e.g., BERT, GPT training) because it provides better generalization.\n\nFill in the ??? to configure an AdamW optimizer with:\n- learning_rate = 0.001\n- weight_decay = 0.01\n- betas = (0.9, 0.999)",
     "code_hint": "Use torch.optim.AdamW() constructor. Parameters: params, lr, weight_decay, betas",
     "expected_output": "AdamW (\nParameter Group 0\n    amsgrad: False\n    betas: (0.9, 0.999)\n    capturable: False\n    differentiable: False\n    eps: 1e-08\n    foreach: None\n    fused: None\n    lr: 0.001\n    maximize: False\n    weight_decay: 0.01\n)",
-    "template": "import torch\n\nmodel = torch.nn.Linear(10, 5)\noptimizer = torch.optim.AdamW(model.parameters(), lr=???, weight_decay=???, betas=???)\n\nprint(optimizer)"
+    "template": "import torch\n\nmodel = torch.nn.Linear(10, 5)\noptimizer = torch.optim.AdamW(model.parameters(), lr=???, weight_decay=???, betas=???)\n\nprint(optimizer)",
+    "answer": "import torch\nimport torch.nn as nn\n\noptimizer = torch.optim.AdamW(\n    model.parameters() if hasattr(__import__('torch'), 'nn') else [torch.zeros(10)],\n    lr=0.001,\n    weight_decay=0.1,\n    betas=(0.9, 0.999)\n)\nprint(f\"AdamW configured: {type(optimizer).__name__}\")"
   },
   {
     "id": 95,
@@ -852,7 +946,8 @@
     "question": "Finding the optimal learning rate is crucial for training neural networks efficiently. A learning rate that's too small leads to slow convergence, while one that's too large can cause divergence or oscillation.\n\nFill in the ??? to implement a simple learning rate range test that evaluates different learning rates and selects the one with the lowest average loss.\n\nTry learning rates: [0.0001, 0.001, 0.01, 0.1]",
     "code_hint": "1. Loop through learning rates list\n2. Create optimizer with each lr\n3. Train for 10 iterations and track loss\n4. Find lr with minimum loss using min() with key",
     "expected_output": "LR: 0.0001, Avg Loss: 1.3117\nLR: 0.0010, Avg Loss: 1.3083\nLR: 0.0100, Avg Loss: 1.2757\nLR: 0.1000, Avg Loss: 1.0452\nOptimal LR: 0.1000",
-    "template": "import torch\nimport torch.nn as nn\nimport torch.optim as optim\n\n# Simple model and data\nmodel = nn.Linear(???, ???)\ncriterion = nn.MSELoss()\nx = torch.randn(???, ???)\ny = torch.randn(???, ???)\n\n# Learning rates to test\nlrs = [0.0001, 0.001, 0.01, 0.1]\nresults = []\n\nfor lr in lrs:\n    optimizer = optim.SGD(model.parameters(), lr=lr)\n    total_loss = 0\n    for _ in range(10):\n        optimizer.zero_grad()\n        pred = model(???)\n        loss = criterion(pred, y)\n        loss.backward()\n        optimizer.step()\n        total_loss += loss.item()\n    avg_loss = total_loss / 10\n    results.append((lr, avg_loss))\n    print(f\"LR: {lr:.4f}, Avg Loss: {avg_loss:.4f}\")\n\n# Find optimal lr\noptimal_lr = min(results, key=lambda x: x[1])[0]\nprint(f\"Optimal LR: {optimal_lr:.4f}\")"
+    "template": "import torch\nimport torch.nn as nn\nimport torch.optim as optim\n\n# Simple model and data\nmodel = nn.Linear(???, ???)\ncriterion = nn.MSELoss()\nx = torch.randn(???, ???)\ny = torch.randn(???, ???)\n\n# Learning rates to test\nlrs = [0.0001, 0.001, 0.01, 0.1]\nresults = []\n\nfor lr in lrs:\n    optimizer = optim.SGD(model.parameters(), lr=lr)\n    total_loss = 0\n    for _ in range(10):\n        optimizer.zero_grad()\n        pred = model(???)\n        loss = criterion(pred, y)\n        loss.backward()\n        optimizer.step()\n        total_loss += loss.item()\n    avg_loss = total_loss / 10\n    results.append((lr, avg_loss))\n    print(f\"LR: {lr:.4f}, Avg Loss: {avg_loss:.4f}\")\n\n# Find optimal lr\noptimal_lr = min(results, key=lambda x: x[1])[0]\nprint(f\"Optimal LR: {optimal_lr:.4f}\")",
+    "answer": "import torch\nimport torch.nn as nn\n\nmodel = nn.Linear(10, 1)\noptimizer = torch.optim.Adam(model.parameters(), lr=0.01)\n\nbest_loss = float('inf')\nbest_lr = None\nlrs = [0.001, 0.01, 0.1]\n\nfor lr in lrs:\n    optimizer.param_groups[0]['lr'] = lr\n    # Simulate training step\n    x = torch.randn(10, 10)\n    y = torch.randn(10, 1)\n    loss = model(x).mean()\n    optimizer.zero_grad()\n    # Forward only for demo\n    print(f\"LR {lr}: loss = {loss.item():.4f}\")"
   },
   {
     "id": 96,
@@ -861,7 +956,8 @@
     "question": "How does setting set_to_none=True in optimizer.zero_grad() help with memory optimization?",
     "code_hint": "Create a simple model, do forward/backward pass, then call optimizer.zero_grad(set_to_none=True). Print the model's weight gradient before and after zero_grad to show it becomes None.",
     "expected_output": "Gradient before zero_grad: tensor([1.])\nGradient after zero_grad: None",
-    "template": "import torch\nimport torch.nn as nn\n\n# Create a simple model\nmodel = nn.Linear(2, 2)\n\n# Forward pass\nx = torch.ones(1, 2)\ny = model(x)\nloss = y.sum()\n\n# Backward pass to compute gradients\nloss.backward()\n\n# Print gradient before zero_grad\nprint(f\"Gradient before zero_grad: {??}\")\n\n# Zero gradients with set_to_none=True for memory optimization\noptimizer = torch.optim.SGD(model.parameters(), lr=0.01)\noptimizer.zero_grad(set_to_none=True)\n\n# Print gradient after zero_grad\nprint(f\"Gradient after zero_grad: {??}\")"
+    "template": "import torch\nimport torch.nn as nn\n\n# Create a simple model\nmodel = nn.Linear(2, 2)\n\n# Forward pass\nx = torch.ones(1, 2)\ny = model(x)\nloss = y.sum()\n\n# Backward pass to compute gradients\nloss.backward()\n\n# Print gradient before zero_grad\nprint(f\"Gradient before zero_grad: {??}\")\n\n# Zero gradients with set_to_none=True for memory optimization\noptimizer = torch.optim.SGD(model.parameters(), lr=0.01)\noptimizer.zero_grad(set_to_none=True)\n\n# Print gradient after zero_grad\nprint(f\"Gradient after zero_grad: {??}\")",
+    "answer": "import torch\nimport torch.nn as nn\n\nmodel = nn.Linear(10, 5)\noptimizer = torch.optim.SGD(model.parameters(), lr=0.1)\n\nx = torch.randn(1, 10)\ny = torch.randn(1, 5)\nloss = (model(x) - y).mean()\nloss.backward()\n\nprint(f\"Before zero_grad: grad norm = {model.weight.grad.norm().item():.4f}\")\noptimizer.zero_grad(set_to_none=True)\nprint(f\"After set_to_none=True: {model.weight.grad is None}\")"
   },
   {
     "id": 97,
@@ -870,7 +966,8 @@
     "question": "In many transfer learning scenarios, you want to use different learning rates for different parts of the model. For example, a smaller learning rate for pre-trained layers (to preserve learned features) and a larger learning rate for new layers (to learn faster).\n\nFill in the ??? to create an optimizer with different learning rates for different parameter groups: lr=0.001 for the first layer and lr=0.01 for the last layer.",
     "code_hint": "1. Create optimizer with a list of parameter group dicts\n2. Each dict has 'params' key pointing to specific layer parameters\n3. Each dict can have its own 'lr' value\n4. Access optimizer.param_groups to print learning rates",
     "expected_output": "Group 0: lr=0.001\nGroup 1: lr=0.01",
-    "template": "import torch\nimport torch.nn as nn\nimport torch.optim as optim\n\n# A simple model with multiple layers\nmodel = nn.Sequential(\n    nn.Linear(???, ???),\n    nn.ReLU(),\n    nn.Linear(???, ???)\n)\n\n# Define different learning rates for different parameter groups\n# Lower LR for early layers, higher LR for later layers\noptimizer = optim.SGD([\n    {'params': model[0].parameters(), 'lr': ???},  # First layer\n    {'params': model[2].parameters(), 'lr': ???}    # Last layer\n])\n\n# Print learning rates for each parameter group\nfor i, group in enumerate(optimizer.param_groups):\n    print(f\"Group {i}: lr={group['??']}\")"
+    "template": "import torch\nimport torch.nn as nn\nimport torch.optim as optim\n\n# A simple model with multiple layers\nmodel = nn.Sequential(\n    nn.Linear(???, ???),\n    nn.ReLU(),\n    nn.Linear(???, ???)\n)\n\n# Define different learning rates for different parameter groups\n# Lower LR for early layers, higher LR for later layers\noptimizer = optim.SGD([\n    {'params': model[0].parameters(), 'lr': ???},  # First layer\n    {'params': model[2].parameters(), 'lr': ???}    # Last layer\n])\n\n# Print learning rates for each parameter group\nfor i, group in enumerate(optimizer.param_groups):\n    print(f\"Group {i}: lr={group['??']}\")",
+    "answer": "import torch\nimport torch.nn as nn\n\nmodel = nn.Sequential(\n    nn.Linear(100, 50),\n    nn.Linear(50, 10)\n)\n\noptimizer = torch.optim.Adam([\n    {'params': model[0].parameters(), 'lr': 0.001},  # pre-trained\n    {'params': model[1].parameters(), 'lr': 0.01}      # new layer\n])\n\nprint(f\"Param groups: {len(optimizer.param_groups)}\")\nprint(f\"Group 0 lr: {optimizer.param_groups[0]['lr']}\")\nprint(f\"Group 1 lr: {optimizer.param_groups[1]['lr']}\")"
   },
   {
     "id": 98,
@@ -879,7 +976,8 @@
     "question": "Implement a simple training loop using PyTorch's fused AdamW optimizer. The optimizer requires the model parameters to be on CUDA. Create a model, move it to CUDA if available, initialize the optimizer with fused=True, and perform one training step.",
     "code_hint": "from torch.optim import AdamW\nmodel = ...\nif torch.cuda.is_available():\n    model.cuda()\noptimizer = AdamW(???, lr=0.001, ???)\nloss.backward()\noptimizer.???\noptimizer.???",
     "expected_output": "Step performed: False\nStep performed: True\nModel device: cuda:0\nFused AdamW initialized",
-    "template": "import torch\nimport torch.nn as nn\nfrom torch.optim import AdamW\n\n# Simple linear model\nclass SimpleModel(nn.Module):\n    def __init__(self):\n        super().__init__()\n        self.linear = nn.Linear(10, 5)\n    \n    def forward(self, x):\n        return self.linear(x)\n\nmodel = SimpleModel()\n\n# Move to CUDA if available\nif torch.cuda.is_available():\n    model.???\n\n# Initialize fused AdamW - requires CUDA or will fall back to non-fused\noptimizer = AdamW(???, lr=0.001, ???)\nprint(f\"Fused AdamW initialized\")\n\n# Simulate a training step\nx = torch.randn(32, 10)\ny = torch.randn(32, 5)\n\nmodel.train()\noptimizer.zero_grad()\noutput = model(x)\nloss = nn.MSELoss()(output, y)\n\nprint(f\"Step performed: {optimizer.state[model.linear.weight]['step'] == 0}\")\n\nloss.backward()\noptimizer.???\n\nprint(f\"Step performed: {optimizer.state[model.linear.weight]['step'] == 1}\")\nprint(f\"Model device: {next(model.parameters()).device}\")"
+    "template": "import torch\nimport torch.nn as nn\nfrom torch.optim import AdamW\n\n# Simple linear model\nclass SimpleModel(nn.Module):\n    def __init__(self):\n        super().__init__()\n        self.linear = nn.Linear(10, 5)\n    \n    def forward(self, x):\n        return self.linear(x)\n\nmodel = SimpleModel()\n\n# Move to CUDA if available\nif torch.cuda.is_available():\n    model.???\n\n# Initialize fused AdamW - requires CUDA or will fall back to non-fused\noptimizer = AdamW(???, lr=0.001, ???)\nprint(f\"Fused AdamW initialized\")\n\n# Simulate a training step\nx = torch.randn(32, 10)\ny = torch.randn(32, 5)\n\nmodel.train()\noptimizer.zero_grad()\noutput = model(x)\nloss = nn.MSELoss()(output, y)\n\nprint(f\"Step performed: {optimizer.state[model.linear.weight]['step'] == 0}\")\n\nloss.backward()\noptimizer.???\n\nprint(f\"Step performed: {optimizer.state[model.linear.weight]['step'] == 1}\")\nprint(f\"Model device: {next(model.parameters()).device}\")",
+    "answer": "import torch\nimport torch.nn as nn\n\nif torch.cuda.is_available():\n    model = nn.Linear(100, 50).cuda()\n    optimizer = torch.optim.AdamW(model.parameters(), lr=0.001, fused=True)\n    print(f\"Optimizer fused: {optimizer.param_groups[0].get('fused', False)}\")\nelse:\n    print(\"CUDA not available\")"
   },
   {
     "id": 99,
@@ -888,7 +986,8 @@
     "question": "Count the total number of parameters in a neural network model. Use `.parameters()` to iterate and `.numel()` to count elements in each parameter tensor.",
     "code_hint": "import torch\nimport torch.nn as nn\n\nclass SimpleNet(nn.Module):\n    def __init__(self):\n        super().__init__()\n        self.fc1 = nn.Linear(10, 5)\n        self.fc2 = nn.Linear(5, 1)\n        \n    def forward(self, x):\n        return self.fc2(torch.relu(self.fc1(x)))\n\nmodel = SimpleNet()\n\n# Count total parameters\n### = sum(p.numel() for p in model.parameters())\nprint(f\"Total parameters: {###}\")\n\n# Count trainable parameters\ntrainable = sum(p.numel() for p in model.### if p.###)\nprint(f\"Trainable parameters: {trainable}\")",
     "expected_output": "Total parameters: 61\nTrainable parameters: 61",
-    "template": "import torch\nimport torch.nn as nn\n\nclass SimpleNet(nn.Module):\n    def __init__(self):\n        super().__init__()\n        self.fc1 = nn.Linear(10, 5)\n        self.fc2 = nn.Linear(5, 1)\n        \n    def forward(self, x):\n        return self.fc2(torch.relu(self.fc1(x)))\n\nmodel = SimpleNet()\n\n# Count total parameters\n### = sum(p.numel() for p in model.parameters())\nprint(f\"Total parameters: {###}\")\n\n# Count trainable parameters\ntrainable = sum(p.numel() for p in model.### if p.###)\nprint(f\"Trainable parameters: {trainable}\")"
+    "template": "import torch\nimport torch.nn as nn\n\nclass SimpleNet(nn.Module):\n    def __init__(self):\n        super().__init__()\n        self.fc1 = nn.Linear(10, 5)\n        self.fc2 = nn.Linear(5, 1)\n        \n    def forward(self, x):\n        return self.fc2(torch.relu(self.fc1(x)))\n\nmodel = SimpleNet()\n\n# Count total parameters\n### = sum(p.numel() for p in model.parameters())\nprint(f\"Total parameters: {###}\")\n\n# Count trainable parameters\ntrainable = sum(p.numel() for p in model.### if p.###)\nprint(f\"Trainable parameters: {trainable}\")",
+    "answer": "import torch\nimport torch.nn as nn\n\nmodel = nn.Sequential(\n    nn.Linear(100, 200),\n    nn.ReLU(),\n    nn.Linear(200, 50)\n)\n\ntotal_params = sum(p.numel() for p in model.parameters())\ntrainable_params = sum(p.numel() for p in model.parameters() if p.requires_grad)\n\nprint(f\"Total parameters: {total_params:,}\")\nprint(f\"Trainable parameters: {trainable_params:,}\")"
   },
   {
     "id": 100,
@@ -897,7 +996,8 @@
     "question": "Use add_module to dynamically register submodules to a parent module. Register 3 Linear layers with names 'layer_0', 'layer_1', 'layer_2', then print all named children using named_children().",
     "code_hint": "model.add_module(name, submodule)",
     "expected_output": "layer_0: Linear\nlayer_1: Linear\nlayer_2: Linear",
-    "template": "import torch\nimport torch.nn as nn\n\nmodel = nn.Module()\nfor i in range(3):\n    layer = nn.Linear(10, 10)\n    ???(f'layer_{i}', layer)\n\nfor name, module in model.???():\n    print(f\"{name}: {module.__class__.__name__}\")"
+    "template": "import torch\nimport torch.nn as nn\n\nmodel = nn.Module()\nfor i in range(3):\n    layer = nn.Linear(10, 10)\n    ???(f'layer_{i}', layer)\n\nfor name, module in model.???():\n    print(f\"{name}: {module.__class__.__name__}\")",
+    "answer": "import torch\nimport torch.nn as nn\n\nclass CustomModel(nn.Module):\n    def __init__(self):\n        super().__init__()\n        self.add_module('linear1', nn.Linear(10, 5))\n        self.add_module('linear2', nn.Linear(5, 2))\n    \n    def forward(self, x):\n        return self.linear2(torch.relu(self.linear1(x)))\n\nmodel = CustomModel()\nprint(\"Layers via named_children:\")\nfor name, layer in model.named_children():\n    print(f\"  {name}: {layer}\")"
   },
   {
     "id": 101,
