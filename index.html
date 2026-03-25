@@ -222,6 +222,21 @@
                         >
                             Next →
                         </button>
+                        <button
+                            @click="showAnswer"
+                            class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg ml-auto"
+                        >
+                            👁 Show Answer
+                        </button>
+                    </div>
+                    
+                    <!-- Answer Reveal -->
+                    <div v-if="answerShown" class="mt-4 p-4 bg-blue-900/30 rounded-lg border border-blue-500/30">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-sm font-semibold text-blue-400">💡 Answer</span>
+                            <button @click="answerShown = false" class="text-gray-400 hover:text-white text-sm">✕</button>
+                        </div>
+                        <pre class="text-gray-300 whitespace-pre-wrap text-sm font-mono bg-gray-900 p-3 rounded">{{ answerRevealed }}</pre>
                     </div>
                 </div>
             </div>
@@ -290,14 +305,18 @@
                 <div class="question-card rounded-xl p-4">
                     <h3 class="text-sm font-semibold mb-3">📊 Progress</h3>
                     <div class="flex justify-between text-sm text-gray-400 mb-2">
-                        <span>Questions Answered</span>
-                        <span>{{ answeredCount }}/{{ filteredQuestions.length }}</span>
+                        <span>Score</span>
+                        <span class="text-white font-medium">{{ correctCount }} correct / {{ attemptedCount }} attempted</span>
                     </div>
-                    <div class="bg-gray-700 rounded-full h-2">
+                    <div class="bg-gray-700 rounded-full h-2 mb-3">
                         <div 
-                            class="bg-gradient-to-r from-orange-500 to-red-500 h-2 rounded-full transition-all"
-                            :style="{ width: progressPercent + '%' }"
+                            class="bg-gradient-to-r from-green-500 to-emerald-500 h-2 rounded-full transition-all"
+                            :style="{ width: scorePercent + '%' }"
                         ></div>
+                    </div>
+                    <div class="flex justify-between text-xs text-gray-500">
+                        <span>Completed: {{ answeredCount }}/{{ filteredQuestions.length }}</span>
+                        <span>{{ Math.round(progressPercent) }}%</span>
                     </div>
                 </div>
             </div>
@@ -333,6 +352,10 @@
                 // Terminal
                 const terminalOutput = ref('');
                 const codeInput = ref('');
+                
+                // Answer reveal
+                const answerShown = ref(false);
+                const answerRevealed = ref('');
 
                 // Examples (multi-line now)
                 const examples = [
@@ -416,9 +439,22 @@
                     return questions.value.filter(q => q.answered).length;
                 });
 
+                const correctCount = computed(() => {
+                    return questions.value.filter(q => q.correct).length;
+                });
+
+                const attemptedCount = computed(() => {
+                    return questions.value.filter(q => q.attempted).length;
+                });
+
                 const progressPercent = computed(() => {
                     if (filteredQuestions.value.length === 0) return 0;
                     return (answeredCount.value / filteredQuestions.value.length * 100);
+                });
+
+                const scorePercent = computed(() => {
+                    if (attemptedCount.value === 0) return 0;
+                    return (correctCount.value / attemptedCount.value * 100);
                 });
 
                 // Methods
@@ -511,6 +547,19 @@
                         currentQuestion.value.userCode = codeAnswer.value;
                         currentQuestion.value.textAnswer = textAnswer.value;
                     }
+                }
+
+                function showAnswer() {
+                    if (!currentQuestion.value) return;
+                    // Generate the answer by replacing ??? with typical solution hints
+                    const template = currentQuestion.value.template || '';
+                    // For coding questions, show the template with ??? replaced by common patterns
+                    // Extract the key lines that had ??? 
+                    answerRevealed.value = template;
+                    answerShown.value = true;
+                    // Mark as attempted (viewing answer counts as attempting)
+                    currentQuestion.value.attempted = true;
+                    currentQuestion.value.viewedAnswer = true;
                 }
 
                 function editCode() {
@@ -606,6 +655,8 @@
                                 };
                             }
                             currentQuestion.value.answered = true;
+                            currentQuestion.value.attempted = true;
+                            currentQuestion.value.correct = false;
                         } else if (data.test_passed) {
                             // Test passed
                             result.value = {
@@ -613,6 +664,8 @@
                                 feedback: '✅ All tests passed! Your solution is correct.'
                             };
                             currentQuestion.value.answered = true;
+                            currentQuestion.value.attempted = true;
+                            currentQuestion.value.correct = true;
                         } else {
                             // Test failed - get LLM feedback
                             result.value = {
@@ -646,6 +699,8 @@
                                 };
                             }
                             currentQuestion.value.answered = true;
+                            currentQuestion.value.attempted = true;
+                            currentQuestion.value.correct = data.test_passed || false;
                         }
                     } catch (e) {
                         result.value = {
@@ -677,6 +732,8 @@
                         });
                         result.value = evalData;
                         currentQuestion.value.answered = true;
+                        currentQuestion.value.attempted = true;
+                        currentQuestion.value.correct = evalData.correct || false;
                     } catch (e) {
                         result.value = {
                             score: 0,
@@ -767,6 +824,9 @@
                     clearOutput,
                     loadExample,
                     answeredCount,
+                    correctCount,
+                    attemptedCount,
+                    scorePercent,
                     progressPercent,
                     nextQuestion,
                     prevQuestion,
@@ -777,7 +837,10 @@
                     handleTabInEditor,
                     handleTabInTerminal,
                     addNewLineInTerminal,
-                    editCode
+                    editCode,
+                    showAnswer,
+                    answerShown,
+                    answerRevealed
                 };
             }
         }).mount('#app');
