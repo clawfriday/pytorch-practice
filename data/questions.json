@@ -407,7 +407,7 @@
     "code_hint": "backward(retain_graph=True) allows multiple backward calls",
     "expected_output": "After first backward: tensor([1., 1.])\nAfter second backward: tensor([3., 5.])",
     "template": "import torch\n\nx = torch.tensor([1.0, 2.0], requires_grad=???)\ny = x.???\nz = (x ** 2).???\ny.backward(retain_graph=???)\nprint(f\"After first backward: {x.grad}\")\nz.???()  # accumulates\nprint(f\"After second backward: {x.grad}\")",
-    "answer": "import torch\n\n# Compute argmax (index of max value)\nx = torch.tensor([1, 5, 2, 8, 3])\nidx = torch.argmax(x)\nprint(f\"Max at index: {idx.item()}\")"
+    "answer": "import torch\n\nx = torch.tensor([1.0, 2.0], requires_grad=True)\ny = x.sum()\nz = (x ** 2).sum()\ny.backward(retain_graph=True)\nprint(f\"After first backward: {x.grad}\")\nz.backward()\nprint(f\"After second backward: {x.grad}\")"
   },
   {
     "id": 42,
@@ -417,7 +417,7 @@
     "code_hint": "with torch.no_grad():",
     "expected_output": "In no_grad: requires_grad = False",
     "template": "import torch\n\nx = torch.tensor([1.0, 2.0], requires_grad=???)\nwith torch.???():\n    y = x * 2\n    print(f\"In no_grad: requires_grad = {y.???}\")",
-    "answer": "import torch\n\n# Find indices of top-k largest elements\nx = torch.tensor([1, 5, 2, 8, 3])\nvalues, indices = torch.topk(x, 2)\nprint(f\"Top 2 values: {values}, indices: {indices}\")"
+    "answer": "import torch\n\nx = torch.tensor([1.0, 2.0], requires_grad=True)\nwith torch.no_grad():\n    y = x * 2\n    print(f\"In no_grad: requires_grad = {y.requires_grad}\")"
   },
   {
     "id": 43,
@@ -427,7 +427,7 @@
     "code_hint": "with torch.inference_mode():",
     "expected_output": "In inference_mode: requires_grad = False",
     "template": "import torch\n\nx = torch.tensor([1.0, 2.0], requires_grad=???)\nwith torch.???():\n    y = x * 2\n    print(f\"In inference_mode: requires_grad = {y.???}\")",
-    "answer": "import torch\n\n# Find where condition is true\nx = torch.tensor([1, 5, 2, 8, 3])\nindices = torch.where(x > 3)\nprint(f\"Indices where x > 3: {indices[0].tolist()}\")"
+    "answer": "import torch\n\nx = torch.tensor([1.0, 2.0], requires_grad=True)\nwith torch.inference_mode():\n    y = x * 2\n    print(f\"In inference_mode: requires_grad = {y.requires_grad}\")"
   },
   {
     "id": 44,
@@ -437,7 +437,7 @@
     "code_hint": "torch.set_grad_enabled(True/False)",
     "expected_output": "With grad enabled: requires_grad = True\nWith grad disabled: requires_grad = False",
     "template": "import torch\n\ntorch.???(???)\nx1 = torch.tensor([1.0], requires_grad=???)\ny1 = x1 * 2\nprint(f\"With grad enabled: requires_grad = {y1.???}\")\n\ntorch.???(???)\nx2 = torch.tensor([1.0], requires_grad=???)\ny2 = x2 * 2\nprint(f\"With grad disabled: requires_grad = {y2.???}\")",
-    "answer": "import torch\n\n# Non-zero elements\nx = torch.tensor([1, 0, 2, 0, 3])\nnonzero = torch.nonzero(x)\nprint(f\"Non-zero indices: {nonzero.squeeze().tolist()}\")"
+    "answer": "import torch\n\ntorch.set_grad_enabled(True)\nx1 = torch.tensor([1.0], requires_grad=True)\ny1 = x1 * 2\nprint(f\"With grad enabled: requires_grad = {y1.requires_grad}\")\n\ntorch.set_grad_enabled(False)\nx2 = torch.tensor([1.0], requires_grad=True)\ny2 = x2 * 2\nprint(f\"With grad disabled: requires_grad = {y2.requires_grad}\")"
   },
   {
     "id": 45,
@@ -447,7 +447,7 @@
     "code_hint": "model.train(), model.eval()",
     "expected_output": "BN train mode: True, eval mode: False",
     "template": "import torch\nimport torch.nn as nn\n\nbn = nn.BatchNorm2d(3)\nbn.???()\nprint(f\"BN train mode: {bn.training}\", end=\", \")\nbn.???()\nprint(f\"eval mode: {bn.training}\")",
-    "answer": "import torch\n\n# Compute max of tensor\nx = torch.tensor([1, 5, 2, 8, 3])\nmax_val = torch.max(x)\nprint(f\"Max value: {max_val.item()}\")"
+    "answer": "import torch\nimport torch.nn as nn\n\nbn = nn.BatchNorm2d(3)\nbn.train()\nprint(f\"BN train mode: {bn.training}\", end=\", \")\nbn.eval()\nprint(f\"eval mode: {bn.training}\")"
   },
   {
     "id": 46,
@@ -457,7 +457,7 @@
     "code_hint": "optim.SGD, .zero_grad(), .backward(), .step()",
     "expected_output": "Before: tensor([1., 2.])\nAfter step: tensor([0.8, 1.6])",
     "template": "import torch\nimport torch.optim as optim\n\ntorch.manual_seed(42)\nparam = torch.tensor([1.0, 2.0], requires_grad=???)\nopt = optim.???([???], lr=???)\nloss = (param ** 2).???\nopt.???()\nloss.???()\nopt.???()\nprint(f\"Before: tensor([1., 2.])\")\nprint(f\"After step: {param}\")",
-    "answer": "import torch\n\n# Create one-hot encoding\nx = torch.tensor([0, 2, 1, 3])\none_hot = torch.nn.functional.one_hot(x, num_classes=4)\nprint(f\"One-hot:\\n{one_hot}\")"
+    "answer": "import torch\nimport torch.optim as optim\n\ntorch.manual_seed(42)\nparam = torch.tensor([1.0, 2.0], requires_grad=True)\nopt = optim.SGD([param], lr=0.1)\nloss = (param ** 2).sum()\nopt.zero_grad()\nloss.backward()\nopt.step()\nprint(f\"Before: tensor([1., 2.])\")\nprint(f\"After step: {param}\")"
   },
   {
     "id": 47,
@@ -467,7 +467,7 @@
     "code_hint": "optim.Adam, .zero_grad(), .backward(), .step()",
     "expected_output": "Before: tensor([1., 2.])\nAfter Adam step: tensor([0.9000, 1.9000], grad=<tensor>)",
     "template": "import torch\nimport torch.optim as optim\n\ntorch.manual_seed(42)\nparam = torch.tensor([1.0, 2.0], requires_grad=???)\nopt = optim.???([???], lr=???)\nloss = (param ** 2).???\nopt.???()\nloss.???()\nopt.???()\nprint(f\"Before: tensor([1., 2.])\")\nprint(f\"After Adam step: {param}\")",
-    "answer": "import torch\n\n# Scatter operation - put values at indices\ntensor = torch.zeros(3, 5)\nindex = torch.tensor([[0, 1, 2, 0, 0], [2, 0, 0, 1, 2]])\nsrc = torch.tensor([[1, 2, 3, 4, 5], [6, 7, 8, 9, 10]])\ntensor.scatter_(1, index, src)\nprint(f\"After scatter:\\n{tensor}\")"
+    "answer": "import torch\nimport torch.optim as optim\n\ntorch.manual_seed(42)\nparam = torch.tensor([1.0, 2.0], requires_grad=True)\nopt = optim.Adam([param], lr=0.1)\nloss = (param ** 2).sum()\nopt.zero_grad()\nloss.backward()\nopt.step()\nprint(f\"Before: tensor([1., 2.])\")\nprint(f\"After Adam step: {param}\")"
   },
   {
     "id": 48,
@@ -477,7 +477,7 @@
     "code_hint": "optim.AdamW with weight_decay parameter",
     "expected_output": "Before: tensor([1., 2.])\nAfter AdamW step: tensor([0.8900, 1.8800], grad=<tensor>)",
     "template": "import torch\nimport torch.optim as optim\n\ntorch.manual_seed(42)\nparam = torch.tensor([1.0, 2.0], requires_grad=???)\nopt = optim.???([???], lr=???, weight_decay=???)\nloss = (param ** 2).???\nopt.???()\nloss.???()\nopt.???()\nprint(f\"Before: tensor([1., 2.])\")\nprint(f\"After AdamW step: {param}\")",
-    "answer": "import torch\n\n# Gather operation - get values at indices\ntensor = torch.tensor([[1, 2], [3, 4], [5, 6]])\nindex = torch.tensor([[0, 1], [1, 0], [0, 1]])\ngathered = torch.gather(tensor, 1, index)\nprint(f\"Gathered:\\n{gathered}\")"
+    "answer": "import torch\nimport torch.optim as optim\n\ntorch.manual_seed(42)\nparam = torch.tensor([1.0, 2.0], requires_grad=True)\nopt = optim.AdamW([param], lr=0.1, weight_decay=0.1)\nloss = (param ** 2).sum()\nopt.zero_grad()\nloss.backward()\nopt.step()\nprint(f\"Before: tensor([1., 2.])\")\nprint(f\"After AdamW step: {param}\")"
   },
   {
     "id": 49,
@@ -487,7 +487,7 @@
     "code_hint": "lr_scheduler.StepLR(optimizer, step_size, gamma)",
     "expected_output": "Initial LR: 1.0\nAfter 1 step: 0.1\nAfter 2 steps: 0.01",
     "template": "import torch\nimport torch.optim as optim\n\nparam = torch.tensor([1.0, 2.0], requires_grad=True)\nopt = optim.SGD([param], lr=???)\nscheduler = optim.lr_scheduler.???(???, step_size=???, gamma=???)\nprint(f\"Initial LR: {opt.param_groups[0]['lr']}\")\nscheduler.???()\nprint(f\"After 1 step: {opt.param_groups[0]['lr']}\")\nscheduler.???()\nprint(f\"After 2 steps: {opt.param_groups[0]['lr']}\")",
-    "answer": "import torch\n\n# Masked select\nx = torch.tensor([1, 2, 3, 4, 5])\nmask = torch.tensor([True, False, True, False, True])\nselected = x[mask]\nprint(f\"Masked select: {selected}\")"
+    "answer": "import torch\nimport torch.optim as optim\n\nparam = torch.tensor([1.0, 2.0], requires_grad=True)\nopt = optim.SGD([param], lr=1.0)\nscheduler = optim.lr_scheduler.StepLR(opt, step_size=1, gamma=0.1)\nprint(f\"Initial LR: {opt.param_groups[0]['lr']}\")\nscheduler.step()\nprint(f\"After 1 step: {opt.param_groups[0]['lr']}\")\nscheduler.step()\nprint(f\"After 2 steps: {opt.param_groups[0]['lr']}\")"
   },
   {
     "id": 50,
@@ -497,7 +497,7 @@
     "code_hint": "model.state_dict(), list(dict.keys())",
     "expected_output": "state_dict keys: ['fc1.weight', 'fc1.bias']",
     "template": "import torch\nimport torch.nn as nn\n\nclass Net(nn.Module):\n    def __init__(self):\n        super().__init__()\n        self.fc1 = nn.Linear(10, 5)\n    def forward(self, x):\n        return self.fc1(x)\n\nmodel = Net()\nstate = model.???()\nkeys = list(state.???())\nprint(f\"state_dict keys: {keys}\")",
-    "answer": "import torch\n\n# Diagonal matrix from vector\nv = torch.tensor([1, 2, 3])\nd = torch.diag(v)\nprint(f\"Diagonal matrix:\\n{d}\")"
+    "answer": "import torch\nimport torch.nn as nn\n\nclass Net(nn.Module):\n    def __init__(self):\n        super().__init__()\n        self.fc1 = nn.Linear(10, 5)\n    def forward(self, x):\n        return self.fc1(x)\n\nmodel = Net()\nstate = model.state_dict()\nkeys = list(state.keys())\nprint(f\"state_dict keys: {keys}\")"
   },
   {
     "id": 51,
