@@ -1,0 +1,9 @@
+{
+  "id": 23,
+  "topic": "Tensor Indexing",
+  "type": "coding",
+  "question": "Given tensor [1,2,3,4,5] and mask [True,False,True,False,True], use masked select to get values. Print result.",
+  "code_hint": "t[mask] or torch.masked_select(t, mask)",
+  "expected_output": "Original: tensor([1., 2., 3., 4., 5.])\nMask: [True, False, True, False, True]\nSelected: tensor([1., 3., 5.])",
+  "template": "import torch\n\nt = torch.tensor([1.0, 2.0, 3.0, 4.0, 5.0])\nmask = torch.tensor([???])\nselected = t[???]\nprint(f\"Original: {t}\")\nprint(f\"Mask: {[???]}\")\nprint(f\"Selected: {selected}\")"
+}

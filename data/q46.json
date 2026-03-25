@@ -1,0 +1,9 @@
+{
+  "id": 46,
+  "topic": "Optimizer",
+  "type": "coding",
+  "question": "Create param=[1,2] requires_grad. SGD lr=0.1. Compute loss=param^2.sum(), zero_grad, backward, step. Print updated param.",
+  "code_hint": "optim.SGD, .zero_grad(), .backward(), .step()",
+  "expected_output": "Before: tensor([1., 2.])\nAfter step: tensor([0.8, 1.6])",
+  "template": "import torch\nimport torch.optim as optim\n\ntorch.manual_seed(42)\nparam = torch.tensor([1.0, 2.0], requires_grad=???)\nopt = optim.???([???], lr=???)\nloss = (param ** 2).???\nopt.???()\nloss.???()\nopt.???()\nprint(f\"Before: tensor([1., 2.])\")\nprint(f\"After step: {param}\")"
+}

@@ -1,0 +1,9 @@
+{
+  "id": 62,
+  "topic": "Debugging",
+  "type": "coding",
+  "question": "Set print precision to 4. Create (3,4) random tensor. Print tensor.",
+  "code_hint": "torch.set_printoptions(precision=4)",
+  "expected_output": "Tensor with 4 decimal places:\ntensor([[-0.0673,  0.7070,  2.5085, -0.6659],\n        [-1.0626, -0.6107, -0.2654, -0.6340],\n        [ 0.6344,  0.6958, -1.4137, -0.0165]])",
+  "template": "import torch\n\ntorch.???(precision=???)\na = torch.randn(3, 4)\nprint(f\"Tensor with 4 decimal places:\")\nprint(???)"
+}

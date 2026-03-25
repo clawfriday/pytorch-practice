@@ -1,0 +1,10 @@
+{
+  "id": 116,
+  "topic": "Text Generation",
+  "type": "coding",
+  "question": "Sample from distribution with temperature. Compare greedy (temp=0) vs random sampling (temp=1).",
+  "code_hint": "torch.multinomial(F.softmax(logits/temp, dim=-1), 1)",
+  "expected_output": "Greedy: tensor([3])\nRandom (temp=1): tensor([3])",
+  "template": "import torch\nimport torch.nn.functional as F\n\nlogits = torch.tensor([1.0, 2.0, 1.0, 4.0])\n\n# Greedy (temperature -> 0)\nprobs_greedy = F.softmax(logits / ???, dim=-1)\ngreedy = torch.argmax(???)\n\n# Random (temperature = 1)\nprobs_random = F.softmax(logits / ???, dim=-1)\nrandom = torch.multinomial(???)\n\nprint(f\"Greedy: {greedy}\")\nprint(f\"Random (temp=1): {random}\")",
+  "answer": "import torch\nimport torch.nn.functional as F\n\nlogits = torch.tensor([1.0, 2.0, 1.0, 4.0])\n\n# Greedy (temperature -> 0)\nprobs_greedy = F.softmax(logits / 0.001, dim=-1)\ngreedy = torch.argmax(probs_greedy)\n\n# Random (temperature = 1)\nprobs_random = F.softmax(logits / 1.0, dim=-1)\nrandom = torch.multinomial(probs_random, 1)\n\nprint(f\"Greedy: {greedy}\")\nprint(f\"Random (temp=1): {random}\")"
+}

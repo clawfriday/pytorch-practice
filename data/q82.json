@@ -1,0 +1,9 @@
+{
+  "id": 82,
+  "topic": "Mixed Precision",
+  "type": "coding",
+  "question": "Use torch.cuda.amp.autocast to run forward pass in FP16. Check the dtype of output.",
+  "code_hint": "with torch.cuda.amp.autocast(): and torch.float16",
+  "expected_output": "Output dtype: torch.float16",
+  "template": "import torch\nimport torch.nn as nn\n\nif torch.cuda.is_available():\n    model = nn.Linear(10, 5).cuda()\n    x = torch.randn(1, 10).cuda()\n    \n    with torch.cuda.amp.???():\n        output = model(x)\n    \n    print(f\"Output dtype: {output.dtype}\")\nelse:\n    print(\"CUDA not available\")"
+}

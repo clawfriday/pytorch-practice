@@ -1,0 +1,9 @@
+{
+  "id": 40,
+  "topic": "Gradient Functions",
+  "type": "coding",
+  "question": "Compute gradient of x=[1,2] for y=x^2.sum(). Then zero the gradient. Print before and after zero.",
+  "code_hint": ".backward(), .grad.zero_()",
+  "expected_output": "Before zero: tensor([2., 4.])\nAfter zero: tensor([0., 0.])",
+  "template": "import torch\n\nx = torch.tensor([1.0, 2.0], requires_grad=???)\ny = (x ** 2).???\ny.???()\nprint(f\"Before zero: {x.???}\")\nx.grad.???()\nprint(f\"After zero: {x.???}\")"
+}

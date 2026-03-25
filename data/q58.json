@@ -1,0 +1,9 @@
+{
+  "id": 58,
+  "topic": "Common Patterns",
+  "type": "coding",
+  "question": "Train 1 step: Linear(10,2), CrossEntropyLoss, SGD lr=0.01. Forward, loss, backward, step. Print loss.",
+  "code_hint": "model(X), criterion(outputs, y), optimizer.zero_grad(), loss.backward(), optimizer.step()",
+  "expected_output": "Loss: 0.7331",
+  "template": "import torch\nimport torch.nn as nn\nimport torch.optim as optim\n\ntorch.manual_seed(42)\nmodel = nn.???(???, ???)\ncriterion = nn.???()\noptimizer = optim.???(model.parameters(), lr=0.01)\n\nX = torch.randn(4, 10)\ny = torch.randint(0, 2, (4,))\n\noptimizer.???()\noutputs = ???(???)\nloss = ???(???, ???)\nloss.???()\noptimizer.???()\nprint(f\"Loss: {loss.item():.4f}\")"
+}

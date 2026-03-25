@@ -1,0 +1,9 @@
+{
+  "id": 38,
+  "topic": "Gradient Functions",
+  "type": "coding",
+  "question": "Given x=[1,2,3] requires_grad, compute y=x^2, z=y.sum(), backward. Print gradient of x.",
+  "code_hint": "y=x**2, z=y.sum(), z.backward(), x.grad",
+  "expected_output": "x: tensor([1., 2., 3.], requires_grad=True)\nGradient: tensor([2., 4., 6.])",
+  "template": "import torch\n\nx = torch.tensor([1.0, 2.0, 3.0], requires_grad=???)\ny = x ** 2\nz = y.???()\nz.???()\ngrad = x.???\nprint(f\"x: {x}\")\nprint(f\"Gradient: {grad}\")"
+}

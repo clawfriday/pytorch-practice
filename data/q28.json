@@ -1,0 +1,9 @@
+{
+  "id": 28,
+  "topic": "Math Operations",
+  "type": "coding",
+  "question": "Create (2,3,4) tensor, compute sum, mean, max, min across all elements. Print results.",
+  "code_hint": ".sum(), .mean(), .max(), .min()",
+  "expected_output": "Shape: torch.Size([2, 3, 4])\nSum: -5.8065\nMean: -0.2419\nMax: 1.9269\nMin: -2.3169",
+  "template": "import torch\n\ntorch.manual_seed(42)\nt = torch.randn(2, 3, 4)\nsum_val = t.???\nmean_val = t.???\nmax_val = t.???\nmin_val = t.???\nprint(f\"Shape: {t.shape}\")\nprint(f\"Sum: {sum_val.item():.4f}\")\nprint(f\"Mean: {mean_val.item():.4f}\")\nprint(f\"Max: {max_val.item():.4f}\")\nprint(f\"Min: {min_val.item():.4f}\")"
+}

@@ -1,0 +1,10 @@
+{
+  "id": 102,
+  "topic": "Normalization",
+  "type": "coding",
+  "question": "Implement LayerNorm using nn.LayerNorm. Compare with BatchNorm which normalizes over batch dimension.",
+  "code_hint": "nn.LayerNorm(normalized_shape=2)",
+  "expected_output": "LayerNorm shape: torch.Size([2, 2])\nBatchNorm shape: torch.Size([2, 2])",
+  "template": "import torch\nimport torch.nn as nn\n\nx = torch.randn(2, 2)\n\nln = nn.LayerNorm(normalized_shape=???)\nbn = nn.BatchNorm1d(2)\n\nprint(\"LayerNorm shape:\", ln(x).shape)\nprint(\"BatchNorm shape:\", bn(x).shape)",
+  "answer": "import torch\nimport torch.nn as nn\n\nx = torch.randn(2, 2)\n\nln = nn.LayerNorm(normalized_shape=2)\nbn = nn.BatchNorm1d(2)\n\nprint(\"LayerNorm shape:\", ln(x).shape)\nprint(\"BatchNorm shape:\", bn(x).shape)"
+}

@@ -1,0 +1,9 @@
+{
+  "id": 96,
+  "topic": "Optimizer",
+  "type": "coding",
+  "question": "How does setting set_to_none=True in optimizer.zero_grad() help with memory optimization?",
+  "code_hint": "Create a simple model, do forward/backward pass, then call optimizer.zero_grad(set_to_none=True). Print the model's weight gradient before and after zero_grad to show it becomes None.",
+  "expected_output": "Gradient before zero_grad: tensor([1.])\nGradient after zero_grad: None",
+  "template": "import torch\nimport torch.nn as nn\n\n# Create a simple model\nmodel = nn.Linear(2, 2)\n\n# Forward pass\nx = torch.ones(1, 2)\ny = model(x)\nloss = y.sum()\n\n# Backward pass to compute gradients\nloss.backward()\n\n# Print gradient before zero_grad\nprint(f\"Gradient before zero_grad: {??}\")\n\n# Zero gradients with set_to_none=True for memory optimization\noptimizer = torch.optim.SGD(model.parameters(), lr=0.01)\noptimizer.zero_grad(set_to_none=True)\n\n# Print gradient after zero_grad\nprint(f\"Gradient after zero_grad: {??}\")"
+}

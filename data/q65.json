@@ -1,0 +1,9 @@
+{
+  "id": 65,
+  "topic": "Debugging",
+  "type": "coding",
+  "question": "Create (3,4) tensor. Print numel (total elements) and element_size (bytes per element).",
+  "code_hint": ".numel(), .element_size()",
+  "expected_output": "Shape: torch.Size([3, 4])\nnumel: 12\nelement_size: 4\nTotal bytes: 48",
+  "template": "import torch\n\na = torch.randn(3, 4)\nnumel = a.???()\nelement_size = a.???()\nprint(f\"Shape: {a.shape}\")\nprint(f\"numel: {numel}\")\nprint(f\"element_size: {element_size}\")\nprint(f\"Total bytes: {numel * element_size}\")"
+}

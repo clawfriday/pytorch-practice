@@ -1,0 +1,9 @@
+{
+  "id": 81,
+  "topic": "Gradient Clipping",
+  "type": "coding",
+  "question": "Simulate gradient accumulation for batch_size=32 using 4 micro-batches of size 8. Accumulate gradients.",
+  "code_hint": "loss.backward() accumulates, optimizer.step() with zero_grad applies",
+  "expected_output": "Accumulated grad norm: similar to single batch",
+  "template": "import torch\nimport torch.nn as nn\n\nmodel = nn.Linear(10, 1)\noptimizer = torch.optim.SGD(model.parameters(), lr=0.1)\nmicro_batch_size = 8\nnum_micro_batches = 4\n\nfor i in range(num_micro_batches):\n    x = torch.randn(micro_batch_size, 10)\n    y = torch.randn(micro_batch_size, 1)\n    loss = model(x).mean()\n    ???(loss).backward()\n\nprint(f\"Accumulated grad norm: {model.weight.grad.norm().item():.4f}\")"
+}

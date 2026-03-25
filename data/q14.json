@@ -1,0 +1,9 @@
+{
+  "id": 14,
+  "topic": "Tensor Creation",
+  "type": "coding",
+  "question": "Create three tensors using different PyTorch tensor creation functions: 1) a 2x3 tensor of random normal numbers using torch.randn with seed 42, 2) a 2x3 tensor of zeros using torch.zeros, and 3) a 2x3 tensor of ones using torch.ones. Print all three tensors.",
+  "code_hint": "Use torch.manual_seed(42) before torch.randn(), torch.zeros((rows, cols)) for zeros, and torch.ones((rows, cols)) for ones",
+  "expected_output": "tensor([[ 0.3367,  0.1288,  0.2345],\n        [ 0.2303, -1.1229, -0.1863]])\ntensor([[0., 0., 0.],\n        [0., 0., 0.]])\ntensor([[1., 1., 1.],\n        [1., 1., 1.]])",
+  "template": "import torch\n\ntorch.manual_seed(42)\na = torch.???((???, ???))\nprint(a)\n\nb = torch.???((???, ???))\nprint(b)\n\nc = torch.???((???, ???))\nprint(c)"
+}

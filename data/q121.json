@@ -1,0 +1,10 @@
+{
+  "id": 121,
+  "topic": "Tokenizer",
+  "type": "coding",
+  "question": "Decode tokens back to text using tiktoken.",
+  "code_hint": "enc.decode(tokens)",
+  "expected_output": "Decoded: Hello world",
+  "template": "import tiktoken\n\nenc = tiktoken.get_encoding('gpt2')\ntokens = [40, 1233, 508]\ntext = enc.???(tokens)\nprint(f\"Decoded: {text}\")",
+  "answer": "import tiktoken\n\nenc = tiktoken.get_encoding('gpt2')\ntokens = [40, 1233, 508]\ntext = enc.decode(tokens)\nprint(f\"Decoded: {text}\")"
+}

@@ -1,0 +1,10 @@
+{
+  "id": 113,
+  "topic": "Metrics",
+  "type": "coding",
+  "question": "Calculate average cross-entropy loss over a sequence, then compute perplexity. Handle padding with mask.",
+  "code_hint": "loss = ce.sum() / mask.sum(), then exp",
+  "expected_output": "Masked perplexity: 5.30",
+  "template": "import torch\nimport torch.nn.functional as F\n\nlogits = torch.randn(5, 10)\ntarget = torch.tensor([3, 5, 2, 7, 0])  # last is padding\nmask = (target != 0).float()\n\nloss = F.cross_entropy(logits, target, reduction='none')\nmasked_loss = (loss * mask).sum() / mask.sum()\nppl = torch.exp(???)\nprint(f\"Masked perplexity: {ppl:.2f}\")",
+  "answer": "import torch\nimport torch.nn.functional as F\n\nlogits = torch.randn(5, 10)\ntarget = torch.tensor([3, 5, 2, 7, 0])  # last is padding\nmask = (target != 0).float()\n\nloss = F.cross_entropy(logits, target, reduction='none')\nmasked_loss = (loss * mask).sum() / mask.sum()\nppl = torch.exp(masked_loss)\nprint(f\"Masked perplexity: {ppl:.2f}\")"
+}

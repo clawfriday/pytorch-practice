@@ -1,0 +1,9 @@
+{
+  "id": 45,
+  "topic": "Gradient Context",
+  "type": "coding",
+  "question": "Create BatchNorm2d(3), set to train mode then eval mode. Print training attribute for both.",
+  "code_hint": "model.train(), model.eval()",
+  "expected_output": "BN train mode: True, eval mode: False",
+  "template": "import torch\nimport torch.nn as nn\n\nbn = nn.BatchNorm2d(3)\nbn.???()\nprint(f\"BN train mode: {bn.training}\", end=\", \")\nbn.???()\nprint(f\"eval mode: {bn.training}\")"
+}

@@ -1,0 +1,9 @@
+{
+  "id": 17,
+  "topic": "Tensor Creation",
+  "type": "coding",
+  "question": "Create a 3x4 random integer tensor (seed 456, range 0-100) and a 4x4 identity matrix. Print both.",
+  "code_hint": "torch.randint(0, 100, (3, 4)), torch.eye(4)",
+  "expected_output": "tensor([[91, 65, 7, 41],\n        [54, 59, 32, 90],\n        [47, 78, 8, 25]])\ntensor([[1., 0., 0., 0.],\n        [0., 1., 0., 0.],\n        [0., 0., 1., 0.],\n        [0., 0., 0., 1.]])",
+  "template": "import torch\n\ntorch.manual_seed(456)\na = torch.???(???, (???, ???))\nprint(a)\n\nb = torch.???(???)\nprint(b)"
+}

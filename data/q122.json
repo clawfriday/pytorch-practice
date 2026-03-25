@@ -1,0 +1,10 @@
+{
+  "id": 122,
+  "topic": "Tokenizer",
+  "type": "conceptual",
+  "question": "What is Byte Pair Encoding (BPE)? How does it work for tokenization?",
+  "code_hint": "BPE iteratively merges most frequent adjacent pairs of bytes/characters",
+  "expected_output": "BPE merges most frequent adjacent pairs iteratively to build vocabulary from characters/bytes",
+  "template": "# BPE (Byte Pair Encoding):\n# 1. Start with character-level vocabulary\n# 2. Count all adjacent pair frequencies\n# 3. Merge most frequent pair into new token\n# 4. Repeat until target vocabulary size\n\nprint(\"BPE merges most frequent adjacent pairs iteratively to build vocabulary from characters/bytes\")",
+  "answer": "# BPE (Byte Pair Encoding):\n# 1. Start with character-level vocabulary\n# 2. Count all adjacent pair frequencies\n# 3. Merge most frequent pair into new token\n# 4. Repeat until target vocabulary size\n\nprint(\"BPE merges most frequent adjacent pairs iteratively to build vocabulary from characters/bytes\")"
+}

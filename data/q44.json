@@ -1,0 +1,9 @@
+{
+  "id": 44,
+  "topic": "Gradient Context",
+  "type": "coding",
+  "question": "Use set_grad_enabled(True) then create x1=[1] requires_grad, compute y1=x1*2. Then set_grad_enabled(False), create x2=[1], compute y2=x2*2. Print grad tracking for both.",
+  "code_hint": "torch.set_grad_enabled(True/False)",
+  "expected_output": "With grad enabled: requires_grad = True\nWith grad disabled: requires_grad = False",
+  "template": "import torch\n\ntorch.???(???)\nx1 = torch.tensor([1.0], requires_grad=???)\ny1 = x1 * 2\nprint(f\"With grad enabled: requires_grad = {y1.???}\")\n\ntorch.???(???)\nx2 = torch.tensor([1.0], requires_grad=???)\ny2 = x2 * 2\nprint(f\"With grad disabled: requires_grad = {y2.???}\")"
+}

@@ -1,0 +1,10 @@
+{
+  "id": 105,
+  "topic": "Activation Functions",
+  "type": "coding",
+  "question": "Compare GELU, ReLU, and Swish activations. Compute outputs for the same input.",
+  "code_hint": "F.gelu, F.relu, x * torch.sigmoid(x) for Swish",
+  "expected_output": "ReLU: tensor([1., 0.])\nGELU: tensor([0.8413, 0.1587])\nSwish: tensor([0.7311, 0.2689])",
+  "template": "import torch\nimport torch.nn.functional as F\n\nx = torch.tensor([1.0, -1.0])\n\nrelu = F.???(x)\ngelu = F.???(x)\nswish = x * torch.sigmoid(???)\n\nprint(f\"ReLU: {relu}\")\nprint(f\"GELU: {gelu}\")\nprint(f\"Swish: {swish}\")",
+  "answer": "import torch\nimport torch.nn.functional as F\n\nx = torch.tensor([1.0, -1.0])\n\nrelu = F.relu(x)\ngelu = F.gelu(x)\nswish = x * torch.sigmoid(x)\n\nprint(f\"ReLU: {relu}\")\nprint(f\"GELU: {gelu}\")\nprint(f\"Swish: {swish}\")"
+}

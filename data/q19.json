@@ -1,0 +1,9 @@
+{
+  "id": 19,
+  "topic": "Tensor Operations",
+  "type": "coding",
+  "question": "Create (3,4) tensor, unsqueeze at dim 0, then permute to (4,3). Print shapes.",
+  "code_hint": ".unsqueeze(0), .permute(1, 0)",
+  "expected_output": "Original: torch.Size([3, 4])\nUnsqueezed: torch.Size([1, 3, 4])\nPermuted: torch.Size([4, 3])",
+  "template": "import torch\n\nt = torch.randn(3, 4)\nprint(f\"Original: {t.shape}\")\n\nu = t.???(???)\nprint(f\"Unsqueezed: {u.shape}\")\n\np = t.???(???, ???)\nprint(f\"Permuted: {p.shape}\")"
+}

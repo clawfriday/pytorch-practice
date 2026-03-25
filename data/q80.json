@@ -1,0 +1,9 @@
+{
+  "id": 80,
+  "topic": "Gradient Clipping",
+  "type": "coding",
+  "question": "Compute gradient norm and clip gradients using clip_grad_norm_ with max_norm=1.0.",
+  "code_hint": "torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)",
+  "expected_output": "Before clip: 2.8758",
+  "template": "import torch\nimport torch.nn as nn\n\nx = torch.randn(1, 10)\nmodel = nn.Linear(10, 1)\ntarget = torch.randn(1, 1)\n\nloss = model(x).mean()\nloss.backward()\n\ngrad_norm_before = torch.nn.utils.???_(model.parameters(), max_norm=1.0)\nprint(f\"Grad norm after clip: {grad_norm_before:.4f}\")\nprint(f\"Max grad element: {model.weight.grad.abs().max().item():.4f}\")"
+}

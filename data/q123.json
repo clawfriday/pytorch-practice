@@ -1,0 +1,10 @@
+{
+  "id": 123,
+  "topic": "Tokenizer",
+  "type": "coding",
+  "question": "Handle unknown words with BPE. Tokens not in vocabulary should map to <|unk|> token.",
+  "code_hint": "enc.encode with allowed_special='all' or strict=False",
+  "expected_output": "Tokens with unknown: [40, 0]",
+  "template": "import tiktoken\n\nenc = tiktoken.get_encoding('gpt2')\ntext = \"Hello xyzunknownword123\"\ntokens = enc.encode(text, allowed_special=???)\nprint(f\"Tokens with unknown: {tokens}\")",
+  "answer": "import tiktoken\n\nenc = tiktoken.get_encoding('gpt2')\ntext = \"Hello xyzunknownword123\"\ntokens = enc.encode(text, allowed_special='all')\nprint(f\"Tokens with unknown: {tokens}\")"
+}

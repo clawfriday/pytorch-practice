@@ -1,0 +1,10 @@
+{
+  "id": 115,
+  "topic": "Text Generation",
+  "type": "coding",
+  "question": "Apply temperature scaling to logits. higher temperature = softer distribution, lower = sharper.",
+  "code_hint": "probs = F.softmax(logits / temperature, dim=-1)",
+  "expected_output": "High temp (1.0): [0.09, 0.12, 0.09, 0.70]\nLow temp (0.1): [0.00, 0.00, 0.00, 1.00]",
+  "template": "import torch\nimport torch.nn.functional as F\n\nlogits = torch.tensor([1.0, 2.0, 1.0, 4.0])\n\nprobs_high = F.softmax(logits / ???, dim=-1)\nprobs_low = F.softmax(logits / ???, dim=-1)\n\nprint(f\"High temp (1.0): {probs_high}\")\nprint(f\"Low temp (0.1): {probs_low}\")",
+  "answer": "import torch\nimport torch.nn.functional as F\n\nlogits = torch.tensor([1.0, 2.0, 1.0, 4.0])\n\nprobs_high = F.softmax(logits / 1.0, dim=-1)\nprobs_low = F.softmax(logits / 0.1, dim=-1)\n\nprint(f\"High temp (1.0): {probs_high}\")\nprint(f\"Low temp (0.1): {probs_low}\")"
+}

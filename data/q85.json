@@ -1,0 +1,9 @@
+{
+  "id": 85,
+  "topic": "Distributed Training",
+  "type": "coding",
+  "question": "Complete the DistributedDataParallel (DDP) setup: initialize the process group with init_process_group and wrap the model with DDP. Fill in the ??? to complete the distributed training initialization.",
+  "code_hint": "1. Use 'gloo' backend (works on CPU). 2. Initialize with dist.init_process_group(backend=..., rank=..., world_size=...). 3. Wrap model with nn.parallel.DistributedDataParallel(model).",
+  "expected_output": "Backend: gloo\nRank: 0\nWorld size: 1\nModel wrapped: True",
+  "template": "import torch\nimport torch.nn as nn\nimport torch.distributed as dist\nimport socket\nimport os\n\n# Get a free port for the rendezvous\ndef get_free_port():\n    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:\n        s.bind(('', 0))\n        s.listen(1)\n        port = s.getsockname()[1]\n    return port\n\nport = get_free_port()\nos.environ['MASTER_ADDR'] = 'localhost'\nos.environ['MASTER_PORT'] = str(port)\n\n# Initialize process group for distributed training\nbackend = 'gloo'\nrank = 0\nworld_size = 1\n???  # Use init_process_group with backend, rank, and world_size\n\n# Define a simple model\nclass SimpleModel(nn.Module):\n    def __init__(self):\n        super().__init__()\n        self.linear = nn.Linear(10, 5)\n    \n    def forward(self, x):\n        return self.linear(x)\n\nmodel = SimpleModel()\n# Wrap model with DDP\nmodel = ???  # Use nn.parallel.DistributedDataParallel\n\nprint(f'Backend: {backend}')\nprint(f'Rank: {rank}')\nprint(f'World size: {dist.get_world_size()}')\nprint(f'Model wrapped: {isinstance(model, nn.parallel.DistributedDataParallel)}')\n\n???  # Use destroy_process_group\n"
+}

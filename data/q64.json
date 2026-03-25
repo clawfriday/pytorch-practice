@@ -1,0 +1,9 @@
+{
+  "id": 64,
+  "topic": "Debugging",
+  "type": "coding",
+  "question": "Clone tensor a to b, add 1e-10 to b[0,0]. Use isclose and allclose to compare with rtol=1e-5, atol=1e-8.",
+  "code_hint": "torch.isclose(a, b), torch.allclose(a, b)",
+  "expected_output": "isclose result: tensor([[True, True, True, True],\n        [True, True, True, True],\n        [True, True, True, True]])\nallclose result: True",
+  "template": "import torch\n\ntorch.manual_seed(42)\na = torch.randn(3, 4)\nb = a.clone()\nb[0, 0] += 1e-10\nisclose = torch.???(???, ???, rtol=1e-5, atol=1e-8)\nallclose = torch.???(???, ???, rtol=1e-5, atol=1e-8)\nprint(f\"isclose result: {isclose}\")\nprint(f\"allclose result: {allclose}\")"
+}

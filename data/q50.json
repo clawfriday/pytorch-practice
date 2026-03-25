@@ -1,0 +1,9 @@
+{
+  "id": 50,
+  "topic": "Model Functions",
+  "type": "coding",
+  "question": "Create Linear(10,5). Print state_dict keys.",
+  "code_hint": "model.state_dict(), list(dict.keys())",
+  "expected_output": "state_dict keys: ['fc1.weight', 'fc1.bias']",
+  "template": "import torch\nimport torch.nn as nn\n\nclass Net(nn.Module):\n    def __init__(self):\n        super().__init__()\n        self.fc1 = nn.Linear(10, 5)\n    def forward(self, x):\n        return self.fc1(x)\n\nmodel = Net()\nstate = model.???()\nkeys = list(state.???())\nprint(f\"state_dict keys: {keys}\")"
+}

@@ -1,0 +1,9 @@
+{
+  "id": 25,
+  "topic": "Tensor Indexing",
+  "type": "coding",
+  "question": "Create 5x4 tensor, use index_select to pick rows 0,2,4 along dim 0. Print selected rows.",
+  "code_hint": "torch.index_select(t, dim, index)",
+  "expected_output": "Original shape: torch.Size([5, 4])\nIndex: [0, 2, 4]\nSelected shape: torch.Size([3, 4])\nSelected:\ntensor([[ 0.3367,  0.1288,  0.2345,  0.2303],\n        [ 0.4617,  0.2674,  0.5349,  0.8094],\n        [-0.4601,  0.0286, -0.0735,  0.0399]])",
+  "template": "import torch\n\ntorch.manual_seed(42)\nt = torch.randn(5, 4)\nidx = torch.tensor([???, ???, ???])\nselected = torch.???(???, ???, ???)\nprint(f\"Original shape: {t.shape}\")\nprint(f\"Index: {[???]}\")\nprint(f\"Selected shape: {selected.shape}\")\nprint(f\"Selected:\\n{selected}\")"
+}

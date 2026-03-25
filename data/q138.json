@@ -1,0 +1,10 @@
+{
+  "id": 138,
+  "topic": "Positional Encodings",
+  "type": "conceptual",
+  "question": "Why is RoPE preferred over absolute positional encodings in modern LLMs?",
+  "code_hint": "RoPE encodes relative position implicitly, extends to arbitrary length at inference, better generalization",
+  "expected_output": "RoPE: relative position implicitly encoded, extensible at inference, better generalization",
+  "template": "# RoPE vs Absolute Positional Encoding:\n# - Absolute: each position gets fixed embedding, not extensible\n# - RoPE: encodes RELATIVE position, naturally extends\n# - RoPE works by rotating Q,K vectors\n# - Better generalization to longer sequences at inference\n\nprint(\"RoPE: relative position implicitly encoded, extensible at inference, better generalization\")",
+  "answer": "# RoPE vs Absolute Positional Encoding:\n# - Absolute: each position gets fixed embedding, not extensible\n# - RoPE: encodes RELATIVE position, naturally extends\n# - RoPE works by rotating Q,K vectors\n# - Better generalization to longer sequences at inference\n\nprint(\"RoPE: relative position implicitly encoded, extensible at inference, better generalization\")"
+}

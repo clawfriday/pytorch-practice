@@ -1,0 +1,9 @@
+{
+  "id": 61,
+  "topic": "Common Patterns",
+  "type": "coding",
+  "question": "Check CUDA availability. Move Linear(10,2) and X=(4,10) to device. Compute output. Print device.",
+  "code_hint": "torch.device('cuda' if torch.cuda.is_available() else 'cpu'), .to(device)",
+  "expected_output": "Model device: cuda\nOutput device: cuda",
+  "template": "import torch\nimport torch.nn as nn\n\ndevice = torch.???('cuda' if torch.cuda.???() else 'cpu')\nmodel = nn.Linear(10, 2).???(???)\nx = torch.randn(4, 10).???(???)\noutput = model(x)\nprint(f\"Model device: {???}\")\nprint(f\"Output device: {???}\")"
+}

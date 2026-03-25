@@ -1,0 +1,9 @@
+{
+  "id": 30,
+  "topic": "nn.Module",
+  "type": "coding",
+  "question": "Create nn.Linear(10, 5), print number of parameters and their shapes.",
+  "code_hint": "nn.Linear(in, out), list(model.parameters())",
+  "expected_output": "Linear(in=10, out=5)\nNumber of parameters: 2\nWeight shape: torch.Size([5, 10])\nBias shape: torch.Size([5])",
+  "template": "import torch\nimport torch.nn as nn\n\nlinear = nn.???(???, ???)\nparams = list(linear.???())\nprint(f\"Linear(in=10, out=5)\")\nprint(f\"Number of parameters: {len(params)}\")\nprint(f\"Weight shape: {params[0].shape}\")\nprint(f\"Bias shape: {params[1].shape}\")"
+}

@@ -1,0 +1,9 @@
+{
+  "id": 51,
+  "topic": "Model Functions",
+  "type": "coding",
+  "question": "Create two Linear(5,2). Load state_dict from model1 into model2. Verify weights match.",
+  "code_hint": "model1.state_dict(), model2.load_state_dict()",
+  "expected_output": "Weights match after load: True",
+  "template": "import torch\nimport torch.nn as nn\n\ntorch.manual_seed(42)\nmodel1 = nn.Linear(5, 2)\nmodel2 = nn.Linear(5, 2)\nsd = model1.???()\nmodel2.???(???)\nmatch = torch.allclose(model1.weight, model2.weight)\nprint(f\"Weights match after load: {match}\")"
+}

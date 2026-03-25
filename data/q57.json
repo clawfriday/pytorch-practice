@@ -1,0 +1,9 @@
+{
+  "id": 57,
+  "topic": "Data Processing",
+  "type": "coding",
+  "question": "Split dataset of 100 samples into train=80, val=20 using random_split.",
+  "code_hint": "torch.utils.data.random_split(dataset, [train_size, val_size])",
+  "expected_output": "Train size: 80\nVal size: 20",
+  "template": "import torch\nfrom torch.utils.data import random_split\n\nds = torch.randn(100, 10)\ntrain, val = random_split(???, [???, ???])\nprint(f\"Train size: {???(train)}\")\nprint(f\"Val size: {???(val)}\")"
+}

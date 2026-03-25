@@ -1,0 +1,9 @@
+{
+  "id": 68,
+  "topic": "Positional Encodings",
+  "type": "coding",
+  "question": "Implement the 2D rotation formula used in Rotary Positional Encoding (RoPE). Given vector (x1, x2) and angle theta, rotate it to (x1*cos(θ) - x2*sin(θ), x1*sin(θ) + x2*cos(θ)).",
+  "code_hint": "Use math.cos() and math.sin() to compute the rotated values.",
+  "expected_output": "x1_rotated: -0.7071\nx2_rotated: 4.9497",
+  "template": "import torch\nimport math\n\ntorch.manual_seed(42)\n\n# Input vector (x1, x2) and angle theta\nx1, x2 = 3.0, 4.0\ntheta = math.pi / 4  # 45 degrees\n\n# TODO: Implement 2D rotation using RoPE formula\n# rotate (x1,x2) to (x1*cos(θ) - x2*sin(θ), x1*sin(θ) + x2*cos(θ))\nx1_rotated = ???\nx2_rotated = ???\n\nprint(f\"x1_rotated: {x1_rotated:.4f}\")\nprint(f\"x2_rotated: {x2_rotated:.4f}\")"
+}

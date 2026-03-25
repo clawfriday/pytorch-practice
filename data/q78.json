@@ -1,0 +1,9 @@
+{
+  "id": 78,
+  "topic": "Loss Functions",
+  "type": "coding",
+  "question": "Compute CrossEntropyLoss with label_smoothing=0.1. Compare with standard CE loss.",
+  "code_hint": "nn.CrossEntropyLoss(label_smoothing=0.1)",
+  "expected_output": "Standard CE: 2.3026\nWith label smoothing (0.1): 2.3026",
+  "template": "import torch\nimport torch.nn as nn\n\nlogits = torch.randn(1, 5)\ntarget = torch.tensor([2])\n\nce_loss = nn.???()\nsmooth_loss = nn.???(label_smoothing=0.1)\n\nprint(f\"Standard CE: {ce_loss(logits, target).item():.4f}\")\nprint(f\"With label smoothing (0.1): {smooth_loss(logits, target).item():.4f}\")"
+}

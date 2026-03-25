@@ -1,0 +1,9 @@
+{
+  "id": 60,
+  "topic": "Common Patterns",
+  "type": "coding",
+  "question": "Save model1.state_dict() to /tmp/model.pt. Create model2 and load the state_dict. Verify match.",
+  "code_hint": "torch.save(model.state_dict(), path), torch.load(path), model.load_state_dict()",
+  "expected_output": "Models match: True",
+  "template": "import torch\nimport torch.nn as nn\n\ntorch.manual_seed(42)\nmodel1 = nn.Linear(10, 2)\ntorch.save(model1.???(), '/tmp/model.pt')\nmodel2 = nn.Linear(10, 2)\nmodel2.???(torch.load('/tmp/model.pt'))\nmatch = torch.allclose(model1.weight, model2.weight)\nprint(f\"Models match: {match}\")"
+}

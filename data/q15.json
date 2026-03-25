@@ -1,0 +1,9 @@
+{
+  "id": 15,
+  "topic": "Tensor Operations",
+  "type": "coding",
+  "question": "Given a tensor of shape (2, 6) with seed 42, perform: 1) reshape to (3, 4), 2) transpose swapping dims 0 and 1, 3) create tensor (1,3,1,4) and squeeze. Print shapes and tensors.",
+  "code_hint": "Use .reshape(), .transpose(0,1), .squeeze()",
+  "expected_output": "Original tensor shape: torch.Size([2, 6])\nReshaped (3, 4):\ntensor([[ 0.3367,  0.1288,  0.2345,  0.2303],\n        [-1.1229, -0.1863,  2.2082, -0.6380],\n        [ 0.4617,  0.2674,  0.5349,  0.8094]])\nTransposed (6, 2):\ntensor([[ 0.3367,  2.2082],\n        [ 0.1288, -0.6380],\n        [ 0.2345,  0.4617],\n        [ 0.2303,  0.2674],\n        [-1.1229,  0.5349],\n        [-0.1863,  0.8094]])\nSqueezed shape: torch.Size([3, 4])\ntensor([[ 1.1103, -1.6898, -0.9890,  0.9580],\n        [ 1.3221,  0.8172, -0.7658, -0.7506],\n        [ 1.3525,  0.6863, -0.3278,  0.7950]])",
+  "template": "import torch\n\ntorch.manual_seed(42)\nt = torch.randn(2, 6)\nprint(f\"Original tensor shape: {t.shape}\")\n\nt_reshaped = t.???(???, ???)\nprint(f\"Reshaped (3, 4):\")\nprint(t_reshaped)\n\nt_transposed = t.???(???, ???)\nprint(f\"Transposed (6, 2):\")\nprint(t_transposed)\n\nt2 = torch.randn(1, 3, 1, 4)\nt_squeezed = t2.???\nprint(f\"Squeezed shape: {t_squeezed.shape}\")\nprint(t_squeezed)"
+}

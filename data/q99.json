@@ -1,0 +1,9 @@
+{
+  "id": 99,
+  "topic": "Model Functions",
+  "type": "coding",
+  "question": "Count the total number of parameters in a neural network model. Use `.parameters()` to iterate and `.numel()` to count elements in each parameter tensor.",
+  "code_hint": "import torch\nimport torch.nn as nn\n\nclass SimpleNet(nn.Module):\n    def __init__(self):\n        super().__init__()\n        self.fc1 = nn.Linear(10, 5)\n        self.fc2 = nn.Linear(5, 1)\n        \n    def forward(self, x):\n        return self.fc2(torch.relu(self.fc1(x)))\n\nmodel = SimpleNet()\n\n# Count total parameters\n### = sum(p.numel() for p in model.parameters())\nprint(f\"Total parameters: {###}\")\n\n# Count trainable parameters\ntrainable = sum(p.numel() for p in model.### if p.###)\nprint(f\"Trainable parameters: {trainable}\")",
+  "expected_output": "Total parameters: 61\nTrainable parameters: 61",
+  "template": "import torch\nimport torch.nn as nn\n\nclass SimpleNet(nn.Module):\n    def __init__(self):\n        super().__init__()\n        self.fc1 = nn.Linear(10, 5)\n        self.fc2 = nn.Linear(5, 1)\n        \n    def forward(self, x):\n        return self.fc2(torch.relu(self.fc1(x)))\n\nmodel = SimpleNet()\n\n# Count total parameters\n### = sum(p.numel() for p in model.parameters())\nprint(f\"Total parameters: {###}\")\n\n# Count trainable parameters\ntrainable = sum(p.numel() for p in model.### if p.###)\nprint(f\"Trainable parameters: {trainable}\")"
+}

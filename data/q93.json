@@ -1,0 +1,9 @@
+{
+  "id": 93,
+  "topic": "Checkpointing",
+  "type": "coding",
+  "question": "You have saved a checkpoint that contains the model's state_dict, optimizer's state_dict, and the current epoch. Write code to load the checkpoint and resume training from the saved state. The checkpoint file is 'checkpoint.pth'.",
+  "code_hint": "Use torch.load() to load the checkpoint. Access model_state_dict, optimizer_state_dict, and epoch from the loaded dictionary. Load them into model, optimizer respectively.",
+  "expected_output": "Resuming from epoch 3\nModel loaded. Optimizer loaded.",
+  "template": "import torch\nimport torch.nn as nn\nimport torch.optim as optim\n\n# Simulate checkpoint file (normally this exists on disk)\ncheckpoint = {\n    'epoch': 3,\n    'model_state_dict': {'weight': torch.tensor([1.0])},\n    'optimizer_state_dict': {'state': {}}\n}\ntorch.save(checkpoint, 'checkpoint.pth')\n\nclass SimpleModel(nn.Module):\n    def __init__(self):\n        super().__init__()\n        self.fc = nn.Linear(1, 1)\n        self.fc.weight.data = torch.tensor([0.0])\n\nmodel = SimpleModel()\noptimizer = optim.SGD(model.parameters(), lr=0.01)\n\n# Load the checkpoint\ncheckpoint = torch.load('checkpoint.pth')\n\n??? = checkpoint['epoch']\n\n??? = checkpoint['model_state_dict']\n\n??? = checkpoint['optimizer_state_dict']\n\nprint(f\"Resuming from epoch {epoch}\")\nprint(\"Model loaded. Optimizer loaded.\")"
+}

@@ -1,0 +1,10 @@
+{
+  "id": 114,
+  "topic": "Metrics",
+  "type": "conceptual",
+  "question": "What does perplexity measure in language modeling? If a model has perplexity of 50, what does it mean?",
+  "code_hint": "Perplexity = avg number of choices the model is confused between, 50 means ~50 equally likely next tokens",
+  "expected_output": "Perplexity 50 means the model has ~50 equally likely choices for next token on average",
+  "template": "# Perplexity interpretation:\n# - Measures how well a probability model predicts a sample\n# - Perplexity = exp(average log likelihood per token)\n# - Lower perplexity = better model\n# - Perplexity of 50 means ~50 equally likely choices on average\n\nprint(\"Perplexity 50 means the model has ~50 equally likely choices for next token on average\")",
+  "answer": "# Perplexity interpretation:\n# - Measures how well a probability model predicts a sample\n# - Perplexity = exp(average log likelihood per token)\n# - Lower perplexity = better model\n# - Perplexity of 50 means ~50 equally likely choices on average\n\nprint(\"Perplexity 50 means the model has ~50 equally likely choices for next token on average\")"
+}

@@ -1,0 +1,9 @@
+{
+  "id": 68,
+  "topic": "Positional Encodings",
+  "type": "coding",
+  "question": "RoPE (Rotary Position Embeddings) computes sin/cos embeddings for position rotation. Given theta_i = 10000^(-2*(i-1)/d_model), for position=0, head_dim=4, compute cos and sin rotary embeddings.",
+  "code_hint": "Use torch.arange and exponentiation: theta = 10000 ** (-2 * indices / head_dim). Compute freqs = position * theta, then cos(freqs), sin(freqs).",
+  "expected_output": "cos: tensor([ 1.0000e+00,  1.0000e+00,  1.0000e+00,  1.0000e+00])\nsin: tensor([0., 0., 0., 0.])",
+  "template": "import torch\n\nhead_dim = 4\nposition = 0\n\n# Compute theta values for each dimension\nindices = torch.arange(0, head_dim, 2)\ntheta = 10000 ** (???)\n\n# Compute frequencies for the position\nfreqs = position * theta\n\n# Compute cos and sin rotary embeddings\nfreqs = torch.outer(torch.arange(1), freqs).reshape(1, -1)\ncos_emb = torch.???\nsin_emb = torch.???\n\nprint(f\"cos: {cos_emb}\")\nprint(f\"sin: {sin_emb}\")"
+}

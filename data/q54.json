@@ -1,0 +1,9 @@
+{
+  "id": 54,
+  "topic": "Data Processing",
+  "type": "coding",
+  "question": "Create Dataset with 100 samples of 10-dim tensors. Implement __init__, __len__, __getitem__.",
+  "code_hint": "class MyDataset(Dataset): with __init__, __len__, __getitem__",
+  "expected_output": "Dataset length: 100\nSample shape: torch.Size([10])",
+  "template": "import torch\nfrom torch.utils.data import Dataset\n\nclass MyDataset(Dataset):\n    def __init__(self):\n        self.data = torch.???(???, ???)\n    def __len__(self):\n        return ???(self.data)\n    def __getitem__(self, idx):\n        return ???[???]\n\nds = MyDataset()\nprint(f\"Dataset length: {???(ds)}\")\nprint(f\"Sample shape: {ds[0].shape}\")"
+}

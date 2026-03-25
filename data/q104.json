@@ -1,0 +1,10 @@
+{
+  "id": 104,
+  "topic": "Activation Functions",
+  "type": "coding",
+  "question": "Implement GELU activation: GELU(x) = x * Phi(x) where Phi is CDF of standard normal, or approximate: 0.5 * x * (1 + tanh(sqrt(2/pi) * (x + 0.044715 * x^3))).",
+  "code_hint": "Use torch.nn.functional.gelu or implement approximation",
+  "expected_output": "GELU(1.0) ≈ 0.8412",
+  "template": "import torch\nimport torch.nn.functional as F\n\nx = torch.tensor([1.0])\ngelu_approx = 0.5 * x * (1 + torch.tanh(torch.sqrt(torch.tensor(2.0/3.14159)) * (x + 0.044715 * x**3)))\nprint(f\"GELU(1.0) ≈ {gelu_approx.item():.4f}\")\nprint(f\"F.gelu: {F.gelu(x).item():.4f}\")",
+  "answer": "import torch\nimport torch.nn.functional as F\n\nx = torch.tensor([1.0])\ngelu_approx = 0.5 * x * (1 + torch.tanh(torch.sqrt(torch.tensor(2.0/3.14159)) * (x + 0.044715 * x**3)))\nprint(f\"GELU(1.0) ≈ {gelu_approx.item():.4f}\")\nprint(f\"F.gelu: {F.gelu(x).item():.4f}\")"
+}

@@ -1,0 +1,9 @@
+{
+  "id": 67,
+  "topic": "Advanced Activations",
+  "type": "coding",
+  "question": "Implement GeGLU (Gated Exponential Linear Unit) activation. GeGLU splits the input tensor into two halves, applies GELU to the first half (gate), applies sigmoid to the second half (value), and multiplies them together.",
+  "code_hint": "Split input into two halves, apply F.gelu to gate half and torch.sigmoid to value half, then multiply.",
+  "expected_output": "tensor([[ 0.1003, -0.0988,  0.7379]])",
+  "template": "import torch\nimport torch.nn.functional as F\n\ndef geglu(x):\n    \"\"\"\n    GeGLU: Gated Exponential Linear Unit\n    Splits input x into gate and value halves.\n    Applies GELU to gate and sigmoid to value, then multiplies.\n    \n    Args:\n        x: Input tensor of shape (batch_size, hidden_size) where hidden_size is even\n    \n    Returns:\n        Output tensor of shape (batch_size, hidden_size // 2)\n    \"\"\"\n    hidden_size = x.shape[-1]\n    assert hidden_size % 2 == 0, \"Hidden size must be even for GeGLU\"\n    \n    gate, value = x.chunk(2, dim=-1)\n    # TODO: Implement GeGLU\n    return ???\n\n# Test\nx = torch.tensor([[ 1.0, -1.0,  2.0, -2.0,  0.5, -0.5]])\nresult = geglu(x)\nprint(result)"
+}

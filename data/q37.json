@@ -1,0 +1,9 @@
+{
+  "id": 37,
+  "topic": "Activation Functions",
+  "type": "coding",
+  "question": "Create 5x5 tensor. Apply dropout with p=0.5 in training mode, then eval mode. Compare outputs.",
+  "code_hint": "F.dropout(x, p=0.5, training=True/False)",
+  "expected_output": "Original mean: -0.1474\nDropout train mean: -0.1551\nDropout eval mean: -0.1474\nTraining changes values, eval is identity",
+  "template": "import torch\nimport torch.nn.functional as F\n\nx = torch.randn(5, 5)\ndrop_train = F.???(???, ???, training=???)\ndrop_eval = F.???(???, ???, training=???)\nprint(f\"Original mean: {x.mean():.4f}\")\nprint(f\"Dropout train mean: {drop_train.mean():.4f}\")\nprint(f\"Dropout eval mean: {drop_eval.mean():.4f}\")\nprint(\"Training changes values, eval is identity\")"
+}

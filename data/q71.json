@@ -1,0 +1,9 @@
+{
+  "id": 71,
+  "topic": "Attention Mechanisms",
+  "type": "coding",
+  "question": "Implement scaled dot-product attention mechanism: attention(Q,K,V) = softmax(Q @ K^T / sqrt(d_k)) @ V. Fill in the ??? to complete the implementation.",
+  "code_hint": "Use torch.matmul for matrix multiplications, K.transpose(-2,-1) to transpose the last two dimensions, and F.softmax with dim=-1.",
+  "expected_output": "Attention weights shape: torch.Size([2, 3, 3])\nOutput shape: torch.Size([2, 3, 4])\nAttention weights:\n tensor([[[0.2746, 0.2220, 0.5034],\n         [0.4423, 0.3890, 0.1687],\n         [0.2303, 0.5218, 0.2479]],\n\n        [[0.1818, 0.0759, 0.7424],\n         [0.2404, 0.4599, 0.2997],\n         [0.3681, 0.2300, 0.4019]]])\nOutput:\n tensor([[[-0.2196,  0.3126, -0.0202, -0.3293],\n         [ 0.0989,  0.1511, -0.1175, -0.2992],\n         [ 0.1140,  0.3381,  0.3332, -0.1965]],\n\n        [[-0.2581,  0.2895,  2.8606,  1.0711],\n         [-0.5805,  0.2681,  1.1562,  0.7658],\n         [-0.4114,  0.3388,  1.3747,  0.8071]]])",
+  "template": "import torch\nimport torch.nn.functional as F\n\ntorch.manual_seed(42)\n\n# Q: (batch_size, seq_len, d_k)\n# K: (batch_size, seq_len, d_k)  \n# V: (batch_size, seq_len, d_v)\nQ = torch.randn(2, 3, 4)  # batch_size=2, seq_len=3, d_k=4\nK = torch.randn(2, 3, 4)\nV = torch.randn(2, 3, 4)  # d_v=4\n\nd_k = Q.size(-1)\n\n# Compute attention scores (batch_size, seq_len, seq_len)\nscores = ???\n\n# Scale scores by sqrt(d_k)\nscores_scaled = ???\n\n# Apply softmax to get attention weights\nattn_weights = ???\n\n# Apply attention weights to V (batch_size, seq_len, d_v)\noutput = ???\n\nprint(\"Attention weights shape:\", attn_weights.shape)\nprint(\"Output shape:\", output.shape)\nprint(\"Attention weights:\\n\", attn_weights)\nprint(\"Output:\\n\", output)"
+}

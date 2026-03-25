@@ -1,0 +1,10 @@
+{
+  "id": 110,
+  "topic": "Transformer Architecture",
+  "type": "coding",
+  "question": "Implement FFN with GELU activation used in GPT: FFN(x) = W2 * GELU(W1 * x) where GELU is approximated.",
+  "code_hint": "F.gelu or 0.5 * x * (1 + tanh(...)) approximation",
+  "expected_output": "FFN+GELU output:\ntensor([[2.1099, 0.9292, 2.1099, 0.9292]])",
+  "template": "import torch\nimport torch.nn as nn\nimport torch.nn.functional as F\n\nclass FFNGELU(nn.Module):\n    def __init__(self, dim, expanded_dim=64):\n        super().__init__()\n        self.w1 = nn.Linear(dim, expanded_dim)\n        self.w2 = nn.Linear(expanded_dim, dim)\n    \n    def forward(self, x):\n        return self.w2(???(self.w1(x)))\n\ntorch.manual_seed(42)\nx = torch.randn(1, 4)\nffn = FFNGELU(dim=4, expanded_dim=16)\nresult = ffn(x)\nprint(\"FFN+GELU output:\\n\", result)",
+  "answer": "import torch\nimport torch.nn as nn\nimport torch.nn.functional as F\n\nclass FFNGELU(nn.Module):\n    def __init__(self, dim, expanded_dim=64):\n        super().__init__()\n        self.w1 = nn.Linear(dim, expanded_dim)\n        self.w2 = nn.Linear(expanded_dim, dim)\n    \n    def forward(self, x):\n        return self.w2(F.gelu(self.w1(x)))\n\ntorch.manual_seed(42)\nx = torch.randn(1, 4)\nffn = FFNGELU(dim=4, expanded_dim=16)\nresult = ffn(x)\nprint(\"FFN+GELU output:\\n\", result)"
+}

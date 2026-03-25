@@ -1,0 +1,9 @@
+{
+  "id": 77,
+  "topic": "Transformer Architecture",
+  "type": "coding",
+  "question": "Implement Kaiming initialization for a Linear layer with ReLU. Use nn.init.kaiming_normal_ for weights.",
+  "code_hint": "nn.init.kaiming_normal_(layer.weight, nonlinearity='relu')",
+  "expected_output": "Weight mean: 0.0\nWeight std: 0.33",
+  "template": "import torch\nimport torch.nn as nn\n\nlayer = nn.Linear(10, 20)\nnn.init.???_(layer.weight, nonlinearity=???)\nprint(f\"Weight mean: {layer.weight.mean().item():.4f}\")\nprint(f\"Weight std: {layer.weight.std().item():.2f}\")"
+}

@@ -1,0 +1,9 @@
+{
+  "id": 87,
+  "topic": "Distributed Training",
+  "type": "coding",
+  "question": "When training with DistributedDataParallel (DDP), BatchNorm layers compute statistics independently on each GPU, leading to different normalization on each rank. Convert the model's BatchNorm layers to SyncBatchNorm to synchronize statistics across all processes.",
+  "code_hint": "Use nn.SyncBatchNorm.convert_sync_batchnorm(model)",
+  "expected_output": "Before conversion:\n  bn1: BatchNorm2d\n  bn2: BatchNorm2d\n\nAfter conversion:\n  bn1: SyncBatchNorm\n  bn2: SyncBatchNorm",
+  "template": "import torch\nimport torch.nn as nn\n\nclass SimpleModel(nn.Module):\n    def __init__(self):\n        super().__init__()\n        self.conv1 = nn.Conv2d(3, 64, 3)\n        self.bn1 = nn.BatchNorm2d(64)\n        self.conv2 = nn.Conv2d(64, 128, 3)\n        self.bn2 = nn.BatchNorm2d(128)\n        self.fc = nn.Linear(128 * 26 * 26, 10)\n\n    def forward(self, x):\n        x = self.bn1(self.conv1(x))\n        x = self.bn2(self.conv2(x))\n        return x\n\nmodel = SimpleModel()\nprint(\"Before conversion:\")\nfor name, module in model.named_modules():\n    if isinstance(module, nn.BatchNorm2d):\n        print(f\"  {name}: {type(module).__name__}\")\n\n# Convert BatchNorm to SyncBatchNorm for DDP\n???\n\nprint(\"\\nAfter conversion:\")\nfor name, module in model.named_modules():\n    if isinstance(module, (nn.BatchNorm2d, nn.SyncBatchNorm)):\n        print(f\"  {name}: {type(module).__name__}\")"
+}

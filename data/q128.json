@@ -1,0 +1,10 @@
+{
+  "id": 128,
+  "topic": "Mixture of Experts",
+  "type": "coding",
+  "question": "Implement top-k routing for MoE. Router outputs weights, select top-k experts.",
+  "code_hint": "torch.topk(router_weights, k), then normalize selected weights",
+  "expected_output": "Top-2 experts: indices=[4, 2], weights=[0.6, 0.4]",
+  "template": "import torch\nimport torch.nn.functional as F\n\nn_experts = 8\nk = 2\nrouter_weights = torch.randn(4, n_experts)  # 4 tokens, 8 experts\n\n# Get top-k and weights\ntopk_weights, topk_indices = torch.topk(router_weights, ???)\ntopk_weights = F.softmax(topk_weights, dim=-1)  # normalize\n\nprint(f\"Top-{k} experts: indices={topk_indices[0].tolist()}, weights={topk_weights[0].tolist()}\")",
+  "answer": "import torch\nimport torch.nn.functional as F\n\nn_experts = 8\nk = 2\nrouter_weights = torch.randn(4, n_experts)  # 4 tokens, 8 experts\n\n# Get top-k and weights\ntopk_weights, topk_indices = torch.topk(router_weights, k)\ntopk_weights = F.softmax(topk_weights, dim=-1)  # normalize\n\nprint(f\"Top-{k} experts: indices={topk_indices[0].tolist()}, weights={topk_weights[0].tolist()}\")"
+}

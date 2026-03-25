@@ -1,0 +1,9 @@
+{
+  "id": 39,
+  "topic": "Gradient Functions",
+  "type": "coding",
+  "question": "Given w=[1,2], b=[0.5] requires_grad, x=[1,2], compute y=w[0]*x[0]+w[1]*x[1]+b. Backward. Print gradients.",
+  "code_hint": "requires_grad=True, backward(), .grad",
+  "expected_output": "w.grad: tensor([1., 2.])\nb.grad: tensor([1.])",
+  "template": "import torch\n\nw = torch.tensor([1.0, 2.0], requires_grad=???)\nb = torch.tensor([0.5], requires_grad=???)\nx = torch.tensor([1.0, 2.0])\ny_pred = w[0]*x[0] + w[1]*x[1] + ???\ny_pred.???()\nprint(f\"w.grad: {w.???}\")\nprint(f\"b.grad: {b.???}\")"
+}

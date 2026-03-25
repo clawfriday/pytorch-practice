@@ -1,0 +1,9 @@
+{
+  "id": 36,
+  "topic": "Activation Functions",
+  "type": "coding",
+  "question": "Apply F.softmax and F.log_softmax to x=[1,2,3] along dim 0. Print results.",
+  "code_hint": "F.softmax(x, dim=0), F.log_softmax(x, dim=0)",
+  "expected_output": "x: tensor([1., 2., 3.])\nSoftmax: tensor([0.0900, 0.2447, 0.6652])\nLogSoftmax: tensor([-2.4076, -1.4076, -0.4076])",
+  "template": "import torch\nimport torch.nn.functional as F\n\nx = torch.tensor([1.0, 2.0, 3.0])\nsoftmax = F.???(???, dim=???)\nlog_softmax = F.???(???, dim=???)\nprint(f\"x: {x}\")\nprint(f\"Softmax: {softmax}\")\nprint(f\"LogSoftmax: {log_softmax}\")"
+}

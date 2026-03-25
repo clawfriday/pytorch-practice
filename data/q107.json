@@ -1,0 +1,10 @@
+{
+  "id": 107,
+  "topic": "Transformer Architecture",
+  "type": "conceptual",
+  "question": "Why do residual connections help training? What problem do they solve?",
+  "code_hint": "Enables gradient flow through skip connections, solves vanishing gradients, enables identity mapping",
+  "expected_output": "Benefits: Enables gradient flow through skip connections, solves vanishing gradients, allows training deeper networks",
+  "template": "# Answer: Why do residual connections help training?\n# 1. Enables direct gradient flow through skip connections\n# 2. Solves vanishing gradient problem in deep networks\n# 3. Allows the network to learn identity mappings easily\n# 4. Makes it easier for layers to learn \"no-op\" transformations\n\nprint(\"Benefits: Enables gradient flow through skip connections, solves vanishing gradients, allows training deeper networks\")",
+  "answer": "# Answer: Why do residual connections help training?\n# 1. Enables direct gradient flow through skip connections\n# 2. Solves vanishing gradient problem in deep networks\n# 3. Allows the network to learn identity mappings easily\n# 4. Makes it easier for layers to learn \"no-op\" transformations\n\nprint(\"Benefits: Enables gradient flow through skip connections, solves vanishing gradients, allows training deeper networks\")"
+}

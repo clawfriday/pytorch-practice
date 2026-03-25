@@ -1,0 +1,10 @@
+{
+  "id": 111,
+  "topic": "Transformer Architecture",
+  "type": "conceptual",
+  "question": "What is the difference between SwiGLU FFN and standard FFN? Why does Llama use SwiGLU?",
+  "code_hint": "SwiGLU: FFN(x) = Swish(x) * W2 * Gate(x), where x is split in half",
+  "expected_output": "SwiGLU: FFN(x) = Swish(x) * W2 * Gate(x), split in half\nStandard: FFN(x) = W2 * ReLU(W1 * x)",
+  "template": "# SwiGLU FFN vs Standard FFN\n# Standard FFN: FFN(x) = W2 * ReLU(W1 * x + b1) + b2\n# SwiGLU FFN: FFN(x) = Swish(W1*x) * W2 * Gate(x), where Gate and W1*x are split in half\n\nprint(\"SwiGLU: FFN(x) = Swish(x) * W2 * Gate(x), split in half\")\nprint(\"Standard: FFN(x) = W2 * ReLU(W1 * x)\")",
+  "answer": "# SwiGLU FFN vs Standard FFN\n# Standard FFN: FFN(x) = W2 * ReLU(W1 * x + b1) + b2\n# SwiGLU FFN: FFN(x) = Swish(W1*x) * W2 * Gate(x), where Gate and W1*x are split in half\n\nprint(\"SwiGLU: FFN(x) = Swish(x) * W2 * Gate(x), split in half\")\nprint(\"Standard: FFN(x) = W2 * ReLU(W1 * x)\")"
+}

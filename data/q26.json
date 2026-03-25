@@ -1,0 +1,9 @@
+{
+  "id": 26,
+  "topic": "Math Operations",
+  "type": "coding",
+  "question": "Given a=[1,2,3] and b=[4,5,6], compute element-wise add, mul, div. Print results.",
+  "code_hint": "torch.add(a,b), torch.mul(a,b), torch.div(b,a)",
+  "expected_output": "a: tensor([1., 2., 3.])\nb: tensor([4., 5., 6.])\nadd: tensor([5., 7., 9.])\nmul: tensor([ 4., 10., 18.])\ndiv: tensor([4.0000, 2.5000, 2.0000])",
+  "template": "import torch\n\na = torch.tensor([1.0, 2.0, 3.0])\nb = torch.tensor([4.0, 5.0, 6.0])\nadd = torch.???(???, ???)\nmul = torch.???(???, ???)\ndiv = torch.???(???, ???)\nprint(f\"a: {a}\")\nprint(f\"b: {b}\")\nprint(f\"add: {add}\")\nprint(f\"mul: {mul}\")\nprint(f\"div: {div}\")"
+}

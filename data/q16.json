@@ -1,0 +1,9 @@
+{
+  "id": 16,
+  "topic": "Tensor Creation",
+  "type": "coding",
+  "question": "Create three tensors: 1) arange from 0 to 10 step 2, 2) linspace 0 to 1 with 5 points, 3) full 2x3 filled with 7. Print all three.",
+  "code_hint": "torch.arange(0, 10, 2), torch.linspace(0, 1, 5), torch.full((2, 3), 7)",
+  "expected_output": "tensor([0, 2, 4, 6, 8])\ntensor([0.0000, 0.2500, 0.5000, 0.7500, 1.0000])\ntensor([[7, 7, 7],\n        [7, 7, 7]])",
+  "template": "import torch\n\na = torch.???(???, ???, ???)\nprint(a)\n\nb = torch.???(???, ???, ???)\nprint(b)\n\nc = torch.???((???, ???), ???)\nprint(c)"
+}

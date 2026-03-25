@@ -1,0 +1,9 @@
+{
+  "id": 83,
+  "topic": "Mixed Precision",
+  "type": "coding",
+  "question": "Use GradScaler to scale loss and unscale gradients. Check if gradients were skipped due to underflow.",
+  "code_hint": "scaler.scale(loss), scaler.step(optimizer), scaler.update()",
+  "expected_output": "Scaled loss: 2.0\nUnscale skipped: False",
+  "template": "import torch\nimport torch.nn as nn\n\nmodel = nn.Linear(10, 1)\noptimizer = torch.optim.SGD(model.parameters(), lr=1.0)\nscaler = torch.cuda.amp.GradScaler()\n\nx = torch.randn(1, 10)\ny = torch.randn(1, 1)\n\nwith torch.cuda.amp.autocast():\n    loss = model(x).mean()\n\nscaled_loss = scaler.???(loss)\nprint(f\"Scaled loss: {scaled_loss.item():.1f}\")\n"
+}

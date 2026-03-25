@@ -1,0 +1,9 @@
+{
+  "id": 43,
+  "topic": "Gradient Context",
+  "type": "coding",
+  "question": "Create x=[1,2] requires_grad. In inference_mode context, compute y=x*2. Check if y has grad tracking.",
+  "code_hint": "with torch.inference_mode():",
+  "expected_output": "In inference_mode: requires_grad = False",
+  "template": "import torch\n\nx = torch.tensor([1.0, 2.0], requires_grad=???)\nwith torch.???():\n    y = x * 2\n    print(f\"In inference_mode: requires_grad = {y.???}\")"
+}

@@ -1,0 +1,10 @@
+{
+  "id": 127,
+  "topic": "Mixture of Experts",
+  "type": "conceptual",
+  "question": "What is Mixture of Experts (MoE)? How does it achieve sparsity?",
+  "code_hint": "MoE has multiple expert networks, router selects top-k experts per token, only k experts active",
+  "expected_output": "MoE: Multiple expert networks, router selects top-k experts, only k active per token",
+  "template": "# MoE Architecture:\n# - N expert networks (usually FFNs)\n# - Router/Gate network predicts expert weights\n# - Top-k experts selected per token\n# - Sparse activation: only k out of N experts process each token\n\nprint(\"MoE: Multiple expert networks, router selects top-k experts, only k active per token\")",
+  "answer": "# MoE Architecture:\n# - N expert networks (usually FFNs)\n# - Router/Gate network predicts expert weights\n# - Top-k experts selected per token\n# - Sparse activation: only k out of N experts process each token\n\nprint(\"MoE: Multiple expert networks, router selects top-k experts, only k active per token\")"
+}

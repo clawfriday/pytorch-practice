@@ -551,11 +551,8 @@
 
                 function showAnswer() {
                     if (!currentQuestion.value) return;
-                    // Generate the answer by replacing ??? with typical solution hints
-                    const template = currentQuestion.value.template || '';
-                    // For coding questions, show the template with ??? replaced by common patterns
-                    // Extract the key lines that had ??? 
-                    answerRevealed.value = template;
+                    // Show the answer field (the filled-in solution)
+                    answerRevealed.value = currentQuestion.value.answer || 'Answer not available';
                     answerShown.value = true;
                     // Mark as attempted (viewing answer counts as attempting)
                     currentQuestion.value.attempted = true;

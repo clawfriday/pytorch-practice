@@ -1,0 +1,10 @@
+{
+  "id": 119,
+  "topic": "Text Generation",
+  "type": "coding",
+  "question": "Combine top-k and top-p. Apply top-p first, then top-k if result exceeds k.",
+  "code_hint": "First apply top-p, then if more than k tokens, keep only top-k",
+  "expected_output": "Combined top-k=2, top-p=0.9: keep 2 tokens",
+  "template": "import torch\nimport torch.nn.functional as F\n\nlogits = torch.tensor([1.0, 2.0, 1.0, 4.0])\nk = 2\np = 0.9\n\n# Top-p\nprobs = F.softmax(logits, dim=-1)\nsorted_probs, indices = torch.sort(probs, descending=True)\ncumsum = torch.cumsum(sorted_probs, dim=-1)\ncutoff_idx = torch.where(cumsum >= p)[0][0]\nnucleus_size = cutoff_idx.item() + 1\n\n# Apply top-k\nfinal_k = min(???)\nprint(f\"Combined top-k={k}, top-p={p}: keep {final_k} tokens\")",
+  "answer": "import torch\nimport torch.nn.functional as F\n\nlogits = torch.tensor([1.0, 2.0, 1.0, 4.0])\nk = 2\np = 0.9\n\n# Top-p\nprobs = F.softmax(logits, dim=-1)\nsorted_probs, indices = torch.sort(probs, descending=True)\ncumsum = torch.cumsum(sorted_probs, dim=-1)\ncutoff_idx = torch.where(cumsum >= p)[0][0]\nnucleus_size = cutoff_idx.item() + 1\n\n# Apply top-k\nfinal_k = min(nucleus_size, k)\nprint(f\"Combined top-k={k}, top-p={p}: keep {final_k} tokens\")"
+}

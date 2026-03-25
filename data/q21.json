@@ -1,0 +1,9 @@
+{
+  "id": 21,
+  "topic": "Tensor Operations",
+  "type": "coding",
+  "question": "Create (1,6) tensor, split into chunks of size 2 along dim 1, and chunk into 3 parts along dim 1. Print number of splits and chunks.",
+  "code_hint": "torch.split(t, 2, dim=1), torch.chunk(t, 3, dim=1)",
+  "expected_output": "Original: torch.Size([1, 6])\nSplit into 3 parts, each shape: torch.Size([1, 2])\nChunked into 3 parts, each shape: torch.Size([1, 2])",
+  "template": "import torch\n\nt = torch.randn(1, 6)\nprint(f\"Original: {t.shape}\")\n\nsplit = torch.???(???, ???, dim=???)\nprint(f\"Split into {len(split)} parts, each shape: {split[0].shape}\")\n\nchunk = torch.???(???, ???, dim=???)\nprint(f\"Chunked into {len(chunk)} parts, each shape: {chunk[0].shape}\")"
+}

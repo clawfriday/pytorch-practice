@@ -1,0 +1,9 @@
+{
+  "id": 55,
+  "topic": "Data Processing",
+  "type": "coding",
+  "question": "Create DataLoader from MyDataset with batch_size=16, shuffle=True. Get first batch.",
+  "code_hint": "DataLoader(dataset, batch_size, shuffle)",
+  "expected_output": "Batch shape: torch.Size([16, 10])\nBatch count per epoch: 7",
+  "template": "import torch\nfrom torch.utils.data import Dataset, DataLoader\n\nclass MyDataset(Dataset):\n    def __init__(self):\n        self.data = torch.randn(100, 10)\n    def __len__(self):\n        return len(self.data)\n    def __getitem__(self, idx):\n        return self.data[idx]\n\nds = MyDataset()\nloader = DataLoader(???, batch_size=???, shuffle=???, num_workers=0)\nbatch = next(???(loader))\nprint(f\"Batch shape: {batch.shape}\")\nprint(f\"Batch count per epoch: {???(loader)}\")"
+}

@@ -1,0 +1,9 @@
+{
+  "id": 35,
+  "topic": "Activation Functions",
+  "type": "coding",
+  "question": "Apply F.gelu and F.tanh to x=[-1,0,1]. Print results.",
+  "code_hint": "F.gelu(x), F.tanh(x)",
+  "expected_output": "x: tensor([-1.,  0.,  1.])\nGELU: tensor([0.1587,  0.0000, 0.8413])\nTanh: tensor([0.7616,  0.0000, 0.7616])",
+  "template": "import torch\nimport torch.nn.functional as F\n\nx = torch.tensor([-1.0, 0.0, 1.0])\ngelu = F.???(???)\ntanh = F.???(???)\nprint(f\"x: {x}\")\nprint(f\"GELU: {gelu}\")\nprint(f\"Tanh: {tanh}\")"
+}

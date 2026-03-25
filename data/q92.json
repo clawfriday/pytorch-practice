@@ -1,0 +1,9 @@
+{
+  "id": 92,
+  "topic": "Checkpointing",
+  "type": "coding",
+  "question": "Save a complete training checkpoint containing model, optimizer, epoch, and scheduler states.",
+  "code_hint": "Use torch.save() with a dict containing model.state_dict(), optimizer.state_dict(), epoch, scheduler.state_dict().",
+  "expected_output": "Checkpoint saved: {'model': <state dict>, 'optimizer': <state dict>, 'epoch': 42, 'scheduler': <state dict>}",
+  "template": "import torch\nimport torch.nn as nn\nimport torch.optim as optim\n\nmodel = nn.Linear(10, 5)\noptimizer = optim.SGD(model.parameters(), lr=0.01)\nscheduler = optim.lr_scheduler.StepLR(optimizer, step_size=10)\nepoch = 42\n\n# Save full checkpoint to 'checkpoint.pth'\ncheckpoint = ???\ntorch.save(checkpoint, 'checkpoint.pth')\nprint(f\"Checkpoint saved: {checkpoint}\")"
+}

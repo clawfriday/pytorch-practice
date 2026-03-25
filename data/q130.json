@@ -1,0 +1,10 @@
+{
+  "id": 130,
+  "topic": "Mixture of Experts",
+  "type": "conceptual",
+  "question": "What is load balancing loss in MoE? Why is it needed?",
+  "code_hint": "Encourages equal expert utilization, prevents few experts from being overloaded",
+  "expected_output": "Load balancing loss: auxiliary loss to ensure equal expert usage, prevents router collapse",
+  "template": "# MoE Load Balancing:\n# - Auxiliary loss added to main loss\n# - Loss = -importance_variance (want equal utilization)\n# - Encourages router to distribute tokens evenly across experts\n# - Prevents router collapse (always selecting same experts)\n\nprint(\"Load balancing loss: auxiliary loss to ensure equal expert usage, prevents router collapse\")",
+  "answer": "# MoE Load Balancing:\n# - Auxiliary loss added to main loss\n# - Loss = -importance_variance (want equal utilization)\n# - Encourages router to distribute tokens evenly across experts\n# - Prevents router collapse (always selecting same experts)\n\nprint(\"Load balancing loss: auxiliary loss to ensure equal expert usage, prevents router collapse\")"
+}

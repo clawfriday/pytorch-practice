@@ -1,0 +1,10 @@
+{
+  "id": 132,
+  "topic": "Attention Mechanisms",
+  "type": "conceptual",
+  "question": "Why use sliding window attention? What is the trade-off?",
+  "code_hint": "Reduces compute from O(n^2) to O(n*w), limits receptive field to window size",
+  "expected_output": "Trade-off: O(n*w) compute vs O(n^2), local context only, often combined with global attention",
+  "template": "# Sliding Window Attention:\n# - Limits attention to window_size context\n# - Complexity: O(n * window_size) instead of O(n^2)\n# - Captures local patterns, loses long-range dependencies\n# - Often combined with global attention for key tokens\n\nprint(\"Trade-off: O(n*w) compute vs O(n^2), local context only, often combined with global attention\")",
+  "answer": "# Sliding Window Attention:\n# - Limits attention to window_size context\n# - Complexity: O(n * window_size) instead of O(n^2)\n# - Captures local patterns, loses long-range dependencies\n# - Often combined with global attention for key tokens\n\nprint(\"Trade-off: O(n*w) compute vs O(n^2), local context only, often combined with global attention\")"
+}

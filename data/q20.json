@@ -1,0 +1,9 @@
+{
+  "id": 20,
+  "topic": "Tensor Operations",
+  "type": "coding",
+  "question": "Create two (2,3) tensors, concatenate along dim 0 and stack along dim 0. Print shapes.",
+  "code_hint": "torch.cat([a, b], dim=0), torch.stack([a, b], dim=0)",
+  "expected_output": "a shape: torch.Size([2, 3])\nb shape: torch.Size([2, 3])\nConcatenated: torch.Size([4, 3])\nStacked: torch.Size([2, 2, 3])",
+  "template": "import torch\n\na = torch.randn(2, 3)\nb = torch.randn(2, 3)\nprint(f\"a shape: {a.shape}\")\nprint(f\"b shape: {b.shape}\")\n\ncat = torch.???([???, ???], dim=???)\nprint(f\"Concatenated: {cat.shape}\")\n\nstack = torch.???([???, ???], dim=???)\nprint(f\"Stacked: {stack.shape}\")"
+}

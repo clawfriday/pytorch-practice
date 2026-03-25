@@ -1,0 +1,9 @@
+{
+  "id": 24,
+  "topic": "Tensor Indexing",
+  "type": "coding",
+  "question": "Use torch.gather to collect values from t=[[1,2],[3,4],[5,6]] using index=[[0,1],[1,0],[0,0]] along dim 1. Print result.",
+  "code_hint": "torch.gather(t, dim, index)",
+  "expected_output": "Tensor t:\ntensor([[1, 2],\n        [3, 4],\n        [5, 6]])\nIndex:\ntensor([[0, 1],\n        [1, 0],\n        [0, 0]])\nGathered:\ntensor([[1, 2],\n        [4, 3],\n        [5, 5]])",
+  "template": "import torch\n\nt = torch.tensor([[1, 2], [3, 4], [5, 6]])\nindex = torch.tensor([[0, 1], [1, 0], [0, 0]])\ngathered = torch.???(???, ???, ???)\nprint(f\"Tensor t:\\n{t}\")\nprint(f\"Index:\\n{index}\")\nprint(f\"Gathered:\\n{index}\")"
+}

@@ -1,0 +1,9 @@
+{
+  "id": 56,
+  "topic": "Data Processing",
+  "type": "coding",
+  "question": "Create TensorDataset from x=(100,10) and y=(100,) labels. DataLoader batch_size=8. Get first batch.",
+  "code_hint": "TensorDataset(*tensors), DataLoader",
+  "expected_output": "x batch shape: torch.Size([8, 10])\ny batch shape: torch.Size([8])",
+  "template": "import torch\nfrom torch.utils.data import TensorDataset, DataLoader\n\nx = torch.randn(100, 10)\ny = torch.randint(0, 5, (100,))\nds = TensorDataset(???, ???)\nloader = DataLoader(???, batch_size=8)\nbatch_x, batch_y = next(???(loader))\nprint(f\"x batch shape: {batch_x.shape}\")\nprint(f\"y batch shape: {batch_y.shape}\")"
+}

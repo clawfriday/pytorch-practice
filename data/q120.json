@@ -1,0 +1,10 @@
+{
+  "id": 120,
+  "topic": "Tokenizer",
+  "type": "coding",
+  "question": "Tokenize text using tiktoken (GPT-2 encoding). Count the number of tokens.",
+  "code_hint": "import tiktoken; enc = tiktoken.get_encoding('gpt2'); enc.encode(text)",
+  "expected_output": "Tokens: [40, 1233, 508]\nNum tokens: 3",
+  "template": "import tiktoken\n\ntext = \"Hello world\"\nenc = tiktoken.get_encoding(???)\ntokens = enc.encode(???)\nprint(f\"Tokens: {tokens}\")\nprint(f\"Num tokens: {len(tokens)}\")",
+  "answer": "import tiktoken\n\ntext = \"Hello world\"\nenc = tiktoken.get_encoding('gpt2')\ntokens = enc.encode(text)\nprint(f\"Tokens: {tokens}\")\nprint(f\"Num tokens: {len(tokens)}\")"
+}

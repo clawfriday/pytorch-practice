@@ -1,0 +1,10 @@
+{
+  "id": 112,
+  "topic": "Metrics",
+  "type": "coding",
+  "question": "Calculate perplexity from cross-entropy loss. Perplexity = exp(CE_loss). Lower perplexity = better model.",
+  "code_hint": "ppl = torch.exp(cross_entropy_loss)",
+  "expected_output": "Perplexity: 10.54",
+  "template": "import torch\nimport torch.nn.functional as F\n\nlogits = torch.randn(4, 10)  # 4 tokens, vocab 10\ntarget = torch.tensor([3, 5, 2, 7])\n\nloss = F.cross_entropy(logits, target)\nppl = torch.???(loss)\nprint(f\"Perplexity: {ppl:.2f}\")",
+  "answer": "import torch\nimport torch.nn.functional as F\n\nlogits = torch.randn(4, 10)  # 4 tokens, vocab 10\ntarget = torch.tensor([3, 5, 2, 7])\n\nloss = F.cross_entropy(logits, target)\nppl = torch.exp(loss)\nprint(f\"Perplexity: {ppl:.2f}\")"
+}

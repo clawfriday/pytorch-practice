@@ -1,0 +1,10 @@
+{
+  "id": 101,
+  "topic": "Normalization",
+  "type": "coding",
+  "question": "Implement Layer Normalization. Formula: output = (x - mean(x)) / sqrt(var(x) + eps) * gamma + beta, where mean and var are computed over the last dimension.",
+  "code_hint": "Compute mean and variance over dim=-1, use x.sub(mean).mul(gamma).div(rstd).add(beta)",
+  "expected_output": "LayerNorm output:\ntensor([[ 0.7071, -0.7071],\n        [ 0.7071, -0.7071]])",
+  "template": "import torch\nimport torch.nn as nn\n\nclass LayerNorm(nn.Module):\n    def __init__(self, dim, eps=1e-6):\n        super().__init__()\n        self.eps = eps\n        self.gamma = nn.Parameter(torch.ones(dim))\n        self.beta = nn.Parameter(torch.zeros(dim))\n    \n    def forward(self, x):\n        mean = x.mean(dim=-1, keepdim=True)\n        var = x.var(dim=-1, keepdim=True, unbiased=False)\n        rstd = (var + self.eps).rsqrt()\n        return ??? * self.gamma + self.beta\n\nx = torch.tensor([[1.0, 2.0], [3.0, 4.0]])\nln = LayerNorm(2)\nprint(\"LayerNorm output:\\n\", ln(x))",
+  "answer": "import torch\nimport torch.nn as nn\n\nclass LayerNorm(nn.Module):\n    def __init__(self, dim, eps=1e-6):\n        super().__init__()\n        self.eps = eps\n        self.gamma = nn.Parameter(torch.ones(dim))\n        self.beta = nn.Parameter(torch.zeros(dim))\n    \n    def forward(self, x):\n        mean = x.mean(dim=-1, keepdim=True)\n        var = x.var(dim=-1, keepdim=True, unbiased=False)\n        rstd = (var + self.eps).rsqrt()\n        return (x - mean) * rstd * self.gamma + self.beta\n\nx = torch.tensor([[1.0, 2.0], [3.0, 4.0]])\nln = LayerNorm(2)\nprint(\"LayerNorm output:\\n\", ln(x))"
+}

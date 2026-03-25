@@ -1,0 +1,9 @@
+{
+  "id": 18,
+  "topic": "Tensor Operations",
+  "type": "coding",
+  "question": "Create tensor (2,3,4) seed 42, flatten completely, then flatten starting from dim 1. Print shapes.",
+  "code_hint": ".flatten() for all, .flatten(1) for from dim 1",
+  "expected_output": "Original shape: torch.Size([2, 3, 4])\nFlattened: torch.Size([24])\nFlattened from dim 1: torch.Size([2, 12])",
+  "template": "import torch\n\nt = torch.randn(2, 3, 4)\nprint(f\"Original shape: {t.shape}\")\n\nflat = t.???\nprint(f\"Flattened: {flat.shape}\")\n\nflat_dim = t.???(???)\nprint(f\"Flattened from dim 1: {flat_dim.shape}\")"
+}

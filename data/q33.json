@@ -1,0 +1,9 @@
+{
+  "id": 33,
+  "topic": "nn.Module",
+  "type": "coding",
+  "question": "Create nn.BatchNorm2d(64), print num_features and running_mean/running_var types.",
+  "code_hint": "nn.BatchNorm2d(num_features)",
+  "expected_output": "BatchNorm2d(64)\nnum_features: 64\nrunning_mean type: Tensor\nrunning_var type: Tensor",
+  "template": "import torch\nimport torch.nn as nn\n\nbn = nn.???(???)\nprint(f\"BatchNorm2d(64)\")\nprint(f\"num_features: {bn.???}\")\nprint(f\"running_mean type: {???(bn.running_mean).__name__}\")\nprint(f\"running_var type: {???(bn.running_var).__name__}\")"
+}

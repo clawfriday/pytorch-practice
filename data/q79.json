@@ -1,0 +1,9 @@
+{
+  "id": 79,
+  "topic": "Loss Functions",
+  "type": "coding",
+  "question": "Compute CE loss with ignore_index=-100. Padding tokens at -100 should not contribute to loss.",
+  "code_hint": "nn.CrossEntropyLoss(ignore_index=-100)",
+  "expected_output": "Loss with ignore: 1.6094\nLoss without ignore: 1.8265",
+  "template": "import torch\nimport torch.nn as nn\n\nlogits = torch.randn(4, 5)\ntarget = torch.tensor([0, 1, -100, 2])\n\nloss_with_ignore = nn.CrossEntropyLoss(ignore_index=???)(logits, target)\nloss_without = nn.CrossEntropyLoss()(logits, target)\n\nprint(f\"Loss with ignore: {loss_with_ignore.item():.4f}\")\nprint(f\"Loss without ignore: {loss_without.item():.4f}\")"
+}

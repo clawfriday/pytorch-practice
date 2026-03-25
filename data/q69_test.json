@@ -1,0 +1,9 @@
+{
+  "id": 69,
+  "topic": "Positional Encodings",
+  "type": "coding",
+  "question": "Implement AliBi (Attention with Linear Biases) positional encoding. AliBi adds a bias to attention scores based on key-query distance. For each head, the bias is: bias[m,n] = -|m-n| * slope_i where slope_i = 1 / (2^(i/h)). Complete the function to compute the AliBi bias matrix.",
+  "code_hint": "Create a distance matrix using torch.arange and broadcasting, then multiply by slopes computed with 2**(i/h).",
+  "expected_output": "tensor([[[-0.0000, -0.1250, -0.2500, -0.3750],\n         [-0.1250, -0.0000, -0.1250, -0.2500],\n         [-0.2500, -0.1250, -0.0000, -0.1250],\n         [-0.3750, -0.2500, -0.1250, -0.0000]],\n\n        [[-0.0000, -0.2500, -0.5000, -0.7500],\n         [-0.2500, -0.0000, -0.2500, -0.5000],\n         [-0.5000, -0.2500, -0.0000, -0.2500],\n         [-0.7500, -0.5000, -0.2500, -0.0000]]])",
+  "template": "import torch\nimport torch.nn.functional as F\n\ndef alibi_bias(seq_len: int, num_heads: int) -> torch.Tensor:\n    \"\"\"Compute AliBi bias matrix.\n    \n    Args:\n        seq_len: Sequence length\n        num_heads: Number of attention heads\n    \n    Returns:\n        Bias tensor of shape (num_heads, seq_len, seq_len)\n    \"\"\"\n    # Compute slopes: slope_i = 1 / 2^(i/num_heads) for i in [0, num_heads-1]\n    slopes = ???\n    \n    # Compute distance matrix: |m - n| for m, n in [0, seq_len-1]\n    m = torch.arange(seq_len)\n    n = torch.arange(seq_len)\n    distance = torch.abs(???)\n    \n    # Compute bias: bias[m,n] = -distance * slope for each head\n    bias = -distance.unsqueeze(0) * slopes.unsqueeze(1).unsqueeze(2)\n    \n    return bias\n\n# Test\nbias = alibi_bias(4, 2)\nprint(bias)"
+}

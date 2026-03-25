@@ -1,0 +1,10 @@
+{
+  "id": 103,
+  "topic": "Normalization",
+  "type": "conceptual",
+  "question": "What is the difference between Pre-LayerNorm and Post-LayerNorm in transformer blocks? Pre-LN applies norm before the sublayer, Post-LN applies after.",
+  "code_hint": "Pre-LN: x = x + Sublayer(LayerNorm(x)), Post-LN: x = LayerNorm(x + Sublayer(x))",
+  "expected_output": "Pre-LN: x = x + Sublayer(LayerNorm(x))\nPost-LN: x = LayerNorm(x + Sublayer(x))",
+  "template": "# Fill in the missing parts for Pre-LN and Post-LN\n\nclass PreLNBlock(nn.Module):\n    def forward(self, x):\n        x = x + self.sublayer(???)  # LayerNorm before sublayer\n        return x\n\nclass PostLNBlock(nn.Module):\n    def forward(self, x):\n        x = ???(x + self.sublayer(x))  # LayerNorm after residual\n        return x\n\nprint(\"Pre-LN: x = x + Sublayer(LayerNorm(x))\")\nprint(\"Post-LN: x = LayerNorm(x + Sublayer(x))\")",
+  "answer": "# Fill in the missing parts for Pre-LN and Post-LN\n\nclass PreLNBlock(nn.Module):\n    def forward(self, x):\n        x = x + self.sublayer(nn.functional.layer_norm(x, x.shape[-1:]))  # LayerNorm before sublayer\n        return x\n\nclass PostLNBlock(nn.Module):\n    def forward(self, x):\n        x = nn.functional.layer_norm(x + self.sublayer(x), x.shape[-1:])  # LayerNorm after residual\n        return x\n\nprint(\"Pre-LN: x = x + Sublayer(LayerNorm(x))\")\nprint(\"Post-LN: x = LayerNorm(x + Sublayer(x))\")"
+}

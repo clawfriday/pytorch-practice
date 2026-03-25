@@ -1,0 +1,10 @@
+{
+  "id": 109,
+  "topic": "Transformer Architecture",
+  "type": "coding",
+  "question": "Implement a standard FFN: FFN(x) = W2 * ReLU(W1 * x + b1) + b2. Typically expanded_dim = 4 * dim.",
+  "code_hint": "nn.Linear(dim, expanded_dim), nn.ReLU(), nn.Linear(expanded_dim, dim)",
+  "expected_output": "FFN output shape: torch.Size([1, 8])\nParameter count: 640",
+  "template": "import torch\nimport torch.nn as nn\n\nclass FFN(nn.Module):\n    def __init__(self, dim, expanded_dim=None):\n        super().__init__()\n        if expanded_dim is None:\n            expanded_dim = 4 * dim\n        self.w1 = nn.Linear(???)\n        self.act = nn.ReLU()\n        self.w2 = nn.Linear(???)\n    \n    def forward(self, x):\n        return self.w2(self.act(self.w1(x)))\n\nx = torch.randn(1, 8)\nffn = FFN(dim=8)\nprint(\"FFN output shape:\", ffn(x).shape)\nprint(\"Parameter count:\", sum(p.numel() for p in ffn.parameters()))",
+  "answer": "import torch\nimport torch.nn as nn\n\nclass FFN(nn.Module):\n    def __init__(self, dim, expanded_dim=None):\n        super().__init__()\n        if expanded_dim is None:\n            expanded_dim = 4 * dim\n        self.w1 = nn.Linear(dim, expanded_dim)\n        self.act = nn.ReLU()\n        self.w2 = nn.Linear(expanded_dim, dim)\n    \n    def forward(self, x):\n        return self.w2(self.act(self.w1(x)))\n\nx = torch.randn(1, 8)\nffn = FFN(dim=8)\nprint(\"FFN output shape:\", ffn(x).shape)\nprint(\"Parameter count:\", sum(p.numel() for p in ffn.parameters()))"
+}

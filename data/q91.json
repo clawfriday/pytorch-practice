@@ -1,0 +1,9 @@
+{
+  "id": 91,
+  "topic": "torch.compile",
+  "type": "coding",
+  "question": "Use torch.compile(model) to compile a model for faster execution. torch.compile performs graph optimization and can significantly speed up model inference.",
+  "code_hint": "Simply pass the model to torch.compile() function: compiled_model = torch.compile(model). The compiled model behaves like the original but is optimized for faster execution.",
+  "expected_output": "Original time: 0.0010s\nCompiled time: 0.0007s\nSpeedup: 1.43x",
+  "template": "import torch\nimport torch.nn as nn\nimport time\n\ntorch.manual_seed(42)\n\n# Simple model\nclass SimpleModel(nn.Module):\n    def __init__(self):\n        super().__init__()\n        self.linear1 = nn.Linear(10, 20)\n        self.linear2 = nn.Linear(20, 10)\n        \n    def forward(self, x):\n        x = torch.relu(self.linear1(x))\n        x = self.linear2(x)\n        return x\n\nmodel = SimpleModel()\nx = torch.randn(100, 10)\n\n# Warm up and time original model\nfor _ in range(10):\n    _ = model(x)\n\nstart = time.time()\nfor _ in range(100):\n    _ = model(x)\noriginal_time = time.time() - start\n\n# TODO: Compile the model using torch.compile\ncompiled_model = ???\n\n# Warm up and time compiled model\nfor _ in range(10):\n    _ = compiled_model(x)\n\nstart = time.time()\nfor _ in range(100):\n    _ = compiled_model(x)\ncompiled_time = time.time() - start\n\nprint(f\"Original time: {original_time:.4f}s\")\nprint(f\"Compiled time: {compiled_time:.4f}s\")\nprint(f\"Speedup: {original_time/compiled_time:.2f}x\")"
+}

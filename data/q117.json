@@ -1,0 +1,10 @@
+{
+  "id": 117,
+  "topic": "Text Generation",
+  "type": "coding",
+  "question": "Implement top-k sampling. Keep only the k largest logits, renormalize.",
+  "code_hint": "values, indices = torch.topk(logits, k), then mask and renormalize",
+  "expected_output": "Top-2: indices=[3, 1], values=[4.0, 2.0]",
+  "template": "import torch\nimport torch.nn.functional as F\n\nlogits = torch.tensor([1.0, 2.0, 1.0, 4.0])\nk = 2\n\ntopk_vals, topk_idx = torch.topk(logits, ???)\nmask = torch.zeros_like(logits)\nmask[topk_idx] = 1.0\n\nmasked_logits = logits.float().masked_fill(mask == 0, float('-inf'))\nprobs = F.softmax(masked_logits, dim=-1)\n\nprint(f\"Top-{k}: indices={topk_idx.tolist()}, values={topk_vals.tolist()}\")",
+  "answer": "import torch\nimport torch.nn.functional as F\n\nlogits = torch.tensor([1.0, 2.0, 1.0, 4.0])\nk = 2\n\ntopk_vals, topk_idx = torch.topk(logits, k)\nmask = torch.zeros_like(logits)\nmask[topk_idx] = 1.0\n\nmasked_logits = logits.float().masked_fill(mask == 0, float('-inf'))\nprobs = F.softmax(masked_logits, dim=-1)\n\nprint(f\"Top-{k}: indices={topk_idx.tolist()}, values={topk_vals.tolist()}\")"
+}

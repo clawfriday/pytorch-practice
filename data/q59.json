@@ -1,0 +1,9 @@
+{
+  "id": 59,
+  "topic": "Common Patterns",
+  "type": "coding",
+  "question": "Set model to eval mode. For X=(4,10), compute output with no_grad. Print output shape.",
+  "code_hint": "model.eval(), with torch.no_grad():",
+  "expected_output": "Output shape: torch.Size([4, 2])",
+  "template": "import torch\nimport torch.nn as nn\n\ntorch.manual_seed(42)\nmodel = nn.Linear(10, 2)\nmodel.???()\nX = torch.randn(4, 10)\n\nwith torch.???():\n    outputs = ???(???)\nprint(f\"Output shape: {outputs.shape}\")"
+}

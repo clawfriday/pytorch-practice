@@ -1,0 +1,10 @@
+{
+  "id": 134,
+  "topic": "Attention Mechanisms",
+  "type": "coding",
+  "question": "Implement simplified linear attention: out = (phi(K)^T @ (phi(Q)^T @ V)) where phi is elu activation + 1.",
+  "code_hint": "phi(x) = elu(x) + 1, then compute cumulative sums",
+  "expected_output": "Linear attention output shape: torch.Size([1, 4])",
+  "template": "import torch\nimport torch.nn.functional as F\n\ndef phi(x):\n    return F.elu(x) + 1\n\ndef linear_attention(Q, K, V):\n    # Q, K, V: [B, N, D]\n    phi_K = phi(K)  # [B, N, D]\n    phi_Q = phi(Q)  # [B, N, D]\n    \n    # Compute in linear order\n    KV = torch.bmm(phi_K.transpose(1, 2), phi_Q)  # [B, D, D] cumulative\n    Z = phi_Q.cumsum(dim=1)  # [B, N, D]\n    \n    # Final: V @ Z^-1 @ KV (simplified)\n    return torch.bmm(KV, V.transpose(1, 2)).transpose(1, 2)\n\nQ = torch.randn(1, 4, 8)\nK = torch.randn(1, 4, 8)\nV = torch.randn(1, 4, 8)\nout = linear_attention(Q, K, V)\nprint(\"Linear attention output shape:\", out.shape)",
+  "answer": "import torch\nimport torch.nn.functional as F\n\ndef phi(x):\n    return F.elu(x) + 1\n\ndef linear_attention(Q, K, V):\n    # Q, K, V: [B, N, D]\n    phi_K = phi(K)  # [B, N, D]\n    phi_Q = phi(Q)  # [B, N, D]\n    \n    # Compute in linear order\n    KV = torch.bmm(phi_K.transpose(1, 2), phi_Q)  # [B, D, D] cumulative\n    Z = phi_Q.cumsum(dim=1)  # [B, N, D]\n    \n    # Final: V @ Z^-1 @ KV (simplified)\n    return torch.bmm(KV, V.transpose(1, 2)).transpose(1, 2)\n\nQ = torch.randn(1, 4, 8)\nK = torch.randn(1, 4, 8)\nV = torch.randn(1, 4, 8)\nout = linear_attention(Q, K, V)\nprint(\"Linear attention output shape:\", out.shape)"
+}

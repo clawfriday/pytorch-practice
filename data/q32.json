@@ -1,0 +1,9 @@
+{
+  "id": 32,
+  "topic": "nn.Module",
+  "type": "coding",
+  "question": "Create Sequential: Linear(10,32) -> ReLU -> Linear(32,5). Count total parameters.",
+  "code_hint": "nn.Sequential(*layers), sum(p.numel() for p in model.parameters())",
+  "expected_output": "Sequential model\nTotal parameters: 517",
+  "template": "import torch\nimport torch.nn as nn\n\nseq = nn.Sequential(\n    nn.???(???, ???),\n    nn.???(),\n    nn.???(???, ???)\n)\nparams = list(seq.???())\ntotal = ???(p.numel() for p in params)\nprint(f\"Sequential model\")\nprint(f\"Total parameters: {total}\")"
+}

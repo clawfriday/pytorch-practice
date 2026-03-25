@@ -1,0 +1,9 @@
+{
+  "id": 63,
+  "topic": "Debugging",
+  "type": "coding",
+  "question": "Create float (3,4) and int64 (5,6) tensors. Print shape, dtype, device for both.",
+  "code_hint": ".shape, .dtype, .device",
+  "expected_output": "a: shape=torch.Size([3, 4]), dtype=torch.float32, device=cpu\nb: shape=torch.Size([5, 6]), dtype=torch.int64, device=cpu",
+  "template": "import torch\n\ntorch.manual_seed(42)\na = torch.randn(3, 4)\nb = torch.randint(0, 10, (5, 6))\nprint(f\"a: shape={a.???}, dtype={a.???}, device={a.???}\")\nprint(f\"b: shape={b.???}, dtype={b.???}, device={b.???}\")"
+}

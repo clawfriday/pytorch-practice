@@ -1,0 +1,10 @@
+{
+  "id": 131,
+  "topic": "Attention Mechanisms",
+  "type": "coding",
+  "question": "Implement sliding window attention. Each token only attends to window_size tokens before it.",
+  "code_hint": "Create mask: attn_weights[dist > window_size] = -inf before softmax",
+  "expected_output": "Window mask shape: torch.Size([5, 5])\nAttended positions per row: 3",
+  "template": "import torch\nimport torch.nn.functional as F\n\nseq_len = 5\nwindow_size = 3\n\n# Create distance matrix\npositions = torch.arange(seq_len)\ndistance = (positions.unsqueeze(0) - positions.unsqueeze(1)).abs()\n\n# Sliding window mask\nmask = distance <= window_size\nprint(f\"Window mask shape: {mask.shape}\")\n\n# Apply to attention scores\nlogits = torch.randn(seq_len, seq_len)\nmasked_logits = logits.masked_fill(~mask, float('-inf'))\nattn = F.softmax(masked_logits, dim=-1)\nprint(f\"Attended positions per row: {mask[0].sum().item()}\")",
+  "answer": "import torch\nimport torch.nn.functional as F\n\nseq_len = 5\nwindow_size = 3\n\n# Create distance matrix\npositions = torch.arange(seq_len)\ndistance = (positions.unsqueeze(0) - positions.unsqueeze(1)).abs()\n\n# Sliding window mask\nmask = distance <= window_size\nprint(f\"Window mask shape: {mask.shape}\")\n\n# Apply to attention scores\nlogits = torch.randn(seq_len, seq_len)\nmasked_logits = logits.masked_fill(~mask, float('-inf'))\nattn = F.softmax(masked_logits, dim=-1)\nprint(f\"Attended positions per row: {mask[0].sum().item()}\")"
+}

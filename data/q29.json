@@ -1,0 +1,9 @@
+{
+  "id": 29,
+  "topic": "Math Operations",
+  "type": "coding",
+  "question": "Create (3,4) tensor, compute gt(t, 0), lt(t, 0), eq(t, 0). Count how many >0, <0, ==0. Print counts.",
+  "code_hint": "torch.gt(t, 0), torch.lt(t, 0), torch.eq(t, 0)",
+  "expected_output": "Shape: torch.Size([3, 4])\nCount > 0: 9\nCount < 0: 3\nCount == 0: 0",
+  "template": "import torch\n\ntorch.manual_seed(42)\nt = torch.randn(3, 4)\ngt = torch.???(???, ???)\nlt = torch.???(???, ???)\neq = torch.???(???, ???)\nprint(f\"Shape: {t.shape}\")\nprint(f\"Count > 0: {gt.???()}\")\nprint(f\"Count < 0: {lt.???()}\")\nprint(f\"Count == 0: {eq.???()}\")"
+}

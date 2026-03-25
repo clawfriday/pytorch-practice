@@ -1,0 +1,10 @@
+{
+  "id": 108,
+  "topic": "Transformer Architecture",
+  "type": "coding",
+  "question": "Implement a Pre-LN Transformer Block: x = x + Sublayer(LayerNorm(x)), then LayerNorm again for next layer.",
+  "code_hint": "x = x + attention(LayerNorm(x)), then x = x + ffn(LayerNorm(x))",
+  "expected_output": "PreLN Block output shape: torch.Size([1, 8])",
+  "template": "import torch\nimport torch.nn as nn\n\nclass PreLNTransformerBlock(nn.Module):\n    def __init__(self, dim, n_heads, ff_dim):\n        super().__init__()\n        self.norm1 = nn.LayerNorm(dim)\n        self.attn = nn.MultiheadAttention(dim, n_heads)\n        self.norm2 = nn.LayerNorm(dim)\n        self.ffn = nn.Sequential(nn.Linear(dim, ff_dim), nn.ReLU(), nn.Linear(ff_dim, dim))\n    \n    def forward(self, x):\n        x = x + ???(self.attn(???, ???, ???)[0])\n        x = x + self.ffn(???)\n        return x\n\nx = torch.randn(1, 8)\nblock = PreLNTransformerBlock(dim=8, n_heads=2, ff_dim=16)\nprint(\"PreLN Block output shape:\", block(x).shape)",
+  "answer": "import torch\nimport torch.nn as nn\n\nclass PreLNTransformerBlock(nn.Module):\n    def __init__(self, dim, n_heads, ff_dim):\n        super().__init__()\n        self.norm1 = nn.LayerNorm(dim)\n        self.attn = nn.MultiheadAttention(dim, n_heads)\n        self.norm2 = nn.LayerNorm(dim)\n        self.ffn = nn.Sequential(nn.Linear(dim, ff_dim), nn.ReLU(), nn.Linear(ff_dim, dim))\n    \n    def forward(self, x):\n        x = x + self.attn(self.norm1(x), self.norm1(x), self.norm1(x))[0]\n        x = x + self.ffn(self.norm2(x))\n        return x\n\nx = torch.randn(1, 8)\nblock = PreLNTransformerBlock(dim=8, n_heads=2, ff_dim=16)\nprint(\"PreLN Block output shape:\", block(x).shape)"
+}

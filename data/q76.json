@@ -1,0 +1,9 @@
+{
+  "id": 76,
+  "topic": "Transformer Architecture",
+  "type": "coding",
+  "question": "Implement Xavier initialization for a Linear layer. Use nn.init.xavier_uniform_ to initialize weights and nn.init.zeros_ for bias.",
+  "code_hint": "nn.init.xavier_uniform_(layer.weight), nn.init.zeros_(layer.bias)",
+  "expected_output": "Weight mean: 0.0\nWeight std: 0.24\nBias: 0.0",
+  "template": "import torch\nimport torch.nn as nn\n\nlayer = nn.Linear(10, 20)\nnn.init.???_(layer.weight)\nnn.init.???_(layer.bias)\nprint(f\"Weight mean: {layer.weight.mean().item():.4f}\")\nprint(f\"Weight std: {layer.weight.std().item():.2f}\")\nprint(f\"Bias: {layer.bias.item():.1f}\")"
+}

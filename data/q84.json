@@ -1,0 +1,9 @@
+{
+  "id": 84,
+  "topic": "LR Schedules",
+  "type": "coding",
+  "question": "Implement linear warmup + cosine decay scheduler. Warmup 100 steps from 0 to 1e-4, then cosine decay to 1e-5 over 900 steps.",
+  "code_hint": "LinearLR for warmup, CosineAnnealingLR for decay",
+  "expected_output": "Step 0: lr=0.0\nStep 50: lr=0.0001\nStep 100: lr=0.0001\nStep 500: lr=5.54e-05\nStep 999: lr=1e-05",
+  "template": "import torch\nimport torch.optim as optim\n\noptimizer = optim.SGD([torch.zeros(1)], lr=0.0)\ntotal_steps = 1000\nwarmup_steps = 100\n\n# Warmup scheduler\nwarmup = optim.lr_scheduler.LinearLR(optimizer, start_factor=0.001, end_factor=1.0, total_iters=warmup_steps)\n# Cosine decay scheduler  \nscheduler = optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=total_steps - warmup_steps, eta_min=1e-5)\n\nlrs = []\nfor step in range(total_steps):\n    if step < warmup_steps:\n        scheduler = warmup\n    else:\n        scheduler = optim.lr_scheduler.CosineAnnealingLR(\n            optim.SGD([torch.zeros(1)], lr=1e-4), \n            T_max=total_steps - warmup_steps, \n            eta_min=1e-5\n        )\n    lr = optimizer.param_groups[0]['lr']\n    if step in [0, 50, 100, 500, 999]:\n        print(f\"Step {step}: lr={lr:.2e}\")"
+}

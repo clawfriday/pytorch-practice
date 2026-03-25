@@ -1,0 +1,9 @@
+{
+  "id": 52,
+  "topic": "Model Functions",
+  "type": "coding",
+  "question": "Create Sequential: Linear(10,5)->ReLU->Linear(5,2). Count parameters() vs named_parameters().",
+  "code_hint": ".parameters(), .named_parameters()",
+  "expected_output": "parameters() count: 4\nnamed_parameters() count: 4",
+  "template": "import torch\nimport torch.nn as nn\n\nmodel = nn.Sequential(\n    nn.Linear(10, 5),\n    nn.ReLU(),\n    nn.Linear(5, 2)\n)\nparams = list(model.???())\nnamed = list(model.???())\nprint(f\"parameters() count: {len(params)}\")\nprint(f\"named_parameters() count: {len(named)}\")"
+}

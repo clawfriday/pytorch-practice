@@ -1,0 +1,9 @@
+{
+  "id": 70,
+  "topic": "Normalization",
+  "type": "coding",
+  "question": "Implement RMSNorm (Root Mean Square Normalization) class that normalizes input by dividing by the RMS (root mean square) and scaling by a learnable gamma parameter. Unlike LayerNorm, RMSNorm does NOT subtract the mean (no centering). RMS = sqrt(mean(x^2) + eps).",
+  "code_hint": "Compute RMS as sqrt(mean(x.pow(2), dim=-1, keepdim=True) + eps). Normalize by x / rms, then multiply by gamma (learnable scale parameter).",
+  "expected_output": "Input x shape: torch.Size([2, 3])\nInput x:\ntensor([[ 0.3367,  0.1288,  0.2345],\n        [ 0.2303, -1.1229, -0.1863]])\nGamma (scale parameter) shape: torch.Size([3])\nRMSNorm output shape: torch.Size([2, 3])\nRMSNorm output:\ntensor([[ 1.3561,  0.5188,  0.9444],\n        [ 0.3435, -1.6747, -0.2779]])",
+  "template": "import torch\nimport torch.nn as nn\n\ntorch.manual_seed(42)\n\nclass RMSNorm(nn.Module):\n    def __init__(self, dim, eps=1e-8):\n        super().__init__()\n        self.eps = eps\n        self.gamma = nn.???(torch.ones(dim))\n    \n    def forward(self, x):\n        rms = torch.sqrt(x.pow(2).mean(???, keepdim=True) + self.???)\n        return x / rms * self.???\n\n# Test\nx = torch.randn(2, 3)\nprint(f'Input x shape: {x.shape}')\nprint(f'Input x:\\n{x}')\nrms_norm = RMSNorm(3)\nprint(f'Gamma (scale parameter) shape: {rms_norm.gamma.shape}')\noutput = rms_norm(x)\nprint(f'RMSNorm output shape: {output.shape}')\nprint(f'RMSNorm output:\\n{output.detach()}')"
+}

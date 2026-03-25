@@ -1,0 +1,9 @@
+{
+  "id": 27,
+  "topic": "Math Operations",
+  "type": "coding",
+  "question": "Create (2,3) and (3,2) random tensors, compute mm and matmul. Print result shapes.",
+  "code_hint": "torch.mm(a, b), torch.matmul(a, b)",
+  "expected_output": "a shape: torch.Size([2, 3])\nb shape: torch.Size([3, 2])\nmm result shape: torch.Size([2, 2])\nmatmul result shape: torch.Size([2, 2])",
+  "template": "import torch\n\ntorch.manual_seed(42)\na = torch.randn(???, ???)\nb = torch.randn(???, ???)\nmm = torch.???(???, ???)\nmatmul = torch.???(???, ???)\nprint(f\"a shape: {a.shape}\")\nprint(f\"b shape: {b.shape}\")\nprint(f\"mm result shape: {mm.shape}\")\nprint(f\"matmul result shape: {matmul.shape}\")"
+}

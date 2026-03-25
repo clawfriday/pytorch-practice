@@ -1,0 +1,9 @@
+{
+  "id": 34,
+  "topic": "Activation Functions",
+  "type": "coding",
+  "question": "Apply F.relu and F.sigmoid to x=[-1,0,1,2]. Print results.",
+  "code_hint": "F.relu(x), F.sigmoid(x)",
+  "expected_output": "x: tensor([-1.,  0.,  1.,  2.])\nReLU: tensor([0., 0., 1., 2.])\nSigmoid: tensor([0.2689, 0.5000, 0.7311, 0.8808])",
+  "template": "import torch\nimport torch.nn.functional as F\n\nx = torch.tensor([-1.0, 0.0, 1.0, 2.0])\nrelu = F.???(???)\nsigmoid = F.???(???)\nprint(f\"x: {x}\")\nprint(f\"ReLU: {relu}\")\nprint(f\"Sigmoid: {sigmoid}\")"
+}

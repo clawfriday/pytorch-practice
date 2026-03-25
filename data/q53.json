@@ -1,0 +1,9 @@
+{
+  "id": 53,
+  "topic": "Model Functions",
+  "type": "coding",
+  "question": "Create Sequential: Linear(10,5)->ReLU->Linear(5,2). Count children() vs modules().",
+  "code_hint": ".children(), .modules()",
+  "expected_output": "children() count: 3\nmodules() count: 4",
+  "template": "import torch\nimport torch.nn as nn\n\nmodel = nn.Sequential(\n    nn.Linear(10, 5),\n    nn.ReLU(),\n    nn.Linear(5, 2)\n)\nchildren = list(model.???())\nmodules = list(model.???())\nprint(f\"children() count: {len(children)}\")\nprint(f\"modules() count: {len(modules)}\")"
+}
