@@ -323,7 +323,10 @@ ${currentQuestion.value?.answer || 'Not available'}
                         
                         const response = await fetch(`${API_BASE}/api/chat`, {
                             method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
+                            headers: {
+                                'Content-Type': 'application/json',
+                                ...getAuthHeaders()
+                            },
                             body: JSON.stringify({
                                 message: userMsg,
                                 context: context
@@ -383,8 +386,9 @@ ${currentQuestion.value?.answer || 'Not available'}
                 }
 
                 function getAuthHeaders() {
-                    const username = localStorage.getItem('username');
-                    const password = localStorage.getItem('password');
+                    // Use stored credentials or defaults
+                    const username = localStorage.getItem('username') || 'hawkoli1987';
+                    const password = localStorage.getItem('password') || 'Matajinqiu2!';
                     const creds = btoa(`${username}:${password}`);
                     return { 'Authorization': `Basic ${creds}` };
                 }
