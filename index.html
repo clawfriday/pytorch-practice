@@ -241,63 +241,45 @@
                 </div>
             </div>
 
-            <!-- Right: Code Terminal (for experimentation) -->
+            <!-- Right: AI Chat -->
             <div class="space-y-4">
-                <div class="question-card rounded-xl p-6">
-                    <h3 class="text-lg font-semibold mb-4">🐍 Python Code Terminal (Practice)</h3>
-                    <p class="text-sm text-gray-400 mb-4">torch, numpy pre-imported. Press Enter for new line, Ctrl+Enter to run</p>
+                <div class="question-card rounded-xl p-4 h-[500px] flex flex-col">
+                    <h3 class="text-lg font-semibold mb-3">💬 AI Tutor Chat</h3>
                     
-                    <div class="code-editor rounded-lg overflow-hidden">
-                        <!-- Input (White background) - Multi-line textarea -->
-                        <div class="code-input-area p-3">
-                            <div class="flex items-center gap-2 mb-2 text-gray-500 text-xs">
-                                <span>››</span>
-                                <span>Multi-line input (Enter=newline, Ctrl+Enter=run)</span>
+                    <!-- Chat History -->
+                    <div class="flex-1 overflow-y-auto space-y-3 mb-3 pr-1">
+                        <div v-if="chatMessages.length === 0" class="text-gray-500 text-sm text-center py-8">
+                            Ask me anything about this PyTorch question!
+                        </div>
+                        <div v-for="(msg, idx) in chatMessages" :key="idx" class="flex" :class="msg.role === 'user' ? 'justify-end' : 'justify-start'">
+                            <div class="max-w-[85%] rounded-lg px-3 py-2 text-sm" :class="msg.role === 'user' ? 'bg-orange-600 text-white' : 'bg-gray-700 text-gray-200'">
+                                <div class="text-xs opacity-70 mb-1">{{ msg.role === 'user' ? 'You' : 'AI' }}</div>
+                                <div class="whitespace-pre-wrap">{{ msg.content }}</div>
                             </div>
-                            <textarea
-                                v-model="codeInput"
-                                @keydown.ctrl.enter.prevent="runCode"
-                                @keydown.tab.prevent="handleTabInTerminal"
-                                class="editor-textarea w-full h-32 font-mono text-sm"
-                                placeholder="e.g., torch.randn(3, 3)&#10;torch.eye(3)"
-                            ></textarea>
                         </div>
-                        
-                        <!-- Output (Black background) -->
-                        <div class="code-output-area p-3 font-mono text-sm min-h-[150px]">
-                            {{ terminalOutput || 'Output will appear here...' }}
+                        <div v-if="isChatLoading" class="flex justify-start">
+                            <div class="bg-gray-700 rounded-lg px-3 py-2 text-sm text-gray-400">
+                                Thinking...
+                            </div>
                         </div>
                     </div>
 
-                    <div class="flex gap-2 mt-3">
-                        <button
-                            @click="runCode"
-                            :disabled="executionStatus === 'running'"
-                            class="bg-green-600 hover:bg-green-700 px-4 py-2 rounded-lg text-sm disabled:opacity-50"
+                    <!-- Chat Input -->
+                    <div class="flex gap-2">
+                        <input
+                            v-model="chatInput"
+                            @keydown.enter.prevent="sendChat"
+                            :disabled="isChatLoading"
+                            placeholder="Ask about this question..."
+                            class="flex-1 bg-gray-800 border border-gray-600 rounded-lg px-3 py-2 text-sm"
                         >
-                            ▶ Run
-                        </button>
                         <button
-                            @click="clearTerminal"
-                            class="bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded-lg text-sm"
+                            @click="sendChat"
+                            :disabled="isChatLoading || !chatInput.trim()"
+                            class="bg-orange-600 hover:bg-orange-700 px-4 py-2 rounded-lg text-sm disabled:opacity-50"
                         >
-                            Clear
+                            Send
                         </button>
-                    </div>
-
-                    <!-- Quick Examples -->
-                    <div class="mt-4">
-                        <p class="text-sm text-gray-400 mb-2">Quick examples:</p>
-                        <div class="flex flex-wrap gap-2">
-                            <button 
-                                v-for="ex in examples" 
-                                :key="ex"
-                                @click="loadExample(ex)"
-                                class="text-xs bg-gray-800 hover:bg-gray-700 px-2 py-1 rounded"
-                            >
-                                {{ ex.split('\n')[0].substring(0, 20) }}
-                            </button>
-                        </div>
                     </div>
                 </div>
 
@@ -349,9 +331,53 @@
                 const loginForm = ref({ username: '', password: '' });
                 const loginError = ref('');
                 
-                // Terminal
+                // Terminal (kept for reference but unused)
                 const terminalOutput = ref('');
                 const codeInput = ref('');
+                
+                // Chat
+                const chatMessages = ref([]);
+                const chatInput = ref('');
+                const isChatLoading = ref(false);
+                
+                async function sendChat() {
+                    if (!chatInput.value.trim() || isChatLoading.value) return;
+                    
+                    const userMsg = chatInput.value;
+                    chatMessages.value.push({ role: 'user', content: userMsg });
+                    chatInput.value = '';
+                    isChatLoading.value = true;
+                    
+                    try {
+                        // Build context with current question and answer
+                        const context = `Current Question (ID: ${currentQuestion.value?.id}):
+${currentQuestion.value?.question}
+
+Hint: ${currentQuestion.value?.code_hint || 'No hint'}
+
+Correct Answer:
+\`\`\`python
+${currentQuestion.value?.answer || 'Not available'}
+\`\`\``;
+                        
+                        const response = await fetch(`${API_BASE}/api/chat`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                message: userMsg,
+                                context: context
+                            })
+                        });
+                        
+                        if (!response.ok) throw new Error('Chat failed');
+                        const data = await response.json();
+                        chatMessages.value.push({ role: 'assistant', content: data.response || data.message || data.feedback });
+                    } catch (e) {
+                        chatMessages.value.push({ role: 'assistant', content: 'Sorry, I encountered an error. Please try again.' });
+                    }
+                    
+                    isChatLoading.value = false;
+                }
                 
                 // Answer reveal
                 const answerShown = ref(false);

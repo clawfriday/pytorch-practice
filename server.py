@@ -68,6 +68,15 @@ class EvaluateResponse(BaseModel):
     feedback: str
 
 
+class ChatRequest(BaseModel):
+    message: str
+    context: str | None = None
+
+
+class ChatResponse(BaseModel):
+    response: str
+
+
 # ============== AUTH ==============
 def verify_auth(authorization: str | None = Header(None)) -> str:
     if not authorization:
@@ -372,6 +381,53 @@ Examples of good feedback:
             correct=False,
             feedback=f"Evaluation error: {str(e)}"
         )
+
+
+@app.post("/api/chat", response_model=ChatResponse)
+async def chat(
+    request: ChatRequest,
+    user: str = Depends(verify_auth)
+):
+    """Chat with AI tutor about PyTorch questions"""
+    
+    client = boto3.client(
+        'bedrock-runtime',
+        region_name=AWS_REGION,
+        config=Config(signature_version='bearer')
+    )
+    
+    system_prompt = """You are a helpful PyTorch coding tutor. You help students understand PyTorch concepts, debug code, and learn best practices. Be concise, friendly, and practical. When showing code, always provide working examples."""
+
+    user_prompt = request.message
+    if request.context:
+        user_prompt = f"""Context:
+{request.context}
+
+---
+User question:
+{request.message}"""
+
+    try:
+        response = client.invoke_model(
+            modelId=BEDROCK_MODEL_ID,
+            body=json.dumps({
+                "messages": [
+                    {"role": "system", "content": system_prompt},
+                    {"role": "user", "content": user_prompt}
+                ],
+                "max_tokens": 1000,
+                "temperature": 0.7
+            }),
+            contentType='application/json'
+        )
+        
+        response_body = json.loads(response['body'].read())
+        ai_message = response_body['choices'][0]['message']['content']
+        
+        return ChatResponse(response=ai_message)
+        
+    except Exception as e:
+        return ChatResponse(response=f"Error: {str(e)}")
 
 
 @app.get("/api/health")
