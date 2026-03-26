@@ -439,6 +439,11 @@ ${currentQuestion.value?.answer || 'Not available'}
                 function loadCurrentQuestionCode() {
                     if (!currentQuestion.value) return;
                     
+                    // Clear chat when switching questions
+                    chatMessages.value = [];
+                    chatInput.value = '';
+                    isChatLoading.value = false;
+                    
                     // For coding questions: restore previous code OR show template
                     if (currentQuestion.value.type === 'coding') {
                         // Restore user's previous attempt (if any)
