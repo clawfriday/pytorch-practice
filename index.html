@@ -54,42 +54,6 @@
 </head>
 <body>
     <div id="app" class="min-h-screen text-white p-6">
-        <!-- Login Modal -->
-        <div v-if="!isLoggedIn" class="fixed inset-0 bg-black/80 flex items-center justify-center z-50">
-            <div class="question-card rounded-xl p-8 max-w-md w-full">
-                <h2 class="text-2xl font-bold mb-6 text-center">🔐 Login</h2>
-                <p class="text-gray-400 mb-4 text-center">Enter your credentials to access AI features</p>
-                
-                <div class="space-y-4">
-                    <div>
-                        <label class="text-sm text-gray-400">Username</label>
-                        <input 
-                            v-model="loginForm.username" 
-                            type="text" 
-                            class="w-full bg-gray-800 border border-gray-600 rounded-lg px-4 py-2 mt-1"
-                            placeholder="username"
-                        >
-                    </div>
-                    <div>
-                        <label class="text-sm text-gray-400">Password</label>
-                        <input 
-                            v-model="loginForm.password" 
-                            type="password" 
-                            class="w-full bg-gray-800 border border-gray-600 rounded-lg px-4 py-2 mt-1"
-                            placeholder="password"
-                        >
-                    </div>
-                    <button 
-                        @click="login" 
-                        class="w-full bg-orange-500 hover:bg-orange-600 px-6 py-3 rounded-lg font-medium"
-                    >
-                        Login
-                    </button>
-                    <p v-if="loginError" class="text-red-400 text-sm text-center">{{ loginError }}</p>
-                </div>
-            </div>
-        </div>
-
         <!-- Header -->
         <header class="mb-8">
             <h1 class="text-4xl font-bold bg-gradient-to-r from-orange-400 to-red-500 bg-clip-text text-transparent">
@@ -100,7 +64,6 @@
                 <span v-if="backendStatus === 'connected'" class="text-green-400 text-sm">✓ Connected to server</span>
                 <span v-else-if="backendStatus === 'error'" class="text-red-400 text-sm">✗ Server error</span>
                 <span v-else class="text-yellow-400 text-sm">⏳ Connecting...</span>
-                <button @click="logout" class="text-sm text-gray-400 hover:text-white ml-auto">Logout</button>
             </div>
         </header>
 
@@ -326,10 +289,8 @@
                 const backendStatus = ref('connecting');
                 const codeEditorRef = ref(null);
                 
-                // Auth
-                const isLoggedIn = ref(false);
-                const loginForm = ref({ username: '', password: '' });
-                const loginError = ref('');
+                // Auth (disabled for now)
+                const isLoggedIn = ref(true);
                 
                 // Terminal (kept for reference but unused)
                 const terminalOutput = ref('');
@@ -426,24 +387,6 @@ ${currentQuestion.value?.answer || 'Not available'}
                     const password = localStorage.getItem('password');
                     const creds = btoa(`${username}:${password}`);
                     return { 'Authorization': `Basic ${creds}` };
-                }
-
-                function login() {
-                    if (loginForm.value.username && loginForm.value.password) {
-                        localStorage.setItem('username', loginForm.value.username);
-                        localStorage.setItem('password', loginForm.value.password);
-                        isLoggedIn.value = true;
-                        loginError.value = '';
-                    } else {
-                        loginError.value = 'Please enter username and password';
-                    }
-                }
-
-                function logout() {
-                    localStorage.removeItem('username');
-                    localStorage.removeItem('password');
-                    isLoggedIn.value = false;
-                    loginForm.value = { username: '', password: '' };
                 }
 
                 // Computed
@@ -832,19 +775,15 @@ ${currentQuestion.value?.answer || 'Not available'}
                     executionStatus,
                     backendStatus,
                     codeEditorRef,
-                    // Auth
-                    isLoggedIn,
-                    loginForm,
-                    loginError,
-                    login,
-                    logout,
-                    // Terminal
+                    // Chat
+                    chatMessages,
+                    chatInput,
+                    isChatLoading,
+                    sendChat,
+                    // Terminal (unused but kept)
                     terminalOutput,
                     codeInput,
                     examples,
-                    runCode,
-                    clearTerminal,
-                    clearOutput,
                     loadExample,
                     answeredCount,
                     correctCount,
